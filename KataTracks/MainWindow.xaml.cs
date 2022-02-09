@@ -43,7 +43,6 @@ namespace KataTracks
         static bool playing = false;
         static DateTime literalTrackStartTime;
         float volume = 0.15f;
-        static long timePlay = 0;
         static long timePick = 0;
         static bool b1Down = false;
         
@@ -60,7 +59,7 @@ namespace KataTracks
             Log.Text = "KataTracks initializing\n";
 
             CombinedBluetoothController.Initialize();
-            CombinedBluetoothController.FindPaired(leaderDeviceName,"");
+            CombinedBluetoothController.FindPaired(leaderDeviceName,followDeviceName);
 
             
             foreach (KeyValuePair<string, BluetoothDeviceInfo> kvp in CombinedBluetoothController.pairedBluetoothDevices)
@@ -73,6 +72,7 @@ namespace KataTracks
             {
                 Log.Text += "Online: " + kvp.Key + " (" + CombinedBluetoothController.pairedBluetoothDevices[kvp.Key].DeviceAddress + ")\n";
                 LeaderText.Text = "Online: " + kvp.Key + " (" + CombinedBluetoothController.pairedBluetoothDevices[kvp.Key].DeviceAddress + ")\n";
+                FollowText.Text = "Online: " + kvp.Key + " (" + CombinedBluetoothController.pairedBluetoothDevices[kvp.Key].DeviceAddress + ")\n";
             }
 
             TrackView.Text = Fx.Get();
@@ -82,6 +82,7 @@ namespace KataTracks
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             dispatcherTimer.Start();
         }
+
 
         private void PlayTrack(int seconds)
         {
@@ -102,6 +103,7 @@ namespace KataTracks
 
             string code = "@" + (timePick * 100) + "\r\n";
             CombinedBluetoothController.SendMessage(leaderDeviceName, code);
+            CombinedBluetoothController.SendMessage(followDeviceName, code);
 
 
             //CombinedBluetoothController.SendMessage(followDeviceName, ")");
@@ -123,6 +125,7 @@ namespace KataTracks
                 Canvas.SetLeft(TrackIndexPlay, 0);
             }
             CombinedBluetoothController.SendMessage(leaderDeviceName, "(");
+            CombinedBluetoothController.SendMessage(followDeviceName, "(");
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -142,7 +145,7 @@ namespace KataTracks
             StopTrack(true);
 
             //4,416,049
-            TimeSpan timeElapsedSincePlay = DateTime.Now - literalTrackStartTime + new TimeSpan(0,0,0,0,(int)timePlay*100);
+            TimeSpan timeElapsedSincePlay = DateTime.Now - literalTrackStartTime;// + new TimeSpan(0,0,0,0,(int)timePlay*100);
             TimeSpan timeCurrentInSong = timeElapsedSincePlay + new TimeSpan(0, 0, 0, 0, (int)timePick * 100);
             TrackTime.Content = ""
                 + timeCurrentInSong.Minutes + ":"
@@ -151,7 +154,7 @@ namespace KataTracks
 
 
             double timeValue = (double)(timeCurrentInSong.TotalMilliseconds)/100;
-            Canvas.SetLeft(TrackIndexPlay, timeValue);
+            Canvas.SetLeft(TrackIndexPlay, Math.Round(timeValue, 0));
 
             /*long time = timePlay + (long)timeValue;
             string timeStr = "@" + (time*100) + "\n";
@@ -172,10 +175,24 @@ namespace KataTracks
             System.Windows.Application.Current.Shutdown();
         }
 
+        
+        private void PlayFromStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            Canvas.SetLeft(TrackIndex, 0);
+            timePick = 0;
+            Canvas.SetLeft(TrackIndexPlay, timePick);
+
+            TrackTime.Content = "0:0:0";
+            TrackTimeOffset.Content = "0:0:0";
+
+            PlayTrack(0);
+        }
+
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            int ts = (int)(timePick /10);
-            PlayTrack(ts);
+            double ts = timePick;
+            ts = Math.Round(ts/10, 0);
+            PlayTrack((int)ts);
         }
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
@@ -200,13 +217,15 @@ namespace KataTracks
             {
                 double X = e.GetPosition(this).X;
                 timePick = (long)X;
+
+                X = Math.Round(X/10,0)*10;
                 Canvas.SetLeft(TrackIndex, X);
 
                 TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)timePick*100);// DateTime.Now - trackStartTime;
                 TrackTimeOffset.Content = ""
                     + ts.Minutes + ":"
                     + ts.Seconds + ":"
-                    + ts.Milliseconds / 100;
+                    + 0;
             }
         }
 

@@ -115,17 +115,18 @@ namespace BtConsole
         static void Main(string[] args)
         {
             string LeaderName = "Leader";
-            string FollowName = "Led Fdollow";
+            string FollowName = "Led Follow";
             BluetoothClient c = new BluetoothClient();
 
             CombinedBluetoothController.FindPaired(c, LeaderName, FollowName);
             CombinedBluetoothController.SendMessage(LeaderName, "!cmy\r\n");
-            //CombinedBluetoothController.SendMessage(FollowName, "!cmy\r\n");
+            CombinedBluetoothController.SendMessage(FollowName, "!cmy\r\n");
             Thread.Sleep(2000);
             CombinedBluetoothController.SendMessage(LeaderName, "!rgbr\n");
-            //CombinedBluetoothController.SendMessage(FollowName, "!rgbr\n");
+            CombinedBluetoothController.SendMessage(FollowName, "!rgbr\n");
             Thread.Sleep(2000);
             CombinedBluetoothController.SendMessage(LeaderName, "!d\n");
+            CombinedBluetoothController.SendMessage(FollowName, "!d\n");
 
             CombinedBluetoothController.CloseConnections();
             
