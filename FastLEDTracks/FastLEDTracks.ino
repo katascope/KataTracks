@@ -91,10 +91,10 @@ SoftwareSerial bluetooth(RX_PIN, TX_PIN);
 //////////////// BlueTooth Section ////////////////
 
 static signed long timeOffset = 0;
+static signed long songOffset = 0;
 static unsigned long lastMatchedTimecode = 0;
-static unsigned long lastTimeLed = 0;
 static unsigned long GetTime() {
-  return (unsigned long)((signed long)millis() - (signed long)timeOffset);
+  return (unsigned long)((signed long)millis() - (signed long)timeOffset + songOffset);
 }
 
 void Print(String str)
@@ -109,7 +109,7 @@ void Println(String str)
   bluetooth.println(str);
 }
 
-void trackStart()
+void trackStart(unsigned long tc)
 {
   CRGB dk(0, 0, 0);
   fxState = FxState_PlayingTrack;
@@ -118,7 +118,7 @@ void trackStart()
   fxController.paletteSpeed = 0;
   fxController.paletteDirection = 1;
   fxController.transitionType = Transition_Instant;
-  lastMatchedTimecode = 0;
+  lastMatchedTimecode = tc;
   fxController.transitionMux = 0;
   timeOffset = (unsigned long)(millis() - (signed long)TRACK_START_DELAY);
 
@@ -164,7 +164,7 @@ void setup() {
   Println(String(BLUETOOTH_BAUD_RATE));
 
   if (fxState == FxState_PlayingTrack)
-    trackStart();
+    trackStart(0);
   else Println(F("Ready"));
 
   if (fxState == FxState_TestPattern)
@@ -299,30 +299,42 @@ static void processCapturedText()
   }
   else if (captureMode == CaptureTimeCode)
   { 
+    //Print(F("GOT:"));
+    //Println(String(capturedTimeCode));
     captureMode = CaptureNone;
-     
-    unsigned long tc = capturedTimeCode.toInt()*100;
+    //fxState == FxState_PlayingTrack;
+    unsigned long tc = capturedTimeCode.toInt();
+    //int match = GetCurrentTimeCodeMatch(tc);
+    //int nextmatch = GetNextTimeCodeMatch(match);
+    int prevmatch = GetPreviousTimeCodeMatch(tc);
+    lastMatchedTimecode = SongTrack_timecode(prevmatch);
 
     /*timeOffset = millis();
-    int match = GetCurrentTimeCodeMatch(tc);
-    int nextmatch = GetNextTimeCodeMatch(match);
     timeOffset -= tc;*/
 
-/*    Print(F("TC:"));
+    songOffset = tc;
+  
+
+    Print(F("TC:"));
     Print(String(tc));
     Print(F(" vs t="));
     Print(String(GetTime()));
     Print(F(", to="));
     Print(String(timeOffset));
-*/
-  /*  Print(F(", to+tc="));
-    Print(String(timeOffset ));
+    timeOffset=millis();
     Print(F(", "));
-*/
+    Print(String(lastMatchedTimecode));
+    Print(F("="));
+    Print(String(songOffset));
+    Print(F(",P:"));
+    Print(String(prevmatch));
+    Println(F(""));
+
+    trackStart(tc);
+
   /*  Print(F(" Match:"));
     Print(String(match));
     Print(F(","));
-    Print(String(nextmatch));
     Print(F(", now t="));
     Print(String(GetTime()));
     Println(F(""));
@@ -372,7 +384,8 @@ static void processInput(int data)
       Println(F("(q)lava (w)cloud (e)ocean (r)forest (t)rainbow (y)rainbowstripe (u)party (i)heat"));
       break;
 
-    case ')': trackStart(); break;
+    case ')': trackStart(0); break;
+    case '*': fxState = FxState_PlayingTrack;break;
     case '(': trackStop(); break;
 
     case '0': fxController.animatePalette = false; DirectEvent(fx_palette_dark); FastLED_SetPalette(); break;
@@ -414,7 +427,38 @@ static void processInput(int data)
   }
 }
 
+static unsigned long lastTimeDisplay = 0;
+void DisplayStatus()
+{
+    unsigned long t =  millis();
+    if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
+    {
+      Print(String(GetTime()));
+      Print(F(":"));
+      Print(String(songOffset));
+      Print(F(":"));
+      Print(String(timeOffset));
+      Print(F("["));
+      Print(FxStateName(fxState));
+      Print(F("-"));
+      Print(FxTransitionName(fxController.transitionType));
+      Print(F(""));
+      Print(F("]"));
+      if (fxState == FxState_PlayingTrack)
+      {
+        int match = GetCurrentTimeCodeMatch(GetTime());
+        Print(F("="));
+        Print(FxEventName(SongTrack_event(match)));
+        Print(F(" "));
+        Print(String(SongTrack_timecode(match)));
+      }
 
+      Println(F(""));
+      lastTimeDisplay = t;
+    }
+}
+
+static unsigned long lastTimeLed = 0;
 void loop()
 {
 /*
@@ -441,4 +485,5 @@ void loop()
       lastTimeLed = t;
     }
   }
+  DisplayStatus();
 }

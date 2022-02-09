@@ -17,8 +17,8 @@
         <Label x:Name="TrackTime" Content="0:0:0" Margin="105,1,0,0" Foreground="#FF2151B8" Width="134" FontSize="28" Canvas.Top="5"/>
         <Slider x:Name="VolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="220" Maximum="1" Canvas.Left="540" Canvas.Top="21"/>
         <Label x:Name="TrackTimeOffset" Content="0:0:0" Foreground="#FF2151B8" Width="134" FontSize="28" Canvas.Top="6" Canvas.Left="295"/>
-        <TextBox Canvas.Top="576" Text="Lead " TextWrapping="Wrap" Width="239" Height="288" Background="Black" Foreground="#FF59ABF0"/>
-        <TextBox Canvas.Top="576" Text="Follow" TextWrapping="Wrap" Width="239" Height="288" Background="Black" Foreground="#FF59ABF0" Canvas.Left="244"/>
+        <TextBox x:Name="LeaderText" Canvas.Top="576" Text="Lead" TextWrapping="Wrap" Width="239" Height="288" Background="Black" Foreground="#FF59ABF0"/>
+        <TextBox x:Name="FollowText" Canvas.Top="576" Text="Follow" TextWrapping="Wrap" Width="239" Height="288" Background="Black" Foreground="#FF59ABF0" Canvas.Left="244"/>
         <Label x:Name="BluetoothStatus" Content="Status" Foreground="#FF2151B8" Width="699" FontSize="28" Canvas.Top="5" Canvas.Left="768"/>
     </Canvas>
 </Window>

@@ -54,6 +54,17 @@ enum FxState
   FxState_PlayingTrack  = 2,
 };
 
+String FxStateName(FxState s)
+{
+  switch (s)
+  {
+    case FxState_Default:      return F("Norm"); break;
+    case FxState_TestPattern:  return F("Test"); break;
+    case FxState_PlayingTrack: return F("Play"); break;
+    default: return F("Unknown");
+  }
+}
+
 //List of possible Fx events
 enum FxEvent
 {
@@ -314,6 +325,18 @@ enum FxTransitionType
   Transition_TimedWipePos = 2,
   Transition_TimedWipeNeg = 3,
 };
+
+String FxTransitionName(FxTransitionType t)
+{
+  switch (t)
+  {
+    case Transition_Instant:      return F("Fast"); break;
+    case Transition_TimedFade:    return F("Fade"); break;
+    case Transition_TimedWipePos: return F("Wip-"); break;
+    case Transition_TimedWipeNeg: return F("Wip+"); break;
+    default: return F("Unknown");
+  }
+}
 
 struct FxController
 {

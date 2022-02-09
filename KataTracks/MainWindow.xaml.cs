@@ -39,9 +39,9 @@ namespace KataTracks
         static WaveOutEvent outputDevice = null;
         static DispatcherTimer dispatcherTimer;
         static bool playing = false;
-        static DateTime trackStartTime;
-        float volume = 0.25f;
-        static long timeMs = 0;
+        static DateTime literalTrackStartTime;
+        float volume = 0.15f;
+        static long timePlay = 0;
         static long timePick = 0;
         static bool b1Down = false;
         
@@ -66,15 +66,27 @@ namespace KataTracks
 
         private void PlayTrack(int seconds)
         {
+            if (playing)
+                return;
+
             var audioFile = new AudioFileReader(filename);
 
             audioFile.Skip((int)(seconds));
             outputDevice.Init(audioFile);
-            CombinedBluetoothController.SendMessage(leaderDeviceName, ")");
+
+            /*long time = timePlay + (long)timeValue;
+            string timeStr = "@" + (time*100) + "\n";
+            LeaderText.Text = timeStr;
+            CombinedBluetoothController.SendMessage(leaderDeviceName, timeStr);*/
+
+            string code = "@" + (timePick * 100) + "\r\n";
+            CombinedBluetoothController.SendMessage(leaderDeviceName, code);
+
+
             //CombinedBluetoothController.SendMessage(followDeviceName, ")");
             outputDevice.Play();
             outputDevice.Volume = volume;
-            trackStartTime = DateTime.Now;
+            literalTrackStartTime = DateTime.Now;
             playing = true;
         }
 
@@ -108,18 +120,23 @@ namespace KataTracks
 
 
             //4,416,049
-            TimeSpan timeElapsedSincePlay = DateTime.Now - trackStartTime + new TimeSpan(0,0,0,0,(int)timePick*100);
+            TimeSpan timeElapsedSincePlay = DateTime.Now - literalTrackStartTime + new TimeSpan(0,0,0,0,(int)timePlay*100);
+            TimeSpan timeCurrentInSong = timeElapsedSincePlay + new TimeSpan(0, 0, 0, 0, (int)timePick * 100);
             TrackTime.Content = ""
-                + timeElapsedSincePlay.Minutes + ":"
-                + timeElapsedSincePlay.Seconds + ":"
-                + timeElapsedSincePlay.Milliseconds / 100;
-            double timeValue = (double)(timeElapsedSincePlay.TotalMilliseconds / 100);
+                + timeCurrentInSong.Minutes + ":"
+                + timeCurrentInSong.Seconds + ":"
+                + timeCurrentInSong.Milliseconds / 100;
 
-            Canvas.SetLeft(TrackIndexPlay, timeMs+timeValue);
 
-            long time = timeMs + (long)timeValue;
-            string timeStr = "@" + time + "\n";
-            //combinedBluetoothController.SendMessage(leaderDeviceName, timeStr);
+            double timeValue = (double)(timeCurrentInSong.TotalMilliseconds)/100;
+            Canvas.SetLeft(TrackIndexPlay, timeValue);
+
+            /*long time = timePlay + (long)timeValue;
+            string timeStr = "@" + (time*100) + "\n";
+            LeaderText.Text = timeStr;
+            CombinedBluetoothController.SendMessage(leaderDeviceName, timeStr);*/
+
+            //trackStartTime = DateTime.Now - new TimeSpan(0, 0, 0, 0, (int)timePick * 100);
             //CombinedBluetoothController.SendMessage("Follow", timeStr);
 
             CommandManager.InvalidateRequerySuggested();

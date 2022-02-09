@@ -114,7 +114,7 @@ const unsigned long SongTrack[] PROGMEM =
   80400,fx_transition_timed_fade,
   80400,fx_palette_yellow,
   81800,fx_transition_timed_fade,
-  81800,fx_palette_orange,
+  81800,fx_palette_white,
 
   99000,fx_transition_timed_fade,
   99000,fx_palette_red,
@@ -172,6 +172,7 @@ static unsigned long SongTrack_event(int i) {  return pgm_read_dword(&(SongTrack
 
 static int GetNextTimeCodeMatch(int currentMatch) { unsigned long tc = SongTrack_timecode(currentMatch); for (int i=0;i<numSongTracks;i++) if (SongTrack_timecode(i) > tc) return i; return 0; }
 static int GetCurrentTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) <= timecode) match = i; } return match; }
+static int GetPreviousTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) < timecode) match = i; } return match; }
 
 void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode)
 {
