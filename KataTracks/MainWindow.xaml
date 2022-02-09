@@ -13,12 +13,21 @@
         <Label x:Name="VolumeSliderLabel" Content="Vol" Canvas.Left="492" Background="Black" Foreground="#FF2151B8" FontSize="24" Canvas.Top="8"/>
         <Button Click="Exit" Content="Exit" Canvas.Left="1492" Canvas.Top="824" Width="22" Height="18" Background="#FF012461" Foreground="White" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351"/>
         <Button Click="PlayButton_Click" Content="Play" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="38" Background="#FF012461" Foreground="White" BorderBrush="#FF120351"/>
-        <Button Click="StopButton_Click" HorizontalAlignment="Left"  Content="Stop" Margin="0,0,0,0" Height="39" Width="54" Background="#FF012461" Foreground="White" Canvas.Left="1472" BorderBrush="#FF120351" Canvas.Top="10"/>
+        <Button Click="StopButton_Click"  Content="Stop" Margin="0,0,0,0" Height="39" Width="80" Background="#FF012461" Foreground="White" Canvas.Left="1446" BorderBrush="#FF120351" Canvas.Top="10"/>
         <Label x:Name="TrackTime" Content="0:0:0" Margin="105,1,0,0" Foreground="#FF2151B8" Width="134" FontSize="28" Canvas.Top="5"/>
         <Slider x:Name="VolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="220" Maximum="1" Canvas.Left="540" Canvas.Top="21"/>
         <Label x:Name="TrackTimeOffset" Content="0:0:0" Foreground="#FF2151B8" Width="134" FontSize="28" Canvas.Top="6" Canvas.Left="295"/>
-        <TextBox x:Name="LeaderText" Canvas.Top="576" Text="Lead" TextWrapping="Wrap" Width="239" Height="288" Background="Black" Foreground="#FF59ABF0"/>
-        <TextBox x:Name="FollowText" Canvas.Top="576" Text="Follow" TextWrapping="Wrap" Width="239" Height="288" Background="Black" Foreground="#FF59ABF0" Canvas.Left="244"/>
+        <TextBox x:Name="LeaderText" HorizontalScrollBarVisibility="Visible"
+         VerticalScrollBarVisibility="Visible"
+          Canvas.Top="576" Text="Lead not connected." TextWrapping="Wrap" Width="239" Height="278" Background="Black" Foreground="#FF59ABF0" Canvas.Left="434"/>
         <Label x:Name="BluetoothStatus" Content="Status" Foreground="#FF2151B8" Width="699" FontSize="28" Canvas.Top="5" Canvas.Left="768"/>
+        <TextBox x:Name="Log" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"
+         Canvas.Top="576" TextWrapping="Wrap" Width="419" Height="278" Background="Black" Foreground="#FF59ABF0" Canvas.Left="10" Text="Initializing..."/>
+        <TextBox x:Name="FollowText" HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Visible"
+            Canvas.Top="576" Text="Follow not connected." TextWrapping="Wrap" Width="239" Height="278" Background="Black" Foreground="#FF59ABF0" Canvas.Left="678"/>
+        <TextBox x:Name="TrackView" HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Visible"
+            Canvas.Top="60" Text="" TextWrapping="Wrap" Width="236" Height="510" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1300"/>
     </Canvas>
 </Window>

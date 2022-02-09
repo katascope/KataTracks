@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using InTheHand.Net.Bluetooth;
+using InTheHand.Net.Sockets;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,10 +57,27 @@ namespace KataTracks
             Canvas.SetLeft(TrackIndexPlay, 0);
             VolumeSlider.Value = volume;
 
+            Log.Text = "KataTracks initializing\n";
 
             CombinedBluetoothController.Initialize();
             CombinedBluetoothController.FindPaired(leaderDeviceName,"");
 
+            
+            foreach (KeyValuePair<string, BluetoothDeviceInfo> kvp in CombinedBluetoothController.pairedBluetoothDevices)
+            {
+                Log.Text += "Device: " + kvp.Key + " " + kvp.Value.DeviceAddress + "\n";
+            }
+
+
+            foreach (KeyValuePair<string, BluetoothClient> kvp in CombinedBluetoothController.pairedBluetoothConnections)
+            {
+                Log.Text += "Online: " + kvp.Key + " (" + CombinedBluetoothController.pairedBluetoothDevices[kvp.Key].DeviceAddress + ")\n";
+                LeaderText.Text = "Online: " + kvp.Key + " (" + CombinedBluetoothController.pairedBluetoothDevices[kvp.Key].DeviceAddress + ")\n";
+            }
+
+            TrackView.Text = Fx.Get();
+
+            Log.Text += "Timer created\n";
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             dispatcherTimer.Start();
@@ -68,6 +87,8 @@ namespace KataTracks
         {
             if (playing)
                 return;
+
+            Log.Text += "Playing Track @" + seconds + " seconds\n";
 
             var audioFile = new AudioFileReader(filename);
 
@@ -92,6 +113,8 @@ namespace KataTracks
 
         private void StopTrack(bool resetLocation)
         {
+            Log.Text += "Stopping track\n";
+
             outputDevice.Stop();
             //dispatcherTimer.Stop();
             playing = false;
@@ -111,13 +134,12 @@ namespace KataTracks
                 BluetoothStatus.Content += " Lead";
             if (CombinedBluetoothController.IsOnline(followDeviceName))
                 BluetoothStatus.Content += " Follow";
-
+            
             if (!playing) return;
 
 
             if (outputDevice.PlaybackState == PlaybackState.Stopped)
             StopTrack(true);
-
 
             //4,416,049
             TimeSpan timeElapsedSincePlay = DateTime.Now - literalTrackStartTime + new TimeSpan(0,0,0,0,(int)timePlay*100);
@@ -144,6 +166,8 @@ namespace KataTracks
 
         private void Exit(object sender, RoutedEventArgs e)
         {
+            Log.Text += "Exiting\n";
+
             CombinedBluetoothController.Close();
             System.Windows.Application.Current.Shutdown();
         }
@@ -183,7 +207,6 @@ namespace KataTracks
                     + ts.Minutes + ":"
                     + ts.Seconds + ":"
                     + ts.Milliseconds / 100;
-
             }
         }
 

@@ -23,6 +23,7 @@ namespace KataTracks
 
             try
             {
+
                 Console.WriteLine("Sending..");
                 Stream peerStream = pairedBluetoothConnections[name].GetStream();
                 byte[] bMessage = System.Text.Encoding.ASCII.GetBytes(pMessage);
