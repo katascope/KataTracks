@@ -1,0 +1,127 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "InTheHand.Net.Bluetooth/4.0.26": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/InTheHand.Net.Bluetooth.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/InTheHand.Net.Bluetooth.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp3.1/InTheHand.Net.Bluetooth.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "InTheHand.Net.Bluetooth/4.0.26": {
+      "sha512": "F8OGA4BHCuxqhXAO7bia/jb9fBeMg5KDvNGU7n3O6VK0Z+5vO9Ank3CcZN9z1uGdEi7cg4XmhRRlcypb6PW/dA==",
+      "type": "package",
+      "path": "inthehand.net.bluetooth/4.0.26",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "32feet-package-icon.png",
+        "inthehand.net.bluetooth.4.0.26.nupkg.sha512",
+        "inthehand.net.bluetooth.nuspec",
+        "lib/monoandroid90/InTheHand.Net.Bluetooth.dll",
+        "lib/monoandroid90/InTheHand.Net.Bluetooth.xml",
+        "lib/net461/InTheHand.Net.Bluetooth.dll",
+        "lib/net461/InTheHand.Net.Bluetooth.xml",
+        "lib/net5.0-windows7.0/InTheHand.Net.Bluetooth.dll",
+        "lib/net5.0-windows7.0/InTheHand.Net.Bluetooth.xml",
+        "lib/netstandard2.0/InTheHand.Net.Bluetooth.dll",
+        "lib/netstandard2.0/InTheHand.Net.Bluetooth.xml",
+        "lib/uap10.0.16299/InTheHand.Net.Bluetooth.dll",
+        "lib/uap10.0.16299/InTheHand.Net.Bluetooth.pri",
+        "lib/uap10.0.16299/InTheHand.Net.Bluetooth.xml",
+        "lib/xamarinios10/InTheHand.Net.Bluetooth.dll",
+        "lib/xamarinios10/InTheHand.Net.Bluetooth.xml",
+        "runtimes/win/lib/netcoreapp3.1/InTheHand.Net.Bluetooth.dll",
+        "runtimes/win/lib/netcoreapp3.1/InTheHand.Net.Bluetooth.pdb",
+        "runtimes/win/lib/netcoreapp3.1/InTheHand.Net.Bluetooth.xml"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v3.1": [
+      "InTheHand.Net.Bluetooth >= 4.0.26"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Layne\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "G:\\github\\KataTracks\\BtConsole\\BtConsole.csproj",
+      "projectName": "BtConsole",
+      "projectPath": "G:\\github\\KataTracks\\BtConsole\\BtConsole.csproj",
+      "packagesPath": "C:\\Users\\Layne\\.nuget\\packages\\",
+      "outputPath": "G:\\github\\KataTracks\\BtConsole\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Layne\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp3.1"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
+        "dependencies": {
+          "InTheHand.Net.Bluetooth": {
+            "target": "Package",
+            "version": "[4.0.26, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TronGame.png" />
+    <None Remove="TronGameCropped.png" />
+    <None Remove="TronGameCroppedCyan.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="InTheHand.Net.Bluetooth" Version="4.0.26" />
+    <PackageReference Include="NAudio" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="TronGame.png" />
+    <Resource Include="TronGameCropped.png" />
+    <Resource Include="TronGameCroppedCyan.png" />
+  </ItemGroup>
+
+</Project>

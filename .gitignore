@@ -1,0 +1,14 @@
+
+*.exe
+*.targets
+*.props
+*.cache
+KataTracks/obj/Debug/netcoreapp3.1/App.g.i.cs
+KataTracks/obj/Debug/netcoreapp3.1/KataTracks.csproj.FileListAbsolute.txt
+KataTracks/obj/Debug/netcoreapp3.1/KataTracks.designer.deps.json
+KataTracks/obj/Debug/netcoreapp3.1/KataTracks.designer.runtimeconfig.json
+KataTracks/obj/Debug/netcoreapp3.1/MainWindow.g.i.cs
+*.v2
+.vs/KataTracks/v16/.suo
+BtConsole/obj/Debug/netcoreapp3.1/BtConsole.csproj.FileListAbsolute.txt
+KataTracks/obj/KataTracks.csproj.nuget.dgspec.json
