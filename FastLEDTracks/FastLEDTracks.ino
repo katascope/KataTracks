@@ -3,9 +3,9 @@
 // Purpose is for a wearable dance-synchronized lightsuit.
 #include "Fx.h"
 #include "Track.h"
-static FxState fxState = FxState_Default;
+//static FxState fxState = FxState_Default;
 //static FxState fxState = FxState_PlayingTrack;
-//static FxState fxState = FxState_TestPattern;
+static FxState fxState = FxState_TestPattern;
 
 //////////////// FastLED Section ////////////////
 #include <FastLED.h>
@@ -105,7 +105,7 @@ void setup() {
   if (fxState == FxState_TestPattern)
   {
     Println(F("TestMode"));
-    FxEventProcess(fx_palette_lava);
+    FxEventProcess(fx_palette_wrb);
     fxController.paletteDirection = 1;
     fxController.paletteSpeed = 3;
     fxController.animatePalette = true;
