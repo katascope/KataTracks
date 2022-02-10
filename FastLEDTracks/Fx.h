@@ -16,8 +16,10 @@ static CRGB LerpRGB(float t, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uin
 #define GREEN   0x00,0xFF,0x00
 #define CYAN    0x00,0xFF,0xFF
 #define BLUE    0x00,0x00,0xFF
-#define MAGENTA 0xFF,0x00,0xFF
+#define MAGENTA 0x7F,0x00,0xFF
 #define ORANGE  0xFF,0x7F,0x00
+#define HALF    0x7F,0x7F,0x7F
+#define LOWHALF 0x4F,0x4F,0x4F
 
 #define CRGB_DARK    CRGB(DARK)
 #define CRGB_WHITE   CRGB(WHITE)
@@ -28,6 +30,8 @@ static CRGB LerpRGB(float t, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uin
 #define CRGB_BLUE    CRGB(BLUE)
 #define CRGB_MAGENTA CRGB(MAGENTA)
 #define CRGB_ORANGE  CRGB(ORANGE)
+#define CRGB_HALF    CRGB(HALF)
+#define CRGB_LOWHALF CRGB(LOWHALF)
 
 static CRGB ShortnameToCRGB(char shortName)
 {  
@@ -44,6 +48,8 @@ static CRGB ShortnameToCRGB(char shortName)
     case 'b': return CRGB_BLUE; 
     case 'm': return CRGB_MAGENTA; 
     case 'o': return CRGB_ORANGE; 
+    case 'h': return CRGB_HALF; 
+    case 'l': return CRGB_LOWHALF; 
   }
 }
 
@@ -99,94 +105,106 @@ enum FxEvent
   fx_transition_timed_wipe_pos = 32,
   fx_transition_timed_wipe_neg = 33,
 
-  fx_palette_lead = 40,
-  fx_palette_follow = 41,
+  fx_palette_lead,
+  fx_palette_follow,
 
-  fx_track_begin = 50,
-  fx_track_stop = 51,
+  fx_track_begin,
+  fx_track_stop,
 
-  fx_palette_lava = 91,
-  fx_palette_cloud = 92,
-  fx_palette_ocean = 93,
-  fx_palette_forest = 94,
-  fx_palette_rainbow = 95,
-  fx_palette_rainbowstripe = 96,
-  fx_palette_party = 97,
-  fx_palette_heat = 98,
+  fx_palette_lava,
+  fx_palette_cloud,
+  fx_palette_ocean,
+  fx_palette_forest,
+  fx_palette_rainbow,
+  fx_palette_rainbowstripe,
+  fx_palette_party,
+  fx_palette_heat,
 
-  fx_palette_dark = 101,
-  fx_palette_white = 102,
-  fx_palette_red = 103,
-  fx_palette_yellow = 104,
-  fx_palette_green = 105,
-  fx_palette_cyan = 106,
-  fx_palette_blue = 107,
-  fx_palette_magenta = 108,
-  fx_palette_orange = 109,  
+  fx_palette_dark,
+  fx_palette_white,
+  fx_palette_red,
+  fx_palette_yellow,
+  fx_palette_green,
+  fx_palette_cyan,
+  fx_palette_blue,
+  fx_palette_magenta,
+  fx_palette_orange,
+  fx_palette_half,
+  fx_palette_lowhalf,
+
+  fx_palette_pulse_dark,
+  fx_palette_pulse_white,
+  fx_palette_pulse_red,
+  fx_palette_pulse_yellow,
+  fx_palette_pulse_green,
+  fx_palette_pulse_cyan,
+  fx_palette_pulse_blue,
+  fx_palette_pulse_magenta,
+  fx_palette_pulse_orange,
+  fx_palette_pulse_half,
+  fx_palette_pulse_lowhalf,
   
-  fx_palette_dw = 119,  
-  fx_palette_dr = 120,
-  fx_palette_dy = 121,
-  fx_palette_dg = 122,
-  fx_palette_dc = 123,
-  fx_palette_db = 124,
-  fx_palette_dm = 125,
-  fx_palette_wr = 130,
-  fx_palette_wy = 131,
-  fx_palette_wg = 132,
-  fx_palette_wc = 133,
-  fx_palette_wb = 134,
-  fx_palette_wm = 135,
-  fx_palette_ry = 141,
-  fx_palette_rg = 142,
-  fx_palette_rc = 143,
-  fx_palette_rb = 144,
-  fx_palette_rm = 145,
-  fx_palette_yg = 152,
-  fx_palette_yc = 153,
-  fx_palette_yb = 154,
-  fx_palette_ym = 155,
-  fx_palette_gc = 163,
-  fx_palette_gb = 164,
-  fx_palette_gm = 165,
-  fx_palette_cb = 174,
-  fx_palette_cm = 175,
-  fx_palette_bm = 185,
+  fx_palette_dw,
+  fx_palette_dr,
+  fx_palette_dy,
+  fx_palette_dg,
+  fx_palette_dc,
+  fx_palette_db,
+  fx_palette_dm,
+  fx_palette_wr,
+  fx_palette_wy,
+  fx_palette_wg,
+  fx_palette_wc,
+  fx_palette_wb,
+  fx_palette_wm,
+  fx_palette_ry,
+  fx_palette_rg,
+  fx_palette_rc,
+  fx_palette_rb,
+  fx_palette_rm,
+  fx_palette_yg,
+  fx_palette_yc,
+  fx_palette_yb,
+  fx_palette_ym,
+  fx_palette_gc,
+  fx_palette_gb,
+  fx_palette_gm,
+  fx_palette_cb,
+  fx_palette_cm,
+  fx_palette_bm,
 
-  fx_palette_wry = 201,
-  fx_palette_wrg = 202,
-  fx_palette_wrc = 203,
-  fx_palette_wrb = 204,
-  fx_palette_wrm = 205,
-  fx_palette_wyg = 206,
-  fx_palette_wyc = 207,
-  fx_palette_wyb = 208,
-  fx_palette_wym = 209,
-  fx_palette_wgc = 210,
-  fx_palette_wgb = 211,
-  fx_palette_wgm = 212,
-  fx_palette_wcb = 213,
-  fx_palette_wcm = 214,
-  fx_palette_wbm = 215,
+  fx_palette_wry,
+  fx_palette_wrg,
+  fx_palette_wrc,
+  fx_palette_wrb,
+  fx_palette_wrm,
+  fx_palette_wyg,
+  fx_palette_wyc,
+  fx_palette_wyb,
+  fx_palette_wym,
+  fx_palette_wgc,
+  fx_palette_wgb,
+  fx_palette_wgm,
+  fx_palette_wcb,
+  fx_palette_wcm,
+  fx_palette_wbm,
 
-  fx_palette_dry = 221,
-  fx_palette_drg = 222,
-  fx_palette_drc = 223,
-  fx_palette_drb = 224,
-  fx_palette_drm = 225,
-  fx_palette_dyg = 226,
-  fx_palette_dyc = 227,
-  fx_palette_dyb = 228,
-  fx_palette_dym = 229,
-  fx_palette_dgc = 230,
-  fx_palette_dgb = 231,
-  fx_palette_dgm = 232,
-  fx_palette_dcb = 233,
-  fx_palette_dcm = 234,
-  fx_palette_dbm = 235,
+  fx_palette_dry,
+  fx_palette_drg,
+  fx_palette_drc,
+  fx_palette_drb,
+  fx_palette_drm,
+  fx_palette_dyg,
+  fx_palette_dyc,
+  fx_palette_dyb,
+  fx_palette_dym,
+  fx_palette_dgc,
+  fx_palette_dgb,
+  fx_palette_dgm,
+  fx_palette_dcb,
+  fx_palette_dcm,
+  fx_palette_dbm,
 
-  fx_palette_rgb = 240,
-  fx_palette_cmy = 241,
 
   fx_nothing = 255
 };
@@ -197,125 +215,137 @@ static String FxEventName(int event)
 {  
   switch(event)
   {
-    case fx_speed_0: return F("x0");break;
-    case fx_speed_1: return F("x1");break;
-    case fx_speed_2: return F("x2");break;
-    case fx_speed_3: return F("x3");break;
-    case fx_speed_4: return F("x4");break;
-    case fx_speed_5: return F("x5");break;
-    case fx_speed_6: return F("x6");break;
-    case fx_speed_7: return F("x7");break;
-    case fx_speed_8: return F("x8");break;
-    case fx_speed_9: return F("x9");break;
-    case fx_speed_10: return F("x10");break;
-    case fx_speed_11: return F("x11");break;
-    case fx_speed_12: return F("x12");break;
-    case fx_speed_13: return F("x13");break;
-    case fx_speed_14: return F("x14");break;
-    case fx_speed_15: return F("x15");break;
-    case fx_speed_16: return F("x16");break;
-    case fx_speed_17: return F("x17");break;
-    case fx_speed_18: return F("x18");break;
-    case fx_speed_32: return F("x32");break;
+    case fx_speed_0: return F("x0");
+    case fx_speed_1: return F("x1");
+    case fx_speed_2: return F("x2");
+    case fx_speed_3: return F("x3");
+    case fx_speed_4: return F("x4");
+    case fx_speed_5: return F("x5");
+    case fx_speed_6: return F("x6");
+    case fx_speed_7: return F("x7");
+    case fx_speed_8: return F("x8");
+    case fx_speed_9: return F("x9");
+    case fx_speed_10: return F("x10");
+    case fx_speed_11: return F("x11");
+    case fx_speed_12: return F("x12");
+    case fx_speed_13: return F("x13");
+    case fx_speed_14: return F("x14");
+    case fx_speed_15: return F("x15");
+    case fx_speed_16: return F("x16");
+    case fx_speed_17: return F("x17");
+    case fx_speed_18: return F("x18");
+    case fx_speed_32: return F("x32");
 
-    case fx_speed_pos: return F("speed pos");break;
-    case fx_speed_neg: return F("speed neg");break;
-    case fx_speed_inc: return F("speed inc");break;
-    case fx_speed_dec: return F("speed dec");break;
+    case fx_speed_pos: return F("speed pos");
+    case fx_speed_neg: return F("speed neg");
+    case fx_speed_inc: return F("speed inc");
+    case fx_speed_dec: return F("speed dec");
     
-    case fx_transition_fast: return F("t-fast");break;
-    case fx_transition_timed_fade:return F("t-timed-fade");break;
-    case fx_transition_timed_wipe_pos:return F("t-timed-wipe-pos");break;
-    case fx_transition_timed_wipe_neg:return F("t-timed-wipe-neg");break;
+    case fx_transition_fast: return F("t-fast");
+    case fx_transition_timed_fade:return F("t-timed-fade");
+    case fx_transition_timed_wipe_pos:return F("t-timed-wipe-pos");
+    case fx_transition_timed_wipe_neg:return F("t-timed-wipe-neg");
     
-    case fx_palette_lead:    return F("lead");break;    
-    case fx_palette_follow:  return F("follow");break;       
+    case fx_palette_lead:    return F("lead");    
+    case fx_palette_follow:  return F("follow");       
 
-    case fx_palette_lava: return F("lava");break;
-    case fx_palette_cloud: return F("cloud");break;
-    case fx_palette_ocean: return F("ocean");break;
-    case fx_palette_forest: return F("forest");break;
-    case fx_palette_rainbow: return F("rainbow");break;
-    case fx_palette_rainbowstripe: return F("rainbowstripe");break;
-    case fx_palette_party: return F("party");break;
-    case fx_palette_heat: return F("heat");break;
+    case fx_palette_lava: return F("lava");
+    case fx_palette_cloud: return F("cloud");
+    case fx_palette_ocean: return F("ocean");
+    case fx_palette_forest: return F("forest");
+    case fx_palette_rainbow: return F("rainbow");
+    case fx_palette_rainbowstripe: return F("rainbowstripe");
+    case fx_palette_party: return F("party");
+    case fx_palette_heat: return F("heat");
 
-    case fx_palette_dark:    return F("dark");break;
-    case fx_palette_white:   return F("white");break;
-    case fx_palette_red:     return F("red");break;
-    case fx_palette_yellow:  return F("yellow");break;
-    case fx_palette_green:   return F("green");break;
-    case fx_palette_cyan:    return F("cyan");break;
-    case fx_palette_blue:    return F("blue");break;
-    case fx_palette_magenta: return F("magenta");break;
-    case fx_palette_orange:  return F("orange");break;
+    case fx_palette_dark:    return F("dark");
+    case fx_palette_white:   return F("white");
+    case fx_palette_red:     return F("red");
+    case fx_palette_yellow:  return F("yellow");
+    case fx_palette_green:   return F("green");
+    case fx_palette_cyan:    return F("cyan");
+    case fx_palette_blue:    return F("blue");
+    case fx_palette_magenta: return F("magenta");
+    case fx_palette_orange:  return F("orange");
+    case fx_palette_half:  return F("half");
+    case fx_palette_lowhalf:  return F("lowhalf");
+
+    case fx_palette_pulse_dark:    return F("pulse-dark");
+    case fx_palette_pulse_white:   return F("pulse-white");
+    case fx_palette_pulse_red:     return F("pulse-red");
+    case fx_palette_pulse_yellow:  return F("pulse-yellow");
+    case fx_palette_pulse_green:   return F("pulse-green");
+    case fx_palette_pulse_cyan:    return F("pulse-cyan");
+    case fx_palette_pulse_blue:    return F("pulse-blue");
+    case fx_palette_pulse_magenta: return F("pulse-magenta");
+    case fx_palette_pulse_orange:  return F("pulse-orange");
+    case fx_palette_pulse_half:  return F("pulse-half");
+    case fx_palette_pulse_lowhalf:  return F("pulse-lowhalf");
    
-    case fx_palette_dw: return F("dark-white");break;
-    case fx_palette_dr: return F("dark-red");break;
-    case fx_palette_dy: return F("dark-yellow");break;
-    case fx_palette_dg: return F("dark-green");break;
-    case fx_palette_dc: return F("dark-cyan");break;
-    case fx_palette_db: return F("dark-blue");break;
-    case fx_palette_dm: return F("dark-magenta");break;
-    case fx_palette_wr: return F("white-red");break;
-    case fx_palette_wy: return F("white-yellow");break;
-    case fx_palette_wg: return F("white-green");break;
-    case fx_palette_wc: return F("white-cyan");break;
-    case fx_palette_wb: return F("white-blue");break;
-    case fx_palette_wm: return F("white-magenta");break;
-    case fx_palette_ry: return F("red-yellow");break;
-    case fx_palette_rg: return F("red-green");break;
-    case fx_palette_rc: return F("red-cyan");break;
-    case fx_palette_rb: return F("red-blue");break;
-    case fx_palette_rm: return F("red-magenta");break;
-    case fx_palette_yg: return F("yellow-green");break;
-    case fx_palette_yc: return F("yellow-cyan");break;
-    case fx_palette_yb: return F("yellow-blue");break;
-    case fx_palette_ym: return F("yellow-magenta");break;
-    case fx_palette_gc: return F("green-cyan");break;
-    case fx_palette_gb: return F("green-blue");break;
-    case fx_palette_gm: return F("green-magenta");break;
-    case fx_palette_cb: return F("cyan-blue");break;
-    case fx_palette_cm: return F("cyan-magenta");break;
-    case fx_palette_bm: return F("blue-magenta");break;
+    case fx_palette_dw: return F("dark-white");
+    case fx_palette_dr: return F("dark-red");
+    case fx_palette_dy: return F("dark-yellow");
+    case fx_palette_dg: return F("dark-green");
+    case fx_palette_dc: return F("dark-cyan");
+    case fx_palette_db: return F("dark-blue");
+    case fx_palette_dm: return F("dark-magenta");
+    case fx_palette_wr: return F("white-red");
+    case fx_palette_wy: return F("white-yellow");
+    case fx_palette_wg: return F("white-green");
+    case fx_palette_wc: return F("white-cyan");
+    case fx_palette_wb: return F("white-blue");
+    case fx_palette_wm: return F("white-magenta");
+    case fx_palette_ry: return F("red-yellow");
+    case fx_palette_rg: return F("red-green");
+    case fx_palette_rc: return F("red-cyan");
+    case fx_palette_rb: return F("red-blue");
+    case fx_palette_rm: return F("red-magenta");
+    case fx_palette_yg: return F("yellow-green");
+    case fx_palette_yc: return F("yellow-cyan");
+    case fx_palette_yb: return F("yellow-blue");
+    case fx_palette_ym: return F("yellow-magenta");
+    case fx_palette_gc: return F("green-cyan");
+    case fx_palette_gb: return F("green-blue");
+    case fx_palette_gm: return F("green-magenta");
+    case fx_palette_cb: return F("cyan-blue");
+    case fx_palette_cm: return F("cyan-magenta");
+    case fx_palette_bm: return F("blue-magenta");
 
-    case fx_palette_wry:return F("wry");break;
-    case fx_palette_wrg:return F("wrg");break;
-    case fx_palette_wrc:return F("wrc");break;
-    case fx_palette_wrb:return F("wrb");break;
-    case fx_palette_wrm:return F("wrm");break;
-    case fx_palette_wyg:return F("wyg");break;
-    case fx_palette_wyc:return F("wyc");break;
-    case fx_palette_wyb:return F("wyb");break;
-    case fx_palette_wym:return F("wym");break;
-    case fx_palette_wgc:return F("wgc");break;
-    case fx_palette_wgb:return F("wgb");break;
-    case fx_palette_wgm:return F("wgm");break;
-    case fx_palette_wcb:return F("wcb");break;
-    case fx_palette_wcm:return F("wcm");break;
-    case fx_palette_wbm:return F("wbm");break;
+    case fx_palette_wry:return F("wry");
+    case fx_palette_wrg:return F("wrg");
+    case fx_palette_wrc:return F("wrc");
+    case fx_palette_wrb:return F("wrb");
+    case fx_palette_wrm:return F("wrm");
+    case fx_palette_wyg:return F("wyg");
+    case fx_palette_wyc:return F("wyc");
+    case fx_palette_wyb:return F("wyb");
+    case fx_palette_wym:return F("wym");
+    case fx_palette_wgc:return F("wgc");
+    case fx_palette_wgb:return F("wgb");
+    case fx_palette_wgm:return F("wgm");
+    case fx_palette_wcb:return F("wcb");
+    case fx_palette_wcm:return F("wcm");
+    case fx_palette_wbm:return F("wbm");
 
-    case fx_palette_dry:return F("dry");break;
-    case fx_palette_drg:return F("drg");break;
-    case fx_palette_drc:return F("drc");break;
-    case fx_palette_drb:return F("drb");break;
-    case fx_palette_drm:return F("drm");break;
-    case fx_palette_dyg:return F("dyg");break;
-    case fx_palette_dyc:return F("dyc");break;
-    case fx_palette_dyb:return F("dyb");break;
-    case fx_palette_dym:return F("dym");break;
-    case fx_palette_dgc:return F("dgc");break;
-    case fx_palette_dgb:return F("dgb");break;
-    case fx_palette_dgm:return F("dgm");break;
-    case fx_palette_dcb:return F("dcb");break;
-    case fx_palette_dcm:return F("dcm");break;
-    case fx_palette_dbm:return F("dbm");break;    
+    case fx_palette_dry:return F("dry");
+    case fx_palette_drg:return F("drg");
+    case fx_palette_drc:return F("drc");
+    case fx_palette_drb:return F("drb");
+    case fx_palette_drm:return F("drm");
+    case fx_palette_dyg:return F("dyg");
+    case fx_palette_dyc:return F("dyc");
+    case fx_palette_dyb:return F("dyb");
+    case fx_palette_dym:return F("dym");
+    case fx_palette_dgc:return F("dgc");
+    case fx_palette_dgb:return F("dgb");
+    case fx_palette_dgm:return F("dgm");
+    case fx_palette_dcb:return F("dcb");
+    case fx_palette_dcm:return F("dcm");
+    case fx_palette_dbm:return F("dbm");    
     
-    case fx_palette_rgb:return F("dgb");break;
-    case fx_palette_cmy:return F("cmy");break;
-
-    case fx_nothing:return F("nothing");break;
+    case fx_nothing:return F("nothing");
   }
+  return F("unk");
 }
 
 enum FxTransitionType
@@ -404,6 +434,12 @@ void CreateTripleBand(uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2
 }
 void CreateDoubleBand(uint8_t r1, uint8_t g1, uint8_t b1,uint8_t r2, uint8_t g2, uint8_t b2) { CreateQuadBand(r1,g1,b1,r2,g2,b2,r1,g1,b1,r2,g2,b2); }
 void CreateSingleBand(uint8_t r, uint8_t g, uint8_t b) { CreateQuadBand(r,g,b,r,g,b,r,g,b,r,g,b); }
+void CreateSinglePulseBand(uint8_t r, uint8_t g, uint8_t b) { 
+  CreatePaletteBands( CRGB(r/2,g/2,b/2),CRGB(r,g,b),CRGB(r/2,g/2,b/2),CRGB(0,0,0),
+                      CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+                      CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+                      CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0));
+}
 
 
 void FxEventProcess(int event)
@@ -475,6 +511,20 @@ void FxEventProcess(int event)
     case fx_palette_blue:CreateSingleBand(BLUE);break;
     case fx_palette_magenta:CreateSingleBand(MAGENTA);break;
     case fx_palette_orange:CreateSingleBand(ORANGE);break;
+    case fx_palette_half:CreateSingleBand(HALF);break;
+    case fx_palette_lowhalf:CreateSingleBand(LOWHALF);break;
+
+    case fx_palette_pulse_dark:CreateSinglePulseBand(DARK);break;
+    case fx_palette_pulse_white:CreateSinglePulseBand(WHITE);break;
+    case fx_palette_pulse_red:CreateSinglePulseBand(RED);break;
+    case fx_palette_pulse_yellow:CreateSinglePulseBand(YELLOW);break;
+    case fx_palette_pulse_green:CreateSinglePulseBand(GREEN);break;
+    case fx_palette_pulse_cyan:CreateSinglePulseBand(CYAN);break;
+    case fx_palette_pulse_blue:CreateSinglePulseBand(BLUE);break;
+    case fx_palette_pulse_magenta:CreateSinglePulseBand(MAGENTA);break;
+    case fx_palette_pulse_orange:CreateSinglePulseBand(ORANGE);break;
+    case fx_palette_pulse_half:CreateSinglePulseBand(HALF);break;
+    case fx_palette_pulse_lowhalf:CreateSinglePulseBand(LOWHALF);break;
     
     case fx_palette_dr: CreateDoubleBand(DARK, RED); break;
     case fx_palette_dy: CreateDoubleBand(DARK, YELLOW); break;
@@ -536,9 +586,7 @@ void FxEventProcess(int event)
     case fx_palette_dcm: CreateQuadBand(DARK, CYAN,   DARK, MAGENTA); break;
     case fx_palette_dbm: CreateQuadBand(DARK, BLUE,   DARK, MAGENTA); break;
 
-    case fx_palette_rgb: CreateTripleBand(RED, GREEN, BLUE);break;
-    case fx_palette_cmy: CreateTripleBand(CYAN, MAGENTA, YELLOW);break;
-  }
+ }
 }
 
 #endif

@@ -31,5 +31,34 @@
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="60" Text="" TextWrapping="Wrap" Width="236" Height="510" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1300"/>
         <Button Click="PlayFromStartButton_Click" Content="Start" Height="38" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Top="1"/>
+        <Button Click="SendBoth" Tag="0" Content="Dark" Canvas.Left="922" Canvas.Top="566" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="1" Content="White" Canvas.Left="922" Canvas.Top="596" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="2" Content="Red" Canvas.Left="922" Canvas.Top="626" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="3" Content="Yellow" Canvas.Left="922" Canvas.Top="655" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="4" Content="Green" Canvas.Left="922" Canvas.Top="685" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="5" Content="Cyan" Canvas.Left="922" Canvas.Top="715" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="6" Content="Blue" Canvas.Left="922" Canvas.Top="743" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="7" Content="Magenta" Canvas.Left="922" Canvas.Top="773" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="8" Content="Orange" Canvas.Left="922" Canvas.Top="803" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="9" Content="RGB" Canvas.Left="1022" Canvas.Top="566" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="q" Content="Lava" Canvas.Left="1022" Canvas.Top="596" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="w" Content="Cloud" Canvas.Left="1022" Canvas.Top="626" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="e" Content="Ocean" Canvas.Left="1022" Canvas.Top="655" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="r" Content="Forest" Canvas.Left="1022" Canvas.Top="685" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="t" Content="Rainbow" Canvas.Left="1022" Canvas.Top="715" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="y" Content="RainbowStripe" Canvas.Left="1022" Canvas.Top="743" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="u" Content="Party" Canvas.Left="1022" Canvas.Top="773" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="i" Content="Heat" Canvas.Left="1022" Canvas.Top="803" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="-" Content="Speed -" Canvas.Left="1300" Canvas.Top="567" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="=" Content="Speed +" Canvas.Left="1400" Canvas.Top="567" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="_" Content="Speed Neg" Canvas.Left="1300" Canvas.Top="597" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="+" Content="Speed Pos" Canvas.Left="1400" Canvas.Top="597" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="~" Content="Speed Stop" Canvas.Left="1300" Canvas.Top="626" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBothCRLF" Tag="!dbdddddddddddddd" Content="Blue Pulse" Canvas.Left="1175" Canvas.Top="566" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBothCRLF" Tag="!drdddddddddddddd" Content="Red Pulse" Canvas.Left="1175" Canvas.Top="596" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBothCRLF" Tag="!worddddddddddddd" Content="Hot Fire Pulse" Canvas.Left="1175" Canvas.Top="626" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBothCRLF" Tag="!dordrddddddddddd" Content="Fire Pulse" Canvas.Left="1175" Canvas.Top="661" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBothCRLF" Tag="!lwhlrdddlwhlbddd" Content="Patriotic USA" Canvas.Left="1175" Canvas.Top="691" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBothCRLF" Tag="!ddddrdddddddbddd" Content="TronFight" Canvas.Left="1175" Canvas.Top="721" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
     </Canvas>
 </Window>

@@ -45,7 +45,7 @@ namespace KataTracks
         float volume = 0.15f;
         static long timePick = 0;
         static bool b1Down = false;
-        
+
 
         public MainWindow()
         {
@@ -59,9 +59,9 @@ namespace KataTracks
             Log.Text = "KataTracks initializing\n";
 
             CombinedBluetoothController.Initialize();
-            CombinedBluetoothController.FindPaired(leaderDeviceName,followDeviceName);
+            CombinedBluetoothController.FindPaired(leaderDeviceName, followDeviceName);
 
-            
+
             foreach (KeyValuePair<string, BluetoothDeviceInfo> kvp in CombinedBluetoothController.pairedBluetoothDevices)
             {
                 Log.Text += "Device: " + kvp.Key + " " + kvp.Value.DeviceAddress + "\n";
@@ -129,7 +129,7 @@ namespace KataTracks
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
-        {            
+        {
             if (!playing) BluetoothStatus.Content = "Stopped";
             else BluetoothStatus.Content = "Playing";
 
@@ -137,12 +137,12 @@ namespace KataTracks
                 BluetoothStatus.Content += " Lead";
             if (CombinedBluetoothController.IsOnline(followDeviceName))
                 BluetoothStatus.Content += " Follow";
-            
+
             if (!playing) return;
 
 
             if (outputDevice.PlaybackState == PlaybackState.Stopped)
-            StopTrack(true);
+                StopTrack(true);
 
             //4,416,049
             TimeSpan timeElapsedSincePlay = DateTime.Now - literalTrackStartTime;// + new TimeSpan(0,0,0,0,(int)timePlay*100);
@@ -153,7 +153,7 @@ namespace KataTracks
                 + timeCurrentInSong.Milliseconds / 100;
 
 
-            double timeValue = (double)(timeCurrentInSong.TotalMilliseconds)/100;
+            double timeValue = (double)(timeCurrentInSong.TotalMilliseconds) / 100;
             Canvas.SetLeft(TrackIndexPlay, Math.Round(timeValue, 0));
 
             /*long time = timePlay + (long)timeValue;
@@ -175,7 +175,7 @@ namespace KataTracks
             System.Windows.Application.Current.Shutdown();
         }
 
-        
+
         private void PlayFromStartButton_Click(object sender, RoutedEventArgs e)
         {
             Canvas.SetLeft(TrackIndex, 0);
@@ -191,7 +191,7 @@ namespace KataTracks
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             double ts = timePick;
-            ts = Math.Round(ts/10, 0);
+            ts = Math.Round(ts / 10, 0);
             PlayTrack((int)ts);
         }
         private void StopButton_Click(object sender, RoutedEventArgs e)
@@ -218,10 +218,10 @@ namespace KataTracks
                 double X = e.GetPosition(this).X;
                 timePick = (long)X;
 
-                X = Math.Round(X/10,0)*10;
+                X = Math.Round(X / 10, 0) * 10;
                 Canvas.SetLeft(TrackIndex, X);
 
-                TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)timePick*100);// DateTime.Now - trackStartTime;
+                TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)timePick * 100);// DateTime.Now - trackStartTime;
                 TrackTimeOffset.Content = ""
                     + ts.Minutes + ":"
                     + ts.Seconds + ":"
@@ -231,8 +231,25 @@ namespace KataTracks
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            volume = (float)e.NewValue;            
+            volume = (float)e.NewValue;
             outputDevice.Volume = volume;
+        }
+
+        void StopAndSendToBoth(string value)
+        {
+           // StopTrack(false);
+            CombinedBluetoothController.SendMessage(leaderDeviceName, value);
+            CombinedBluetoothController.SendMessage(followDeviceName, value);
+        }
+        private void SendBoth(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;            
+            StopAndSendToBoth(""+button.Tag);
+        }
+        private void SendBothCRLF(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            StopAndSendToBoth("" + button.Tag + "\r\n");
         }
     }
 }
