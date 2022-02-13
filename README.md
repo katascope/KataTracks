@@ -1,3 +1,41 @@
+Shopping:
+liquid plumr
+thick olive oil
+3m electrical tape 33 or 88
+butter
+eggs
+ham
+cheese
+muffins
+coffee creamer
+pizzas
+peanuts
+chips
+frozen vegetables
+
+
+Todo:
+Build:
+ Backup device
+ Fix Burnt BEC
+Research:
+ KataTracks
+  Postponed connecting
+  "Shimmer test" for pre-show synchronicity
+  Multi-threaded Reconnection ability
+ Lightsuit
+  Extension cables - need newtype connector
+  X-hole connector, like leather/rubber?
+ Device
+  Redesign to protect Bluetooth module
+
+
+
+
+
+
+
+
 # KataTracks
 What it should be: Wireless light-suits precisely synchronized to events in the music.
 Lightsuit.. Songtracksuit?

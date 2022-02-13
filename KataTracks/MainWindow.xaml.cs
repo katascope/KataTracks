@@ -39,6 +39,7 @@ namespace KataTracks
         static string bluetoothDeviceSearchName = "Lightsuit";
         static WaveOutEvent outputDevice = null;
         static DispatcherTimer dispatcherTimer;
+        static DispatcherTimer connectionTimer;
         static DispatcherTimer btTextTimer;
         static bool playing = false;
         static DateTime literalTrackStartTime;
@@ -46,12 +47,14 @@ namespace KataTracks
         static long timePick = 0;
         static bool b1Down = false;
         static Dictionary<int,string> connectionSlots = new Dictionary<int, string>();
+        static bool activateConnection = false;
 
         public MainWindow()
         {
             InitializeComponent();
             outputDevice = new WaveOutEvent();
             dispatcherTimer = new DispatcherTimer();
+            connectionTimer = new DispatcherTimer();
             btTextTimer = new DispatcherTimer();
             Canvas.SetLeft(TrackIndex, 0);
             Canvas.SetLeft(TrackIndexPlay, 0);
@@ -59,40 +62,70 @@ namespace KataTracks
 
             MainLog.Text = "KataTracks initializing\n";
             CombinedBluetoothController.Initialize();
+
+
             MainLog.Text += "Finding '" + bluetoothDeviceSearchName + "'\n";
-            CombinedBluetoothController.FindPaired(bluetoothDeviceSearchName);
-            foreach (KeyValuePair<string, BluetoothDeviceInfo> kvp in CombinedBluetoothController.pairedBluetoothDevices)
+            Dictionary<string, BluetoothDeviceInfo> paired = CombinedBluetoothController.FindPaired(bluetoothDeviceSearchName);
+            foreach (KeyValuePair<string, BluetoothDeviceInfo> kvp in paired)
             {
-                MainLog.Text += " " + kvp.Key + "\n";// + " " + kvp.Value.DeviceAddress + "\n";
+                MainLog.Text += " " + kvp.Key + "\n";
             }
 
-            MainLog.Text += "Connecting..\n";
-            CombinedBluetoothController.ConnectPaired("Lightsuit");
-            int count = 0;
-            foreach (KeyValuePair<string, BluetoothClient> kvp in CombinedBluetoothController.pairedBluetoothConnections)
-            {
-                MainLog.Text += "+" + kvp.Key + "\n";// + " (" + CombinedBluetoothController.pairedBluetoothDevices[kvp.Key].DeviceAddress + ")\n";
-                switch (count)
-                {
-                    case 0: connectionSlots[0] = kvp.Key; Log1Label.Content = kvp.Key; break;
-                    case 1: connectionSlots[1] = kvp.Key; Log2Label.Content = kvp.Key; break;
-                    case 2: connectionSlots[2] = kvp.Key; Log3Label.Content = kvp.Key; break;
-                    case 3: connectionSlots[3] = kvp.Key; Log4Label.Content = kvp.Key; break;
-                }
-
-                count++;
-            }
-
+            //ConnectPaired();
             TrackView.Text = Fx.Get();
+            
+            MainLog.Text += "Ready to Connect\n";
 
-            MainLog.Text += "Timer created\n";
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             dispatcherTimer.Start();
 
+            activateConnection = true;MainLog.Text += "Auto-Connect..\n";
+
+            connectionTimer.Tick += new EventHandler(connectionTimer_Tick);
+            connectionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
+            connectionTimer.Start();
+
             btTextTimer.Tick += new EventHandler(btTextTimer_Tick);
             btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             btTextTimer.Start();
+
+
+        }
+
+        private void ConnectPaired()
+        {
+            MainLog.Text += "Connecting...\n";
+            connectionSlots = new Dictionary<int, string>();
+
+            Log1Label.Content = "Device";
+            Log1.Text = "Not connected.";
+            Log2Label.Content = "Device";
+            Log2.Text = "Not connected.";
+            Log3Label.Content = "Device";
+            Log3.Text = "Not connected.";
+            Log4Label.Content = "Device";
+            Log4.Text = "Not connected.";
+
+
+            CombinedBluetoothController.ConnectPaired(bluetoothDeviceSearchName);
+            int count = 0;
+            foreach (KeyValuePair<string, Lightsuit> kvp in CombinedBluetoothController.lightsuits)
+            {
+                string name = kvp.Key;
+                Lightsuit lightsuit = kvp.Value;
+                MainLog.Text += "+" + name + "\n";
+                switch (count)
+                {
+                    case 0: connectionSlots[0] = name; Log1Label.Content = name; break;
+                    case 1: connectionSlots[1] = name; Log2Label.Content = name; break;
+                    case 2: connectionSlots[2] = name; Log3Label.Content = name; break;
+                    case 3: connectionSlots[3] = name; Log4Label.Content = name; break;
+                }
+
+                count++;
+            }
+            activateConnection = false;
         }
 
 
@@ -108,13 +141,8 @@ namespace KataTracks
             audioFile.Skip((int)(seconds));
             outputDevice.Init(audioFile);
 
-
             string code = "@" + (timePick * 100) + "\r\n";
             CombinedBluetoothController.SendMessage(code);
-            //CombinedBluetoothController.SendMessage(followDeviceName, code);
-
-
-            //CombinedBluetoothController.SendMessage(followDeviceName, ")");
             outputDevice.Play();
             outputDevice.Volume = volume;
             literalTrackStartTime = DateTime.Now;
@@ -135,6 +163,14 @@ namespace KataTracks
             CombinedBluetoothController.SendMessage("(");
         }
 
+        private void connectionTimer_Tick(object sender, EventArgs e)
+        {
+            if (activateConnection)
+            {
+                ConnectPaired();
+            }
+        }
+
         private void btTextTimer_Tick(object sender, EventArgs e)
         {
             for (int i=0;i<4;i++)
@@ -145,24 +181,25 @@ namespace KataTracks
                     switch (i)
                     {
                         case 0:
-                            Log1.Text = CombinedBluetoothController.Logs[name];
+                            Log1.Text = CombinedBluetoothController.lightsuits[name].Log;
                             Log1.ScrollToEnd();
                             break;
                         case 1:
-                            Log2.Text = CombinedBluetoothController.Logs[name];
+                            Log2.Text = CombinedBluetoothController.lightsuits[name].Log;
                             Log2.ScrollToEnd();
                             break;
                         case 2:
-                            Log3.Text = CombinedBluetoothController.Logs[name];
+                            Log3.Text = CombinedBluetoothController.lightsuits[name].Log;
                             Log3.ScrollToEnd();
                             break;
                         case 3:
-                            Log4.Text = CombinedBluetoothController.Logs[name];
+                            Log4.Text = CombinedBluetoothController.lightsuits[name].Log;
                             Log4.ScrollToEnd();
                             break;
                     }
                 }
             }
+            MainLog.ScrollToEnd();
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -170,13 +207,7 @@ namespace KataTracks
             if (!playing) BluetoothStatus.Content = "Stopped";
             else BluetoothStatus.Content = "Playing";
 
-            if (CombinedBluetoothController.IsOnline("Lightsuit1"))
-                BluetoothStatus.Content += " L1";
-            if (CombinedBluetoothController.IsOnline("Lightsuit2"))
-                BluetoothStatus.Content += " L2";
-
             if (!playing) return;
-
 
             if (outputDevice.PlaybackState == PlaybackState.Stopped)
                 StopTrack(true);
@@ -202,6 +233,12 @@ namespace KataTracks
             System.Windows.Application.Current.Shutdown();
         }
 
+
+        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            CombinedBluetoothController.Close();
+            activateConnection = true;
+        }
 
         private void PlayFromStartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -261,7 +298,6 @@ namespace KataTracks
             volume = (float)e.NewValue;
             outputDevice.Volume = volume;
         }
-
         void StopAndSendToBoth(string value)
         {
             CombinedBluetoothController.SendMessage(value);

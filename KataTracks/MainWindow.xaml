@@ -71,5 +71,6 @@
         <Label x:Name="Log2Label" Content="Device 2" Canvas.Left="405" Canvas.Top="576" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Label x:Name="Log3Label" Content="Device 3" Canvas.Left="611" Canvas.Top="576" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Label x:Name="Log4Label" Content="Device 4" Canvas.Left="816" Canvas.Top="576" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
+        <Button x:Name="ConnectButton" Click="ConnectButton_Click"  Content="Connect" Height="38" Width="80" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1438" BorderBrush="#FF120351"/>
     </Canvas>
 </Window>
