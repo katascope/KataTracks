@@ -6,10 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using System;
-using System.Collections.Generic;
-using InTheHand.Net.Bluetooth;
-using InTheHand.Net.Sockets;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +24,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Media;
 //using System.Windows.Forms;
-using System.Threading;
 using NAudio;
 using NAudio.Wave;
 using NAudio.MediaFoundation;
@@ -42,35 +37,60 @@ namespace KataTracks
     {
         static bool _Go;
         static bool threadsActive = false;
-        static TextBox _leaderWindow;
-        static TextBox _followWindow;
         static BluetoothClient bluetoothClient;
         static public Dictionary<string, BluetoothDeviceInfo> pairedBluetoothDevices = new Dictionary<string, BluetoothDeviceInfo>();
         static public Dictionary<string, BluetoothClient> pairedBluetoothConnections = new Dictionary<string, BluetoothClient>();
-        static public string _followText = "";
-        static public string _leaderText = "";
-        static public Thread listenerThreadLeader;
-        static public Thread listenerThreadFollow;
+        static public Dictionary<string, string> Logs = new Dictionary<string, string>();
+        static public Dictionary<string, Thread> listenerThreads = new Dictionary<string, Thread>();
 
-        static public void SendMessage(string name, string pMessage)
+        static public void SendMessage(string pMessage)
         {
-            if (!pairedBluetoothConnections.ContainsKey(name))
-                return;
-
-            try
+            foreach (KeyValuePair<string, BluetoothClient> clients in pairedBluetoothConnections)
             {
-
-                Console.WriteLine("Sending..");
-                Stream peerStream = pairedBluetoothConnections[name].GetStream();
-                byte[] bMessage = System.Text.Encoding.ASCII.GetBytes(pMessage);
-                peerStream.Write(bMessage, 0, bMessage.Length);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                try
+                {
+                    Console.WriteLine("Sending..");
+                    Stream peerStream = pairedBluetoothConnections[clients.Key].GetStream();
+                    if (peerStream != null)
+                    {
+                        byte[] bMessage = System.Text.Encoding.ASCII.GetBytes(pMessage);
+                        peerStream.Write(bMessage, 0, bMessage.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                }
             }
         }
 
+        static private void ListenToConnected(object in_name)
+        {
+            
+            while (threadsActive)
+            {
+                while (_Go)
+                {
+                    string name = (string)in_name;
+                    if (pairedBluetoothConnections.ContainsKey(name))
+                    {
+                        Stream s = pairedBluetoothConnections[name].GetStream();
+                        if (!pairedBluetoothConnections[name].Connected) { return; }
+
+                        StreamReader reader = new StreamReader(s);
+                        try
+                        {
+                            string value = reader.ReadLine();
+                            Logs[name] += value + "\n";
+                        }
+                        catch (Exception ex)
+                        {
+                            Logs[name] += ex.ToString();
+                        }
+                    }
+                }
+            }
+        }
         static public void Connect(string name, BluetoothDeviceInfo di)
         {
             Console.Write("Found "+name+" : " + di.DeviceAddress.ToString());
@@ -79,6 +99,7 @@ namespace KataTracks
                 pairedBluetoothConnections[name] = new BluetoothClient();
                 pairedBluetoothConnections[name].Connect(di.DeviceAddress, BluetoothService.SerialPort);
                 pairedBluetoothDevices[name] = di;
+                Logs[name] = "Ready.";
             }
             catch (Exception ex)
             {
@@ -90,31 +111,39 @@ namespace KataTracks
 
             threadsActive = true;
 
-            listenerThreadLeader = new Thread(new ThreadStart(ListenToConnectedLeader));
-            listenerThreadLeader.Start();
 
-            listenerThreadFollow = new Thread(new ThreadStart(ListenToConnectedFollow));
-            listenerThreadFollow.Start();
+            listenerThreads[name] = new Thread(ListenToConnected);// new ThreadStart(ListenToConnected));
+            listenerThreads[name].Start(name);
+
 
             _Go = true;
 
         }
 
-        static public void FindPaired(string LeaderName, string FollowName)
+        static public void FindPaired(string searchName)
         {
             foreach (BluetoothDeviceInfo di in bluetoothClient.PairedDevices)
             {
-                Console.WriteLine("Device : " + di.DeviceAddress.ToString());
-                if (di.DeviceName == LeaderName)
+                Console.WriteLine("Paired : " + di.DeviceAddress.ToString());
+                if (di.DeviceName.Contains(searchName))
                 {
-                    Connect(LeaderName, di);
+                    pairedBluetoothDevices[di.DeviceName] = di;
                 }
-                if (di.DeviceName == FollowName)
-                {
-                    Connect(FollowName, di);
-                }
-            }        
+            }
         }
+
+        static public void ConnectPaired(string searchName)
+        {
+            foreach (BluetoothDeviceInfo di in bluetoothClient.PairedDevices)
+            {
+                Console.WriteLine("Connect : " + di.DeviceAddress.ToString());
+                if (di.DeviceName.Contains(searchName))
+                {
+                    Connect(di.DeviceName, di);
+                }
+            }
+        }
+
 
         static public bool IsOnline(string name)
         {
@@ -130,30 +159,30 @@ namespace KataTracks
                 pairedBluetoothConnections[kvp.Key].Close();
                 pairedBluetoothConnections[kvp.Key].Dispose();
             }
-            pairedBluetoothConnections.Remove("Leader");
-            pairedBluetoothConnections.Remove("Led Follow");
+            pairedBluetoothConnections.Remove("Lightsuit1");
+            pairedBluetoothConnections.Remove("Lightsuit2");
 
             bluetoothClient.Close();
             _Go = false;
             threadsActive = false;
         }
-
-        static private void ListenToConnectedLeader()
+        /*
+        static private void ListenToConnected1()
         {
             while (threadsActive)
             {
                 while (_Go)
                 {
-                    if (pairedBluetoothConnections.ContainsKey("Leader"))
+                    if (pairedBluetoothConnections.ContainsKey("Lightsuit1"))
                     {
-                        Stream s = pairedBluetoothConnections["Leader"].GetStream();
-                        if (!pairedBluetoothConnections["Leader"].Connected) { return; }
+                        Stream s = pairedBluetoothConnections["Lightsuit1"].GetStream();
+                        if (!pairedBluetoothConnections["Lightsuit1"].Connected) { return; }
 
                         StreamReader reader = new StreamReader(s);
                         try
                         {
                             string value = reader.ReadLine();
-                            _leaderText += value + "\n";
+                            _Log1 += value + "\n";
                         }
                         catch (Exception ex)
                         {
@@ -163,22 +192,22 @@ namespace KataTracks
             }
         }
 
-        static private void ListenToConnectedFollow()
+        static private void ListenToConnected2()
         {
             while (threadsActive)
             {
                 while (_Go)
                 {
-                    if (pairedBluetoothConnections.ContainsKey("Led Follow"))
+                    if (pairedBluetoothConnections.ContainsKey("Lightsuit2"))
                     {
-                        Stream s = pairedBluetoothConnections["Led Follow"].GetStream();
-                        if (!pairedBluetoothConnections["Led Follow"].Connected) { return; }
+                        Stream s = pairedBluetoothConnections["Lightsuit2"].GetStream();
+                        if (!pairedBluetoothConnections["Lightsuit2"].Connected) { return; }
 
                         StreamReader reader = new StreamReader(s);
                         try
                         {
                             string value = reader.ReadLine();
-                           _followText += value + "\n";
+                            _Log2 += value + "\n";
                         }
                         catch (Exception ex)
                         {
@@ -187,17 +216,11 @@ namespace KataTracks
                 }
             }
         }
+        */
 
-
-        static Thread _ListenToConnected;
-        static BluetoothListener _Listener;
-        static public void Initialize(TextBox leaderWindow, TextBox followWindow)
+        static public void Initialize()
         {
-            _leaderWindow = leaderWindow;
-            _followWindow = followWindow;
             bluetoothClient = new BluetoothClient();
-//            _Listener = new BluetoothListener(BluetoothService.SerialPort);
-            //_Listener.Start();
         }
     }
 }

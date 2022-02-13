@@ -114,8 +114,8 @@ namespace BtConsole
 
         static void Main(string[] args)
         {
-            string LeaderName = "Leader";
-            string FollowName = "Led Follow";
+            string LeaderName = "Lightsuit1";
+            string FollowName = "Lightsuit2";
             BluetoothClient c = new BluetoothClient();
 
             CombinedBluetoothController.FindPaired(c, LeaderName, FollowName);

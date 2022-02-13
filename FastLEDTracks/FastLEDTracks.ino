@@ -3,9 +3,9 @@
 // Purpose is for a wearable dance-synchronized lightsuit.
 #include "Fx.h"
 #include "Track.h"
-//static FxState fxState = FxState_Default;
+static FxState fxState = FxState_Default;
 //static FxState fxState = FxState_PlayingTrack;
-static FxState fxState = FxState_TestPattern;
+//static FxState fxState = FxState_TestPattern;
 
 //////////////// FastLED Section ////////////////
 #include <FastLED.h>
@@ -21,7 +21,7 @@ CRGB leds[NUM_LEDS];
 #include <SoftwareSerial.h>
 const PROGMEM int RX_PIN = 5;
 const PROGMEM int TX_PIN = 6;
-const PROGMEM unsigned long BLUETOOTH_BAUD_RATE = 38400;
+const PROGMEM unsigned long BLUETOOTH_BAUD_RATE = 9600;
 SoftwareSerial bluetooth(RX_PIN, TX_PIN);
 //////////////// BlueTooth Section ////////////////
 
