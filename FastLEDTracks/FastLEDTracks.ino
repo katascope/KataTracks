@@ -3,9 +3,9 @@
 // Purpose is for a wearable dance-synchronized lightsuit.
 #include "Fx.h"
 #include "Track.h"
-static FxState fxState = FxState_Default;
-//static FxState fxState = FxState_PlayingTrack;
-//static FxState fxState = FxState_TestPattern;
+//static FxState fxState = FxState_Default;
+///static FxState fxState = FxState_PlayingTrack;
+static FxState fxState = FxState_TestPattern;
 
 //////////////// FastLED Section ////////////////
 #include <FastLED.h>
@@ -86,6 +86,36 @@ void FastLED_SetPalette()
   FastLED.show();
 }
 
+void DirectEvent(int event)
+{
+  fxState = FxState_Default;
+  fxController.transitionType = Transition_Instant;
+  if (event != fx_nothing)
+    Println(FxEventName(event));
+  FxEventProcess(event);
+}
+
+static void magicColors(int count, char *colors)
+{
+  CRGB palette[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  int index = 0;
+  for (int i=0;i<16;i++)
+  {
+    palette[i] = CRGB(ShortnameToCRGB(colors[index]));
+    index++;
+    if (index >= count) index = 0;  
+  }
+  CreatePaletteBands(
+    palette[0],  palette[1],  palette[2],  palette[3], 
+    palette[4],  palette[5],  palette[6],  palette[7], 
+    palette[8],  palette[9],  palette[10], palette[11], 
+    palette[12], palette[13], palette[14], palette[15]);
+  
+  //animatePalette = false; 
+  DirectEvent(fx_nothing);
+  FastLED_SetPalette(); 
+}
+
 void setup() {
   Serial.begin(9600); //serial communication at 9600 bauds
   delay( 3000 ); // power-up safety delay
@@ -105,7 +135,12 @@ void setup() {
   if (fxState == FxState_TestPattern)
   {
     Println(F("TestMode"));
-    FxEventProcess(fx_palette_wrb);
+    //FxEventProcess(fx_palette_rgb);
+    FxEventProcess(fx_palette_drb);
+    /*CreatePaletteBands(CRGB_RED,CRGB_GREEN,CRGB_BLUE,CRGB_RED,
+                       CRGB_GREEN,CRGB_BLUE,CRGB_RED,CRGB_GREEN,
+                       CRGB_BLUE,CRGB_RED,CRGB_GREEN,CRGB_BLUE,
+                       CRGB_RED,CRGB_GREEN,CRGB_BLUE,CRGB_DARK);*/
     fxController.paletteDirection = 1;
     fxController.paletteSpeed = 3;
     fxController.animatePalette = true;
@@ -174,35 +209,6 @@ void FxEventPoll(unsigned long timecode)
   }
 }
 
-void DirectEvent(int event)
-{
-  fxState = FxState_Default;
-  fxController.transitionType = Transition_Instant;
-  if (event != fx_nothing)
-    Println(FxEventName(event));
-  FxEventProcess(event);
-}
-
-static void magicColors(int count, char *colors)
-{
-  CRGB palette[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  int index = 0;
-  for (int i=0;i<16;i++)
-  {
-    palette[i] = CRGB(ShortnameToCRGB(colors[index]));
-    index++;
-    if (index >= count) index = 0;  
-  }
-  CreatePaletteBands(
-    palette[0],  palette[1],  palette[2],  palette[3], 
-    palette[4],  palette[5],  palette[6],  palette[7], 
-    palette[8],  palette[9],  palette[10], palette[11], 
-    palette[12], palette[13], palette[14], palette[15]);
-  
-  //animatePalette = false; 
-  DirectEvent(fx_nothing);
-  FastLED_SetPalette(); 
-}
 
 enum CaptureTextMode
 {

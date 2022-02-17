@@ -1,5 +1,7 @@
-#include <SoftwareSerial.h>
-SoftwareSerial BTSerial(5, 6); // RX | TX
+//#include <SoftwareSerial.h>
+//SoftwareSerial BTSerial(5, 6); // RX | TX
+#include "BluetoothSerial.h"
+BluetoothSerial BTSerial;
 
 void setup()
 {

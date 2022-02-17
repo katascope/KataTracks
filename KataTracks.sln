@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KataTracks", "KataTracks\Ka
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtConsole", "BtConsole\BtConsole.csproj", "{1FAB8F78-927B-419D-956C-ECF1335FC7A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLEConsole", "BLEConsole\BLEConsole.csproj", "{ACF2E370-7D1D-4CC7-8634-B52DEB65C73B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleBLE", "ConsoleBLE\ConsoleBLE.csproj", "{3FBBFA62-9C9A-4043-8334-C960C8775087}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{1FAB8F78-927B-419D-956C-ECF1335FC7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FAB8F78-927B-419D-956C-ECF1335FC7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FAB8F78-927B-419D-956C-ECF1335FC7A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACF2E370-7D1D-4CC7-8634-B52DEB65C73B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACF2E370-7D1D-4CC7-8634-B52DEB65C73B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACF2E370-7D1D-4CC7-8634-B52DEB65C73B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACF2E370-7D1D-4CC7-8634-B52DEB65C73B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FBBFA62-9C9A-4043-8334-C960C8775087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FBBFA62-9C9A-4043-8334-C960C8775087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FBBFA62-9C9A-4043-8334-C960C8775087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FBBFA62-9C9A-4043-8334-C960C8775087}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

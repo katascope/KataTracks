@@ -14,3 +14,5 @@ BtConsole/obj/Debug/netcoreapp3.1/BtConsole.csproj.FileListAbsolute.txt
 KataTracks/obj/KataTracks.csproj.nuget.dgspec.json
 *.lref
 KataTracks/obj/Lightsuite.csproj.nuget.dgspec.json
+ConsoleBLE/obj/Debug/ConsoleBLE.csproj.CopyComplete
+ConsoleBLE/obj/Debug/ConsoleBLE.csproj.FileListAbsolute.txt

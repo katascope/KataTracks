@@ -1,17 +1,9 @@
-Shopping:
-liquid plumr
-thick olive oil
-3m electrical tape 33 or 88
-butter
-eggs
-ham
-cheese
-muffins
-coffee creamer
-pizzas
-peanuts
-chips
-frozen vegetables
+Devices, Bluetooth:
+ AT+NAME=Lightsuit#
+ AT+UART=9600,0,0
+ AT+PSWD=...
+ 
+
 
 
 Todo:
