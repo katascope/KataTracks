@@ -17,21 +17,21 @@
 #include <ArduinoBLE.h>
 #include <Arduino_LSM9DS1.h>
 
-#include "FX.h"
-#include "Track.h"
+//#include "FX.h"
+//#include "Track.h"
 
-static FxState fxState = FxState_TestPattern;
+//static FxState fxState = FxState_TestPattern;
 
 //////////////// FastLED Section ////////////////
 //#include <FastLED.h>
-#include "FastLED-Master\src\FastLED.h"
+//#include "FastLED-Master\src\FastLED.h"
 
-#define LED_PIN     3 // 3, 5 for some, should be 3 
+/*#define LED_PIN     3 // 3, 5 for some, should be 3 
 #define NUM_LEDS    310
 #define BRIGHTNESS  64
 #define LED_TYPE    WS2811
 #define COLOR_ORDER GRB
-CRGB leds[NUM_LEDS];
+CRGB leds[NUM_LEDS];*/
 //////////////// FastLED Section ////////////////
 
 //----------------------------------------------------------------------------------------------------------------------

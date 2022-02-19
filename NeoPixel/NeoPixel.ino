@@ -22,8 +22,8 @@ void setup() {
   strip.begin();
   strip.setBrightness(50);
 
-  PaletteGradient();
-  //PaletteSolid(255,127,0);
+  //PaletteGradient();
+  PaletteSolid(255,127,0);
   //PaletteDouble(0,255,255, 255,0,255);
 //  PaletteTriple(255,0,0, 0,255,0, 0,0,255);
 }

@@ -163,7 +163,7 @@ static int GetNextTimeCodeMatch(int currentMatch) { unsigned long tc = SongTrack
 static int GetCurrentTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) <= timecode) match = i; } return match; }
 static int GetPreviousTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) < timecode) match = i; } return match; }
 
-void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode)
+static void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode)
 {
     float tc = (float)matchedTimecode;// / (float)1000.0f;
     Serial.print(tc);
@@ -191,6 +191,28 @@ void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned l
     Serial.print(timeUntil);
     Serial.print(F("s"));
     Serial.println();
+}
+
+static void trackStart(FxController &fxc,unsigned long tc)
+{
+  uint32_t dk = LEDRGB(0,0,0);
+  fxc.fxState = FxState_PlayingTrack;
+  fxc.paletteSpeed = 0;
+  fxc.paletteDirection = 1;
+  fxc.transitionType = Transition_Instant;
+  setTimecodeLastMatched(tc);//.timeController.lastMatchedTimecode = tc;
+  setTimecodeTimeOffset((unsigned long)(millis() - (signed long)TRACK_START_DELAY));
+  fxc.transitionMux = 0;
+  PrintLog(F("Playing Track"));
+  PrintLog(F(", Time Offset = "));
+  PrintLogln(String(getTimecodeTimeOffset()));
+}
+
+static void trackStop(FxController &fxc)
+{
+  fxc.fxState = FxState_Default;
+  fxc.animatePalette = false;
+  PrintLog(F("Stopping Track"));
 }
 
 #endif
