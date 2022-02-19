@@ -1,6 +1,7 @@
 #include "Config.h"
 #include <Arduino.h>
 #include <avr/pgmspace.h> 
+#include "Fx.h"
 #include "Track.h"
 #include "Timecode.h"
 
@@ -44,13 +45,14 @@ void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned l
     Serial.println();*/
 }
 
-void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset)
+void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset, FxTrackEndAction tae)
 {
   uint32_t dk = LEDRGB(0,0,0);
   fxc.fxState = FxState_PlayingTrack;
   fxc.paletteSpeed = 0;
   fxc.paletteDirection = 1;
   fxc.transitionType = Transition_Instant;
+  fxc.trackEndAction = tae;
   setTimecodeLastMatched(tc);
   setTimecodeTimeOffset((unsigned long)(millis() - (signed long)TRACK_START_DELAY));
   fxc.transitionMux = 0;
@@ -62,6 +64,6 @@ void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset)
 void trackStop(FxController &fxc)
 {
   fxc.fxState = FxState_Default;
-  fxc.animatePalette = false;
+  fxc.updatePalette = false;
   //Serial.println(F("Stopping Track"));
 }

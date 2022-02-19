@@ -5,12 +5,9 @@
 #include "Fx.h"
 #include "Track.h"
 #include "Commands.h"
+#include "Status.h"
 
 static FxController fxController;
-static uint32_t palette16[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static CaptureTextMode captureMode = CaptureNone;
-static char captureBuffer[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static int captureCount = 0;
 
 unsigned long GetTime() { return (unsigned long)((signed long)millis() - (signed long)getTimecodeTimeOffset() + getTimecodeSongOffset()); }
 
@@ -68,24 +65,25 @@ void setup() {
   Serial.println(F("No IMU init"));
 #endif
 
-  if (fxController.fxState == FxState_PlayingTrack)
-    trackStart(fxController, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY));
-  else Serial.println(F("Ready"));
-
   if (fxController.fxState == FxState_TestPattern)
   {
+    Serial.println("Setting test pattern.");
     FxEventProcess(fxController, fx_palette_drb);
     fxController.paletteDirection = 1;
     fxController.paletteSpeed = 1;
-    fxController.animatePalette = true;
+    fxController.updatePalette = true;
   }
+
+  if (fxController.fxState == FxState_PlayingTrack)
+    trackStart(fxController, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), fxController.trackEndAction);
+  else Serial.println(F("Ready"));
 
   Serial.println("Setup complete.");
 }
 
 void UpdatePalette()
 {
-  if (fxController.animatePalette)
+  if (fxController.updatePalette)
   {
     fxController.paletteIndex = fxController.paletteIndex + (fxController.paletteSpeed * fxController.paletteDirection);
     if (fxController.paletteIndex >= NUM_LEDS)
@@ -112,7 +110,7 @@ void FxEventPoll(unsigned long timecode)
       CopyPalette(fxController.palette, fxController.nextPalette);
     }
     fxController.transitionType = Transition_Instant;
-    fxController.animatePalette = true;
+    fxController.updatePalette = true;
 
     FxTrackSay(timecode, matchedTimecode, nextMatchedTimecode);
     /*Serial.print(((float)matchedTimecode / (float)1000.0f);
@@ -165,11 +163,6 @@ void StatePoll(FxController &fxc)
   if (fxc.fxState == FxState_IMU)
   {
 #if ENABLE_IMU
-    /*if ( IMU.accelerationAvailable() )
-      IMU.readAcceleration( fxc.imu.accelX, fxc.imu.accelY, fxc.imu.accelZ );
-      if ( IMU.gyroscopeAvailable() )
-      IMU.readGyroscope( fxc.imu.gyroX, fxc.imu.gyroY, fxc.imu.gyroZ );
-
       //PrintLogln(F("IMUMode"));
       //FxEventProcess(fx_palette_drb);
       //FxEventProcess(fx_palette_accel);
@@ -178,14 +171,14 @@ void StatePoll(FxController &fxc)
       //byte b = (float)((float)127.0f-(float)imuGyroZ*120.0f);
 
       byte r = 0;//(float)((float)127.0f-(float)imuGyroX*1.0f);
-      byte g = (float)((float)127.0f-(float)imuGyroY*1.0f);
-      byte b = (float)((float)127.0f-(float)imuGyroZ*1.0f);
+      byte g = (float)((float)127.0f-(float)getGyroY()*1.0f);
+      byte b = (float)((float)127.0f-(float)getGyroZ()*1.0f);
 
       fxc.palette[0] = LEDRGB(r,g,b);
-      rotPalette();
+      rotPalette(fxc.palette);
       fxc.paletteDirection = 0;
       fxc.paletteSpeed = 0;
-      fxc.animatePalette = true;*/
+      fxc.updatePalette = true;
 #endif
   }
   if (fxc.fxState == FxState_TestPattern)
@@ -193,267 +186,17 @@ void StatePoll(FxController &fxc)
     FxEventProcess(fxc, fx_palette_drb);
     fxc.paletteDirection = 2;
     fxc.paletteSpeed = 2;
-    fxc.animatePalette = true;
+    fxc.updatePalette = true;
   }
 
   if (fxc.fxState == FxState_PlayingTrack)
     FxEventPoll(GetTime());
 }
 
-static unsigned long lastTimeDisplay = 0;
-void DisplayStatus(FxController &fxc)
-{
-    unsigned long t =  millis();
-    if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
-    {      
-      //Serial.print(SystemName);
-      //Serial.print(F(":"));
-      Serial.print(GetTime());
-      Serial.print(F(":"));
-      Serial.print(getTimecodeSongOffset());
-      Serial.print(F(":"));
-      Serial.print(getTimecodeTimeOffset());
-      Serial.print(F("["));
-      PrintFxStateName(fxc.fxState);
-      Serial.print(F("-"));
-      PrintFxTransitionName(fxc.transitionType);
-      Serial.print(F("]"));
-      if (fxc.fxState == FxState_PlayingTrack)
-      {
-        int match = GetCurrentTimeCodeMatch(GetTime());
-        Serial.print(F("="));
-        PrintFxEventName(SongTrack_event(match));
-        Serial.print(F(" "));
-        Serial.print(SongTrack_timecode(match));
-      }
-      Serial.println(F(""));      
-      lastTimeDisplay = t;
-    }
-}
 
-void DirectEvent(FxController &fxc, int event)
-{
-  fxc.fxState = FxState_Default;
-  fxc.transitionType = Transition_Instant;
-  if (event != fx_nothing)
-    PrintFxEventName(event);
-  FxEventProcess(fxc, event);
-}
 
-void magicColors(FxController &fxc, int count)
-{
-  int index = 0;
-  for (int i=0;i<16;i++)
-  {
-    char c = captureBuffer[index];
-    uint32_t crgb = ShortnameToCRGB(c);
-    palette16[i] = crgb;
-    index++;
-    if (index > count) index = 0;  
-  }
-  CreatePaletteBands(fxc,
-    palette16[0],  palette16[1],  palette16[2],  palette16[3], 
-    palette16[4],  palette16[5],  palette16[6],  palette16[7], 
-    palette16[8],  palette16[9],  palette16[10], palette16[11], 
-    palette16[12], palette16[13], palette16[14], palette16[15]);
-  //animatePalette = false;
-  
-  DirectEvent(fxc, fx_nothing);
-  UpdatePalette(); 
-}
 
-void processCapturedText(FxController &fxc)
-{
-  if (captureMode == CaptureColorCode)
-  {  
-    Serial.print(F("ColorDef("));
-    Serial.print(captureCount);
-    Serial.print(F(")=("));
-    for (int i = 0; i < captureCount; i++)
-    {
-      Serial.print((char)captureBuffer[i]);
-    }
-    Serial.print(F(")"));
-    Serial.println();
 
-    //Magic colors is currently broken as it breaks serial print for some unknown reason
-    magicColors(fxc,captureCount);
-    captureCount = 0;
-    captureMode = CaptureNone;
-  }
-  else if (captureMode == CaptureTimeCode)
-  { 
-    captureMode = CaptureNone;
-    //fxState == FxState_PlayingTrack;
-    unsigned long tc = atoi(captureBuffer);//capturedTimeCode.toInt();
-    //int match = GetCurrentTimeCodeMatch(tc);
-    //int nextmatch = GetNextTimeCodeMatch(match);
-    int prevmatch = GetPreviousTimeCodeMatch(tc);
-    
-    setTimecodeLastMatched(SongTrack_timecode(prevmatch));
-
-    /*timeOffset = millis();
-    timeOffset -= tc;*/
-
-    //timeController.songOffset = tc;
-    setTimecodeSongOffset(tc);
-  
-    Serial.print(F("TC:"));
-    Serial.print(tc);
-    Serial.print(F(" vs t="));
-    Serial.print(GetTime());
-    Serial.print(F(", to="));
-    Serial.print(getTimecodeTimeOffset());
-    setTimecodeTimeOffset(millis());
-    Serial.print(F(", "));
-    Serial.print(getTimecodeLastMatched());
-    Serial.print(F("="));
-    Serial.print(getTimecodeSongOffset());
-    Serial.print(F(",P:"));
-    Serial.print(prevmatch);
-    Serial.println(F(""));
-
-    trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY));
-  }
-}
-
-void UserCommandExecute(FxController &fxc, int cmd)
-{
-  switch (cmd)
-  {
-    case Cmd_Help:
-      Serial.println(F("? : Help Menu"));
-      Serial.println(F("+ : Rotate Pos"));
-      Serial.println(F("- : Rotate Neg"));
-      Serial.println(F("( : Track Start"));
-      Serial.println(F(") : Track Stop"));
-      Serial.println(F("* : Track StartFrom"));
-      Serial.println(F("!code : Color code"));
-      Serial.println(F("@code : Time code"));
-      Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
-      Serial.println(F("(q)lava (w)cloud (e)ocean (r)forest (t)rainbow (y)rainbowstripe (u)party (i)heat"));
-      break;
-    case Cmd_State_Default: fxc.fxState = FxState_Default;break;
-    case Cmd_State_Test:    fxc.fxState = FxState_TestPattern;break;
-    case Cmd_State_IMU:     fxc.fxState = FxState_IMU;break;
-      
-    case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY)); break;
-    case Cmd_PlayFrom:      fxc.fxState = FxState_PlayingTrack;break;
-    case Cmd_PlayStop:      trackStop(fxc); break;
-
-    case Cmd_SpeedNeg:      fxc.animatePalette = true; DirectEvent(fxc, fx_speed_neg); break;
-    case Cmd_SpeedPos:      fxc.animatePalette = true; DirectEvent(fxc, fx_speed_pos); break;
-    case Cmd_SpeedDec:      fxc.animatePalette = true; DirectEvent(fxc, fx_speed_dec); break;
-    case Cmd_SpeedInc:      fxc.animatePalette = true; DirectEvent(fxc, fx_speed_inc); break;
-    case Cmd_SpeedRst:      fxc.animatePalette = true; DirectEvent(fxc, fx_speed_0); break;
-    
-    case Cmd_ColorDark:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_dark); UpdatePalette(); break;
-    case Cmd_ColorWhite:    fxc.animatePalette = false; DirectEvent(fxc, fx_palette_white); UpdatePalette(); break;
-    case Cmd_ColorRed:      fxc.animatePalette = false; DirectEvent(fxc, fx_palette_red); UpdatePalette(); break;
-    case Cmd_ColorYellow:   fxc.animatePalette = false; DirectEvent(fxc, fx_palette_yellow); UpdatePalette(); break;
-    case Cmd_ColorGreen:    fxc.animatePalette = false; DirectEvent(fxc, fx_palette_green); UpdatePalette(); break;
-    case Cmd_ColorCyan:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_cyan); UpdatePalette(); break;
-    case Cmd_ColorBlue:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_blue); UpdatePalette(); break;
-    case Cmd_ColorMagenta:  fxc.animatePalette = false; DirectEvent(fxc, fx_palette_magenta); UpdatePalette(); break;
-    case Cmd_ColorOrange:   fxc.animatePalette = false; DirectEvent(fxc, fx_palette_orange); UpdatePalette(); break;
-    case Cmd_ColorHalf:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_half); UpdatePalette(); break;
-
-    case Cmd_ColorLava:           DirectEvent(fxc, fx_palette_lava); UpdatePalette(); break;
-    case Cmd_ColorCloud:          DirectEvent(fxc, fx_palette_cloud); UpdatePalette(); break;
-    case Cmd_ColorOcean:          DirectEvent(fxc, fx_palette_ocean); UpdatePalette(); break;
-    case Cmd_ColorForest:         DirectEvent(fxc, fx_palette_forest); UpdatePalette(); break;
-    case Cmd_ColorRainbow:        DirectEvent(fxc, fx_palette_rainbow); UpdatePalette(); break;
-    case Cmd_ColorRainbowstripe:  DirectEvent(fxc, fx_palette_rainbowstripe); UpdatePalette(); break;
-    case Cmd_ColorParty:          DirectEvent(fxc, fx_palette_party); UpdatePalette(); break;
-    case Cmd_ColorHeat:           DirectEvent(fxc, fx_palette_heat); UpdatePalette(); break;
-    default: break;
-  }
-}
-
-void UserCommandInput(FxController &fxc, int data)
-{
-  if (captureMode == CaptureColorCode && data != 10 && data != 13)
-  {
-    if (captureCount < 16)
-    {
-      captureBuffer[captureCount] = (char)data;
-      captureCount++;
-    }
-    return;
-  }   
-
-  if (captureMode == CaptureTimeCode && data != 10 && data != 13)
-  {
-    if (captureCount < 15)
-    {
-      captureBuffer[captureCount] = (char)data;
-      captureBuffer[captureCount+1] = 0;
-      captureCount++;
-    }
-    return;
-  }
-
-  switch (data)
-  {
-    case '!':
-      //PrintLogln(F("Capturing ColorCode"));
-      captureCount = 0;
-      captureMode = CaptureColorCode;
-      break;
-    case '@':
-      //PrintLogln(F("Capturing TimeCode"));
-      captureCount = 0;
-      //capturedTimeCode = "";
-      captureMode = CaptureTimeCode;
-      break;
-    case '?': UserCommandExecute(fxc, Cmd_Help); break;
-      
-    case 'z': UserCommandExecute(fxc, Cmd_State_Default);break;
-    case 'x': UserCommandExecute(fxc, Cmd_State_Test);break;
-    case 'c': UserCommandExecute(fxc, Cmd_State_IMU);break;      
-    
-    case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
-    case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;
-    case '(': UserCommandExecute(fxc, Cmd_PlayStop); break;
-    
-    case '0': UserCommandExecute(fxc, Cmd_ColorDark); break;
-    case '1': UserCommandExecute(fxc, Cmd_ColorWhite); break;
-    case '2': UserCommandExecute(fxc, Cmd_ColorRed); break;
-    case '3': UserCommandExecute(fxc, Cmd_ColorYellow); break;
-    case '4': UserCommandExecute(fxc, Cmd_ColorGreen); break;
-    case '5': UserCommandExecute(fxc, Cmd_ColorCyan); break;
-    case '6': UserCommandExecute(fxc, Cmd_ColorBlue); break;
-    case '7': UserCommandExecute(fxc, Cmd_ColorMagenta); break;
-    case '8': UserCommandExecute(fxc, Cmd_ColorOrange); break;
-    case '9': UserCommandExecute(fxc, Cmd_ColorHalf); break;
-    
-    case 'q': UserCommandExecute(fxc, Cmd_ColorLava);break;
-    case 'w': UserCommandExecute(fxc, Cmd_ColorCloud);break;
-    case 'e': UserCommandExecute(fxc, Cmd_ColorOcean);break;
-    case 'r': UserCommandExecute(fxc, Cmd_ColorForest);break;
-    case 't': UserCommandExecute(fxc, Cmd_ColorRainbow);break;
-    case 'y': UserCommandExecute(fxc, Cmd_ColorRainbowstripe);break;
-    case 'u': UserCommandExecute(fxc, Cmd_ColorParty);break;
-    case 'i': UserCommandExecute(fxc, Cmd_ColorHeat);break;
-
-    case '_': UserCommandExecute(fxc, Cmd_SpeedNeg);break;
-    case '+': UserCommandExecute(fxc, Cmd_SpeedPos);break;
-    case '-': UserCommandExecute(fxc, Cmd_SpeedDec);break;
-    case '=': UserCommandExecute(fxc, Cmd_SpeedInc);break;
-    case '~': UserCommandExecute(fxc, Cmd_SpeedRst);break;
-    
-    case 10:
-    case 13:
-      if (captureMode != CaptureNone)
-        processCapturedText(fxc);
-    case 0:
-    case 225: break;
-    default:
-      Serial.print(F("unk:"));
-      Serial.println(data);
-      break;
-  }
-}
 
 static unsigned long lastTimeLed = 0;
 void loop()
@@ -464,13 +207,18 @@ void loop()
   while (bluetooth.available())
     UserCommandInput(fxController, bluetooth.read());
 #endif
+
 #if ENABLE_BLE
   bleloop();
 #endif
 
+#if ENABLE_IMU
+  imuPoll();
+#endif
+  
   StatePoll(fxController);
 
-  if (fxController.fxState == FxState_PlayingTrack || fxController.animatePalette)
+  if (fxController.fxState == FxState_PlayingTrack || fxController.updatePalette)
   {
     unsigned long t =  millis();
     if (t - lastTimeLed > 45)//delay to let bluetooth get data(fastled issue)
@@ -481,6 +229,6 @@ void loop()
   }
 
 #if ENABLE_STATUS
-  DisplayStatus(fxController);
+  FxDisplayStatus(fxController);
 #endif
 }

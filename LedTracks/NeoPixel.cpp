@@ -10,6 +10,12 @@ void neopixelSetup()
   strip.setBrightness(50);
 }
 
+void neopixelSetBrightness(unsigned char brightness)
+{
+  strip.setBrightness(brightness);
+  strip.show();
+}
+
 void neopixelSetPalette(uint32_t *palette, int paletteIndex)
 {  
   uint32_t offset = paletteIndex;

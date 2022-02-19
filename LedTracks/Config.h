@@ -11,16 +11,18 @@ static const char *DeviceName = "LightSuitA";
 #endif
 
 #ifdef SYSTEM_NANO
-#define ENABLE_MEMORYUSAGE  1
+#define ENABLE_MEMORYUSAGE  1 //Do AVR-based memory check in beginning
+#define ENABLE_BRIGHTNESS   1 //Allow adjustments to brightness - this can cause excess heat
 #define ENABLE_STATUS       1 //Periodically output heartbeat status to log
-#define ENABLE_NEOPIXEL     1
-#define ENABLE_BLUETOOTH    1
-#define ENABLE_BLE          0
-#define ENABLE_IMU          0
+#define ENABLE_NEOPIXEL     1 //Enable Neopixel led library
+#define ENABLE_BLUETOOTH    0 //Enable classic bluetooth
+#define ENABLE_BLE          0 //Enable Bluetooth Low-Energy
+#define ENABLE_IMU          0 //Enable Inertial Motion Unit
 #endif
 
 #ifdef SYSTEM_NANO_33_BLE
 #define ENABLE_MEMORYUSAGE  0
+#define ENABLE_BRIGHTNESS   0
 #define ENABLE_STATUS       1
 #define ENABLE_NEOPIXEL     1
 #define ENABLE_BLUETOOTH    0
@@ -36,9 +38,13 @@ static const char *DeviceName = "LightSuitA";
 #include <MemoryUsage.h>
 #endif
 
+#if ENABLE_STATUS
+#include "Status.h"
+#endif
+
 //////////////// NeoPixel Section ////////////////
 #if ENABLE_NEOPIXEL
-#define LED_PIN    5 //3 most of the time, 5 on old things
+#define LED_PIN    3 //3 most of the time, 5 on old things
 #include "NeoPixel.h"
 #include <Adafruit_NeoPixel.h>
 #endif
@@ -46,6 +52,7 @@ static const char *DeviceName = "LightSuitA";
 
  /////////////////// IMU Section ///////////////////
 #if ENABLE_IMU
+#include <Arduino_LSM9DS1.h>
 #include "IMU.h"
 #endif
 

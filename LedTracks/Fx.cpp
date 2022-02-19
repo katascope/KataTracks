@@ -346,8 +346,8 @@ void FxEventProcess(FxController &fxc,int event)
       break;
     case fx_transition_fast:fxc.transitionType = Transition_Instant;break;
     case fx_transition_timed_fade:fxc.transitionType = Transition_TimedFade;break;
-    case fx_transition_timed_wipe_pos:fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.animatePalette = false;break;
-    case fx_transition_timed_wipe_neg:fxc.transitionType = Transition_TimedWipeNeg;fxc.paletteIndex = 15;fxc.animatePalette = false;break;
+    case fx_transition_timed_wipe_pos:fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.updatePalette = false;break;
+    case fx_transition_timed_wipe_neg:fxc.transitionType = Transition_TimedWipeNeg;fxc.paletteIndex = 15;fxc.updatePalette = false;break;
 
     case fx_palette_lead:CreateSingleBand(fxc, BLUE);break;
     case fx_palette_follow:CreateSingleBand(fxc, RED);break;

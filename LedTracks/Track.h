@@ -1,7 +1,7 @@
 #if !defined TRACK_DEF
 #define TRACK_DEF
 #include <avr/pgmspace.h> 
-#include "Fx.h"
+#include "FxTypes.h"
 
 #define LEAD      1                // Set 1 for Dance lead, 0 for Dance follow
 
@@ -165,7 +165,7 @@ int GetCurrentTimeCodeMatch(unsigned long timecode);
 int GetPreviousTimeCodeMatch(unsigned long timecode);
 
 void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode);
-void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset);
+void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset, FxTrackEndAction tae);
 void trackStop(FxController &fxc);
 
 #endif

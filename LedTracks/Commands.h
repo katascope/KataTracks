@@ -1,5 +1,6 @@
 #if !defined USER_COMMAND_DEF
 #define USER_COMMAND_DEF
+#include "Fx.h"
 
 enum CaptureTextMode
 {
@@ -12,6 +13,11 @@ enum UserCommand
 {
   Cmd_Unk,
   Cmd_Help,
+
+  Cmd_Brightness_VeryHigh,
+  Cmd_Brightness_High,
+  Cmd_Brightness_Normal,
+  Cmd_Brightness_Low,
 
   Cmd_State_Default,
   Cmd_State_Test,
@@ -48,5 +54,7 @@ enum UserCommand
   Cmd_SpeedRst  
 };
 
+void UserCommandExecute(FxController &fxc, int cmd);
+void UserCommandInput(FxController &fxc, int data);
 
 #endif
