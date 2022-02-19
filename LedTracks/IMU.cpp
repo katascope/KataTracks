@@ -1,7 +1,7 @@
+#include "Config.h"
+#if ENABLE_IMU
 #include "IMU.h"
 #include <Arduino_LSM9DS1.h>
-
-
 void imuSetup()
 {
   if ( !IMU.begin() )
@@ -13,3 +13,4 @@ void imuSetup()
   Serial.print( String(IMU.accelerationSampleRate()) );
   Serial.print( " Hz" );
 }
+#endif

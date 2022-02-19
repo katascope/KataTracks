@@ -1,8 +1,9 @@
 #include "Config.h"
 #if ENABLE_BLE
 #include "BLE.h"
-
+#include <ArduinoBLE.h>
 #include <Arduino_LSM9DS1.h>
+
 const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = LED_PWR;
 
@@ -46,8 +47,8 @@ bool bleSetup()
   }
 
   // set advertised local name and service UUID:
-  BLE.setDeviceName( "LightSuitA" );
-  BLE.setLocalName( "LightSuitA" );
+  BLE.setDeviceName( DeviceName );
+  BLE.setLocalName( DeviceName );
   BLE.setAdvertisedService( lightsuitService );
 
   // BLE add characteristics
@@ -92,11 +93,11 @@ void bleloop()
 
   // listen for BLE peripherals to connect:
   BLEDevice central = BLE.central();
-  //Serial.println("Waiting for connection.");
+  //Serial.println(F("Waiting for connection."));
 
   if ( central )
   {
-    Serial.println( "Connected to central: " );
+    Serial.println( F("Connected to central: " ));
     Serial.println( central.address() );
 
     if ( central.connected() )

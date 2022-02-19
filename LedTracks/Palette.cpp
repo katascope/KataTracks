@@ -1,3 +1,4 @@
+#include <avr/pgmspace.h> 
 #include "Config.h"
 #include "Palette.h"
 
@@ -22,20 +23,21 @@ void CopyPalette(uint32_t *dst, uint32_t *src)
     dst[i] = src[i];
 }
 
-void SetPalette16(uint32_t *pal, uint32_t *pal16)
+void SetPalette16(uint32_t *pal, uint32_t *palsrc)
 {
   float scaling = (float)16.0f/(float)NUM_LEDS;
 //  Serial.print("Set pal16:");
   for (int i=0;i<NUM_LEDS;i++)
   {
     uint16_t offset = (float)i*(float)scaling;
-    uint32_t rgb = pal16[offset];
+    uint32_t rgb = palsrc[offset];
     pal[i] = rgb;
   //  Serial.print(rgb);
 //    Serial.print(" ");
   }
 //  Serial.println();
 }
+
 
 void rotPalette(uint32_t * palette)
 {

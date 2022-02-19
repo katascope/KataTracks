@@ -1,6 +1,6 @@
 #include "Timecode.h"
-TimeCode timeController;
-
+static TimeCode timeController;
+#include <avr/pgmspace.h> 
 
 void setTimecodeLastMatched(unsigned long match)
 {

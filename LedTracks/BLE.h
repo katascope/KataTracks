@@ -1,6 +1,6 @@
 #if !defined BLE_DEF
 #define BLE_DEF
-#include <ArduinoBLE.h>
+//#include <ArduinoBLE.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 // BLE UUIDs
@@ -25,8 +25,6 @@
 // BLE
 //----------------------------------------------------------------------------------------------------------------------
 
-void blePeripheralConnectHandler(BLEDevice central);
-void blePeripheralDisconnectHandler(BLEDevice central);
 bool bleSetup();
 void bleloop();
 

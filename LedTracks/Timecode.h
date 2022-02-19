@@ -1,6 +1,5 @@
 #if !defined TIMECODE_DEF
 #define TIMECODE_DEF
-#include <avr/pgmspace.h> 
 
 struct TimeCode
 {

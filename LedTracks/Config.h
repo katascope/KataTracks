@@ -1,41 +1,46 @@
-#if !defined CONFIG_DEF
+#ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-/*
-#if defined ARDUINO_AVR_NANO
- #define SYSTEM_NANO
+#define NUM_LEDS   80
+static const char *DeviceName = "LightSuitA";
+
+#ifdef ARDUINO_AVR_NANO
+ #define SYSTEM_NANO         1
 #else
+ #define SYSTEM_NANO_33_BLE  1
 #endif
-*/
-//#define SYSTEM_NANO_33_BLE 1
-#define SYSTEM_NANO 1
 
 #ifdef SYSTEM_NANO
-#define ENABLE_STATUS     1 //Periodically output heartbeat status to log
-#define ENABLE_NEOPIXEL   1
-#define ENABLE_BLUETOOTH  0
-#define ENABLE_BLE        0
-#define ENABLE_IMU        0
+#define ENABLE_MEMORYUSAGE  1
+#define ENABLE_STATUS       1 //Periodically output heartbeat status to log
+#define ENABLE_NEOPIXEL     1
+#define ENABLE_BLUETOOTH    1
+#define ENABLE_BLE          0
+#define ENABLE_IMU          0
 #endif
 
 #ifdef SYSTEM_NANO_33_BLE
-#define ENABLE_STATUS     1
-#define ENABLE_NEOPIXEL   1
-#define ENABLE_BLUETOOTH  0
-#define ENABLE_BLE        1
-#define ENABLE_IMU        1
+#define ENABLE_MEMORYUSAGE  0
+#define ENABLE_STATUS       1
+#define ENABLE_NEOPIXEL     1
+#define ENABLE_BLUETOOTH    0
+#define ENABLE_BLE          1
+#define ENABLE_IMU          1
 #endif
 
 #define SERIAL_BAUD_RATE  9600
 
 #include "Palette.h"
 
+#if ENABLE_MEMORYUSAGE
+#include <MemoryUsage.h>
+#endif
+
 //////////////// NeoPixel Section ////////////////
 #if ENABLE_NEOPIXEL
 #define LED_PIN    5 //3 most of the time, 5 on old things
-#define NUM_LEDS   70
-#include <Adafruit_NeoPixel.h>
 #include "NeoPixel.h"
+#include <Adafruit_NeoPixel.h>
 #endif
 //////////////// NeoPixel Section ////////////////
 

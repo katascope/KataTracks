@@ -2,7 +2,7 @@
 
 void PrintLoglno(String str)
 {
-  Serial.print("Lognolen=");
+  Serial.print(F("Lognolen="));
   Serial.print(str.length());
   Serial.println(str);
 }

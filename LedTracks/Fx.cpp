@@ -1,15 +1,17 @@
+#include <Arduino.h>
 #include "Config.h"
 #include "Fx.h"
+//#include <avr/pgmspace.h> 
 
-uint8_t lerp(float mux, uint8_t a, uint8_t b) { return (uint8_t)(a * (1.0 - mux) + b * mux); }
-uint32_t LerpRGB(float t, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2) { return LEDRGB(lerp(t, r1, r2),lerp(t, g1, g2),lerp(t, b1, b2)); }
+unsigned char lerp(float mux, unsigned char a, unsigned char b) { return (unsigned char)(a * (1.0 - mux) + b * mux); }
+uint32_t LerpRGB(float t, unsigned char r1, unsigned char g1, unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2) { return LEDRGB(lerp(t, r1, r2),lerp(t, g1, g2),lerp(t, b1, b2)); }
 uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2) {
-  byte r1 = (rgb1 >> 16) & 0xFF;
-  byte g1 = (rgb1 >> 8) & 0xFF;
-  byte b1 = (rgb1 >> 0) & 0xFF;
-  byte r2 = (rgb2 >> 16) & 0xFF;
-  byte g2 = (rgb2 >> 8) & 0xFF;
-  byte b2 = (rgb2 >> 0) & 0xFF;
+  unsigned char r1 = (rgb1 >> 16) & 0xFF;
+  unsigned char g1 = (rgb1 >> 8) & 0xFF;
+  unsigned char b1 = (rgb1 >> 0) & 0xFF;
+  unsigned char r2 = (rgb2 >> 16) & 0xFF;
+  unsigned char g2 = (rgb2 >> 8) & 0xFF;
+  unsigned char b2 = (rgb2 >> 0) & 0xFF;
   return LEDRGB(lerp(t, r1, r2),lerp(t, g1, g2),lerp(t, b1, b2));
 }
 
@@ -31,13 +33,6 @@ uint32_t ShortnameToCRGB(char shortName)
     case 'l': return CRGB_LOWHALF;
   }
   return CRGB_DARK;
-}
-void flashprint (const char p[])
-{
-    char c;
-    while (0 != (c = pgm_read_byte(p++))) {
-    Serial.write(c);
-    }
 }
 
 void PrintFxStateName(FxState s)
@@ -237,7 +232,8 @@ void CreatePaletteBands(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,u
                         uint32_t b8,uint32_t b9,uint32_t b10,uint32_t b11, uint32_t b12,uint32_t b13,uint32_t b14,uint32_t b15)
 {
   float scaling = (float)(NUM_LEDS)/16.0f;
-  uint32_t palette16[16] = { b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15};
+ uint32_t palette16[16] = { b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15};
+
   CreatePalette(fxc, palette16);
 }
 

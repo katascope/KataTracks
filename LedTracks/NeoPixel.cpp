@@ -1,5 +1,6 @@
-#include <Adafruit_NeoPixel.h>
 #include "Config.h"
+#if ENABLE_NEOPIXEL
+#include <Adafruit_NeoPixel.h>
 
 static Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -21,3 +22,4 @@ void neopixelSetPalette(uint32_t *palette, int paletteIndex)
   }
   strip.show();
 }
+#endif

@@ -1,6 +1,5 @@
 // LightDrive : A time-track event system for Addressable LED
 // Purpose is for a wearable dance-synchronized lightsuit.
-//#include <avr/pgmspace.h>
 #include "Config.h"
 #include "Timecode.h"
 #include "Fx.h"
@@ -12,27 +11,34 @@ static uint32_t palette16[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 static CaptureTextMode captureMode = CaptureNone;
 static char captureBuffer[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static int captureCount = 0;
-static String capturedTimeCode = "";
 
-unsigned long GetTime()
-{ 
-  return (unsigned long)((signed long)millis() - (signed long)getTimecodeTimeOffset() + getTimecodeSongOffset()); 
-}
+unsigned long GetTime() { return (unsigned long)((signed long)millis() - (signed long)getTimecodeTimeOffset() + getTimecodeSongOffset()); }
 
 void setup() {
-  fxController.fxState = FxState_Default;//TestPattern;
-  //static FxState fxState = FxState_Default;
-  //static FxState fxState = FxState_PlayingTrack;
-  Serial.begin(SERIAL_BAUD_RATE); //serial communication at 9600 bauds
-  Serial.print(F("Serial init "));
+  fxController.fxState = FxState_Default;//TestPattern;//PlayingTrack;
+  Serial.begin(SERIAL_BAUD_RATE);
+  Serial.print(F("Serial init: "));
   Serial.println(SERIAL_BAUD_RATE);
+
+#if SYSTEM_NANO_33_BLE
+  Serial.println(F("System: Arduino Nano 33 BLE"));
+#endif
+#if SYSTEM_NANO
+  Serial.println(F("System: Arduino Nano"));
+#endif
+
+#if ENABLE_MEMORYUSAGE
+  Serial.println(F("MemoryUsage"));
+  MEMORY_PRINT_STACKSIZE
+  MEMORY_PRINT_HEAPSIZE
+#endif  
 
 #if ENABLE_NEOPIXEL
   Serial.println(F("Delaying 3 seconds for LEDs."));
   delay( 3000 ); // power-up safety delay
   neopixelSetup();
   PaletteGradient(fxController.palette);
-  Serial.print(F("NeoPixel init "));
+  Serial.print(F("NeoPixel init: "));
   Serial.print(NUM_LEDS);
   Serial.print(F(" LEDs on pin "));
   Serial.println(LED_PIN);
@@ -48,7 +54,7 @@ void setup() {
 #endif
 
 #if ENABLE_BLUETOOTH
-  Serial.print(F("BT init "));
+  Serial.print(F("BT init: "));
   Serial.println(BLUETOOTH_BAUD_RATE);
   bluetooth.begin(BLUETOOTH_BAUD_RATE);
 #else
@@ -77,7 +83,7 @@ void setup() {
   Serial.println("Setup complete.");
 }
 
-void SetPalette()
+void UpdatePalette()
 {
   if (fxController.animatePalette)
   {
@@ -87,9 +93,7 @@ void SetPalette()
     if (fxController.paletteIndex < 0)
       fxController.paletteIndex = NUM_LEDS - 1;
   }
-
 #if ENABLE_NEOPIXEL
-  //neopixelSetPalette(fxController);
   neopixelSetPalette(fxController.palette, fxController.paletteIndex);
 #endif
 }
@@ -111,9 +115,9 @@ void FxEventPoll(unsigned long timecode)
     fxController.animatePalette = true;
 
     FxTrackSay(timecode, matchedTimecode, nextMatchedTimecode);
-    /*PrintLog(String((float)matchedTimecode / (float)1000.0f));
-      PrintLog(F(" : next @ "));
-      PrintLogln(String((float)nextMatchedTimecode / (float)1000.0f));*/
+    /*Serial.print(((float)matchedTimecode / (float)1000.0f);
+      Serial.print(F(" : next @ "));
+      Serial.println((float)nextMatchedTimecode / (float)1000.0f);*/
 
     for (int i = 0; i < numSongTracks; i++)
       if (SongTrack_timecode(i) == matchedTimecode)
@@ -202,6 +206,8 @@ void DisplayStatus(FxController &fxc)
     unsigned long t =  millis();
     if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
     {      
+      //Serial.print(SystemName);
+      //Serial.print(F(":"));
       Serial.print(GetTime());
       Serial.print(F(":"));
       Serial.print(getTimecodeSongOffset());
@@ -220,13 +226,10 @@ void DisplayStatus(FxController &fxc)
         Serial.print(F(" "));
         Serial.print(SongTrack_timecode(match));
       }
-
-      Serial.println(F(""));
-      
+      Serial.println(F(""));      
       lastTimeDisplay = t;
     }
 }
-
 
 void DirectEvent(FxController &fxc, int event)
 {
@@ -236,7 +239,6 @@ void DirectEvent(FxController &fxc, int event)
     PrintFxEventName(event);
   FxEventProcess(fxc, event);
 }
-
 
 void magicColors(FxController &fxc, int count)
 {
@@ -249,7 +251,7 @@ void magicColors(FxController &fxc, int count)
     index++;
     if (index > count) index = 0;  
   }
-  CreatePaletteBands(fxc,//v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+  CreatePaletteBands(fxc,
     palette16[0],  palette16[1],  palette16[2],  palette16[3], 
     palette16[4],  palette16[5],  palette16[6],  palette16[7], 
     palette16[8],  palette16[9],  palette16[10], palette16[11], 
@@ -257,7 +259,7 @@ void magicColors(FxController &fxc, int count)
   //animatePalette = false;
   
   DirectEvent(fxc, fx_nothing);
-  SetPalette(); 
+  UpdatePalette(); 
 }
 
 void processCapturedText(FxController &fxc)
@@ -281,11 +283,9 @@ void processCapturedText(FxController &fxc)
   }
   else if (captureMode == CaptureTimeCode)
   { 
-    //PrintLog(F("GOT:"));
-    //PrintLogln(String(capturedTimeCode));
     captureMode = CaptureNone;
     //fxState == FxState_PlayingTrack;
-    unsigned long tc = capturedTimeCode.toInt();
+    unsigned long tc = atoi(captureBuffer);//capturedTimeCode.toInt();
     //int match = GetCurrentTimeCodeMatch(tc);
     //int nextmatch = GetNextTimeCodeMatch(match);
     int prevmatch = GetPreviousTimeCodeMatch(tc);
@@ -298,7 +298,6 @@ void processCapturedText(FxController &fxc)
     //timeController.songOffset = tc;
     setTimecodeSongOffset(tc);
   
-
     Serial.print(F("TC:"));
     Serial.print(tc);
     Serial.print(F(" vs t="));
@@ -315,17 +314,7 @@ void processCapturedText(FxController &fxc)
     Serial.println(F(""));
 
     trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY));
-
-  /*  PrintLog(F(" Match:"));
-    PrintLog(String(match));
-    PrintLog(F(","));
-    PrintLog(F(", now t="));
-    PrintLog(String(GetTime()));
-    PrintLogln(F(""));
-*/
-    
-
-}
+  }
 }
 
 void UserCommandExecute(FxController &fxc, int cmd)
@@ -338,8 +327,10 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("- : Rotate Neg"));
       Serial.println(F("( : Track Start"));
       Serial.println(F(") : Track Stop"));
-      Serial.println(F("0-9 : Color"));
+      Serial.println(F("* : Track StartFrom"));
       Serial.println(F("!code : Color code"));
+      Serial.println(F("@code : Time code"));
+      Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("(q)lava (w)cloud (e)ocean (r)forest (t)rainbow (y)rainbowstripe (u)party (i)heat"));
       break;
     case Cmd_State_Default: fxc.fxState = FxState_Default;break;
@@ -356,25 +347,25 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_SpeedInc:      fxc.animatePalette = true; DirectEvent(fxc, fx_speed_inc); break;
     case Cmd_SpeedRst:      fxc.animatePalette = true; DirectEvent(fxc, fx_speed_0); break;
     
-    case Cmd_ColorDark:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_dark); SetPalette(); break;
-    case Cmd_ColorWhite:    fxc.animatePalette = false; DirectEvent(fxc, fx_palette_white); SetPalette(); break;
-    case Cmd_ColorRed:      fxc.animatePalette = false; DirectEvent(fxc, fx_palette_red); SetPalette(); break;
-    case Cmd_ColorYellow:   fxc.animatePalette = false; DirectEvent(fxc, fx_palette_yellow); SetPalette(); break;
-    case Cmd_ColorGreen:    fxc.animatePalette = false; DirectEvent(fxc, fx_palette_green); SetPalette(); break;
-    case Cmd_ColorCyan:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_cyan); SetPalette(); break;
-    case Cmd_ColorBlue:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_blue); SetPalette(); break;
-    case Cmd_ColorMagenta:  fxc.animatePalette = false; DirectEvent(fxc, fx_palette_magenta); SetPalette(); break;
-    case Cmd_ColorOrange:   fxc.animatePalette = false; DirectEvent(fxc, fx_palette_orange); SetPalette(); break;
-    case Cmd_ColorHalf:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_half); SetPalette(); break;
+    case Cmd_ColorDark:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_dark); UpdatePalette(); break;
+    case Cmd_ColorWhite:    fxc.animatePalette = false; DirectEvent(fxc, fx_palette_white); UpdatePalette(); break;
+    case Cmd_ColorRed:      fxc.animatePalette = false; DirectEvent(fxc, fx_palette_red); UpdatePalette(); break;
+    case Cmd_ColorYellow:   fxc.animatePalette = false; DirectEvent(fxc, fx_palette_yellow); UpdatePalette(); break;
+    case Cmd_ColorGreen:    fxc.animatePalette = false; DirectEvent(fxc, fx_palette_green); UpdatePalette(); break;
+    case Cmd_ColorCyan:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_cyan); UpdatePalette(); break;
+    case Cmd_ColorBlue:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_blue); UpdatePalette(); break;
+    case Cmd_ColorMagenta:  fxc.animatePalette = false; DirectEvent(fxc, fx_palette_magenta); UpdatePalette(); break;
+    case Cmd_ColorOrange:   fxc.animatePalette = false; DirectEvent(fxc, fx_palette_orange); UpdatePalette(); break;
+    case Cmd_ColorHalf:     fxc.animatePalette = false; DirectEvent(fxc, fx_palette_half); UpdatePalette(); break;
 
-    case Cmd_ColorLava:           DirectEvent(fxc, fx_palette_lava); SetPalette(); break;
-    case Cmd_ColorCloud:          DirectEvent(fxc, fx_palette_cloud); SetPalette(); break;
-    case Cmd_ColorOcean:          DirectEvent(fxc, fx_palette_ocean); SetPalette(); break;
-    case Cmd_ColorForest:         DirectEvent(fxc, fx_palette_forest); SetPalette(); break;
-    case Cmd_ColorRainbow:        DirectEvent(fxc, fx_palette_rainbow); SetPalette(); break;
-    case Cmd_ColorRainbowstripe:  DirectEvent(fxc, fx_palette_rainbowstripe); SetPalette(); break;
-    case Cmd_ColorParty:          DirectEvent(fxc, fx_palette_party); SetPalette(); break;
-    case Cmd_ColorHeat:           DirectEvent(fxc, fx_palette_heat); SetPalette(); break;
+    case Cmd_ColorLava:           DirectEvent(fxc, fx_palette_lava); UpdatePalette(); break;
+    case Cmd_ColorCloud:          DirectEvent(fxc, fx_palette_cloud); UpdatePalette(); break;
+    case Cmd_ColorOcean:          DirectEvent(fxc, fx_palette_ocean); UpdatePalette(); break;
+    case Cmd_ColorForest:         DirectEvent(fxc, fx_palette_forest); UpdatePalette(); break;
+    case Cmd_ColorRainbow:        DirectEvent(fxc, fx_palette_rainbow); UpdatePalette(); break;
+    case Cmd_ColorRainbowstripe:  DirectEvent(fxc, fx_palette_rainbowstripe); UpdatePalette(); break;
+    case Cmd_ColorParty:          DirectEvent(fxc, fx_palette_party); UpdatePalette(); break;
+    case Cmd_ColorHeat:           DirectEvent(fxc, fx_palette_heat); UpdatePalette(); break;
     default: break;
   }
 }
@@ -393,7 +384,12 @@ void UserCommandInput(FxController &fxc, int data)
 
   if (captureMode == CaptureTimeCode && data != 10 && data != 13)
   {
-    capturedTimeCode = capturedTimeCode + (char)data;
+    if (captureCount < 15)
+    {
+      captureBuffer[captureCount] = (char)data;
+      captureBuffer[captureCount+1] = 0;
+      captureCount++;
+    }
     return;
   }
 
@@ -407,7 +403,7 @@ void UserCommandInput(FxController &fxc, int data)
     case '@':
       //PrintLogln(F("Capturing TimeCode"));
       captureCount = 0;
-      capturedTimeCode = "";
+      //capturedTimeCode = "";
       captureMode = CaptureTimeCode;
       break;
     case '?': UserCommandExecute(fxc, Cmd_Help); break;
@@ -454,37 +450,32 @@ void UserCommandInput(FxController &fxc, int data)
     case 225: break;
     default:
       Serial.print(F("unk:"));
-      Serial.println(String(data));
+      Serial.println(data);
       break;
   }
 }
+
 static unsigned long lastTimeLed = 0;
 void loop()
 {
-  while (Serial.available())
-  {
-    int data = Serial.read();
-    Serial.print("UC:");
-    Serial.println(data);    
-    UserCommandInput(fxController, data);
-  }
+  while (Serial.available())  
+    UserCommandInput(fxController, Serial.read());
 #if BLUETOOTH_ENABLE
   while (bluetooth.available())
     UserCommandInput(fxController, bluetooth.read());
 #endif
-
-  StatePoll(fxController);
-
 #if ENABLE_BLE
   bleloop();
 #endif
 
+  StatePoll(fxController);
+
   if (fxController.fxState == FxState_PlayingTrack || fxController.animatePalette)
   {
     unsigned long t =  millis();
-    if (t - lastTimeLed > 45)//delay to let bluetooth get data
+    if (t - lastTimeLed > 45)//delay to let bluetooth get data(fastled issue)
     {
-      SetPalette();
+      UpdatePalette();
       lastTimeLed = t;
     }
   }

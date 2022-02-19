@@ -1,3 +1,5 @@
+#include "Config.h"
+#include <Arduino.h>
 #include <avr/pgmspace.h> 
 #include "Track.h"
 #include "Timecode.h"
