@@ -1,22 +1,12 @@
 #if !defined USER_COMMAND_DEF
 #define USER_COMMAND_DEF
 
-#include "Fx.h"
-#include "Log.h"
-void SetPalette();
-unsigned long GetTime();
-
 enum CaptureTextMode
 {
   CaptureNone,
   CaptureColorCode,
   CaptureTimeCode
 };
-
-
-static void DirectEvent(FxController &fxc, int event);
-static void magicColors(FxController &fxc, int count, char *colors);
-static void processCapturedText(FxController &fxc);
 
 enum UserCommand
 {
@@ -58,9 +48,5 @@ enum UserCommand
   Cmd_SpeedRst  
 };
 
-void UserCommandExecute(FxController &fxc, int cmd);
-void UserCommandInput(FxController &fxc, int data);
-
-void DisplayStatus(FxController &fxc);
 
 #endif

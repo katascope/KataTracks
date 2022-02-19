@@ -1,15 +1,8 @@
 #if !defined FX_DEF
 #define FX_DEF
-#include <Arduino.h>
 #include <avr/pgmspace.h> 
 
-#include "Palette.h"
-
-
-uint8_t lerp(float mux, uint8_t a, uint8_t b);
-uint32_t LerpRGB(float t, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2);
-uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2);
-
+#include "Config.h"
 
 #define DARK    0x00,0x00,0x00
 #define WHITE   0xFF,0xFF,0xFF
@@ -35,7 +28,6 @@ uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2);
 #define CRGB_HALF    LEDRGB(HALF)
 #define CRGB_LOWHALF LEDRGB(LOWHALF)
 
-uint32_t ShortnameToCRGB(char shortName);
 
 enum FxState
 {
@@ -44,8 +36,6 @@ enum FxState
   FxState_PlayingTrack  = 2,
   FxState_IMU           = 3,
 };
-
-String FxStateName(FxState s);
 
 //List of possible Fx events
 enum FxEvent
@@ -189,8 +179,6 @@ enum FxEvent
 
 struct Fx { unsigned long timecode; unsigned long event;   };
 
-String FxEventName(int event);
-
 enum FxTransitionType
 {
   Transition_Instant      = 0,
@@ -198,8 +186,6 @@ enum FxTransitionType
   Transition_TimedWipePos = 2,
   Transition_TimedWipeNeg = 3,
 };
-
-String FxTransitionName(FxTransitionType t);
 
 struct FxController
 {
@@ -214,6 +200,16 @@ struct FxController
   bool animatePalette = false;
   float transitionMux = 0;
 };
+
+uint8_t lerp(float mux, uint8_t a, uint8_t b);
+uint32_t LerpRGB(float t, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2);
+uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2);
+
+uint32_t ShortnameToCRGB(char shortName);
+
+void PrintFxStateName(FxState s);
+void PrintFxEventName(int event);
+void PrintFxTransitionName(FxTransitionType t);
 
 void CreatePalette(FxController &fxController, uint32_t *pal16);
 void CreatePaletteBands(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7, 

@@ -25,13 +25,13 @@ BLEBoolCharacteristic resetCounterCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERIS
 
 void blePeripheralConnectHandler(BLEDevice central) {
   // central connected event handler
-  Serial.print("Connected event, central: ");
+  Serial.print(F("Connected event, central: "));
   Serial.println(central.address());
 }
 
 void blePeripheralDisconnectHandler(BLEDevice central) {
   // central disconnected event handler
-  Serial.print("Disconnected event, central: ");
+  Serial.print(F("Disconnected event, central: "));
   Serial.println(central.address());
 }
 
@@ -124,7 +124,7 @@ void bleloop()
           {
             float imuAccelX, imuAccelY, imuAccelZ;
             IMU.readAcceleration( imuAccelX, imuAccelY, imuAccelZ );
-            Serial.print("Acc=");
+            Serial.print(F("Acc="));
             Serial.print(imuAccelX);
             Serial.print('\t');
             Serial.print(imuAccelY);
@@ -139,7 +139,7 @@ void bleloop()
           {
             float imuGyroX, imuGyroY, imuGyroZ;
             IMU.readGyroscope( imuGyroX, imuGyroY, imuGyroZ );
-            Serial.print("Gyro=");
+            Serial.print(F("Gyro="));
             Serial.print(imuGyroX);
             Serial.print('\t');
             Serial.print(imuGyroY);
@@ -151,7 +151,7 @@ void bleloop()
           }
 
           counter++;
-          Serial.print("Count=");
+          Serial.print(F("Count="));
           Serial.println(counter);
           counterCharacteristic.writeValue( counter );
         }

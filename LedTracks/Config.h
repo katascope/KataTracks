@@ -1,7 +1,6 @@
 #if !defined CONFIG_DEF
 #define CONFIG_DEF
 
-#include "IMU.h"
 /*
 #if defined ARDUINO_AVR_NANO
  #define SYSTEM_NANO
@@ -27,10 +26,14 @@
 #define ENABLE_IMU        1
 #endif
 
+#define SERIAL_BAUD_RATE  9600
+
 #include "Palette.h"
 
 //////////////// NeoPixel Section ////////////////
 #if ENABLE_NEOPIXEL
+#define LED_PIN    5 //3 most of the time, 5 on old things
+#define NUM_LEDS   70
 #include <Adafruit_NeoPixel.h>
 #include "NeoPixel.h"
 #endif
@@ -55,5 +58,5 @@ static SoftwareSerial bluetooth(RX_PIN, TX_PIN);
 #include "BLE.h"
 #endif
 
-#include "Log.h"
+
 #endif

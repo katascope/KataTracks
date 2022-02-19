@@ -1,7 +1,6 @@
+#include "Config.h"
 #include "Fx.h"
-#include <Arduino.h> 
-//#include "Palette.h"
-#define NUM_LEDS   80
+
 uint8_t lerp(float mux, uint8_t a, uint8_t b) { return (uint8_t)(a * (1.0 - mux) + b * mux); }
 uint32_t LerpRGB(float t, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2) { return LEDRGB(lerp(t, r1, r2),lerp(t, g1, g2),lerp(t, b1, b2)); }
 uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2) {
@@ -14,8 +13,9 @@ uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2) {
   return LEDRGB(lerp(t, r1, r2),lerp(t, g1, g2),lerp(t, b1, b2));
 }
 
+
 uint32_t ShortnameToCRGB(char shortName)
-{
+{  
   switch (shortName)
   {
     case 'd': return CRGB_DARK;
@@ -30,169 +30,176 @@ uint32_t ShortnameToCRGB(char shortName)
     case 'h': return CRGB_HALF;
     case 'l': return CRGB_LOWHALF;
   }
+  return CRGB_DARK;
+}
+void flashprint (const char p[])
+{
+    char c;
+    while (0 != (c = pgm_read_byte(p++))) {
+    Serial.write(c);
+    }
 }
 
-String FxStateName(FxState s)
+void PrintFxStateName(FxState s)
 {
   switch (s)
   {
-    case FxState_Default:       return F("Norm"); break;
-    case FxState_TestPattern:   return F("Test"); break;
-    case FxState_PlayingTrack:  return F("Play"); break;
-    case FxState_IMU:           return F("IMU"); break;
-    default: return F("Unknown");
+    case FxState_Default:       Serial.print("Norm"); break;
+    case FxState_TestPattern:   Serial.print("Test"); break;
+    case FxState_PlayingTrack:  Serial.print("Play"); break;
+    case FxState_IMU:           Serial.print("IMU"); break;
+    default: Serial.print("Unk");
   }
 }
 
-String FxEventName(int event)
+void PrintFxEventName(int event)
 {
   switch(event)
   {
-    case fx_speed_0: return F("x0");
-    case fx_speed_1: return F("x1");
-    case fx_speed_2: return F("x2");
-    case fx_speed_3: return F("x3");
-    case fx_speed_4: return F("x4");
-    case fx_speed_5: return F("x5");
-    case fx_speed_6: return F("x6");
-    case fx_speed_7: return F("x7");
-    case fx_speed_8: return F("x8");
-    case fx_speed_9: return F("x9");
-    case fx_speed_10: return F("x10");
-    case fx_speed_11: return F("x11");
-    case fx_speed_12: return F("x12");
-    case fx_speed_13: return F("x13");
-    case fx_speed_14: return F("x14");
-    case fx_speed_15: return F("x15");
-    case fx_speed_16: return F("x16");
-    case fx_speed_17: return F("x17");
-    case fx_speed_18: return F("x18");
-    case fx_speed_32: return F("x32");
+    case fx_speed_0: Serial.print(F("x0"));break;
+    case fx_speed_1: Serial.print(F("x1"));break;
+    case fx_speed_2: Serial.print(F("x2"));break;
+    case fx_speed_3: Serial.print(F("x3"));break;
+    case fx_speed_4: Serial.print(F("x4"));break;
+    case fx_speed_5: Serial.print(F("x5"));break;
+    case fx_speed_6: Serial.print(F("x6"));break;
+    case fx_speed_7: Serial.print(F("x7"));break;
+    case fx_speed_8: Serial.print(F("x8"));break;
+    case fx_speed_9: Serial.print(F("x9"));break;
+    case fx_speed_10: Serial.print(F("x10"));break;
+    case fx_speed_11: Serial.print(F("x11"));break;
+    case fx_speed_12: Serial.print(F("x12"));break;
+    case fx_speed_13: Serial.print(F("x13"));break;
+    case fx_speed_14: Serial.print(F("x14"));break;
+    case fx_speed_15: Serial.print(F("x15"));break;
+    case fx_speed_16: Serial.print(F("x16"));break;
+    case fx_speed_17: Serial.print(F("x17"));break;
+    case fx_speed_18: Serial.print(F("x18"));break;
+    case fx_speed_32: Serial.print(F("x32"));break;
 
-    case fx_speed_pos: return F("speed pos");
-    case fx_speed_neg: return F("speed neg");
-    case fx_speed_inc: return F("speed inc");
-    case fx_speed_dec: return F("speed dec");
+    case fx_speed_pos: Serial.print(F("speed pos"));break;
+    case fx_speed_neg: Serial.print(F("speed neg"));break;
+    case fx_speed_inc: Serial.print(F("speed inc"));break;
+    case fx_speed_dec: Serial.print(F("speed dec"));break;
     
-    case fx_transition_fast: return F("t-fast");
-    case fx_transition_timed_fade:return F("t-timed-fade");
-    case fx_transition_timed_wipe_pos:return F("t-timed-wipe-pos");
-    case fx_transition_timed_wipe_neg:return F("t-timed-wipe-neg");
+    case fx_transition_fast: Serial.print(F("t-fast"));break;
+    case fx_transition_timed_fade:Serial.print(F("t-timed-fade"));break;
+    case fx_transition_timed_wipe_pos:Serial.print(F("t-timed-wipe-pos"));break;
+    case fx_transition_timed_wipe_neg:Serial.print(F("t-timed-wipe-neg"));break;
     
-    case fx_palette_lead:    return F("lead");    
-    case fx_palette_follow:  return F("follow");       
+    case fx_palette_lead:    Serial.print(F("lead"));break;    
+    case fx_palette_follow:  Serial.print(F("follow"));break;       
 
-    case fx_palette_lava: return F("lava");
-    case fx_palette_cloud: return F("cloud");
-    case fx_palette_ocean: return F("ocean");
-    case fx_palette_forest: return F("forest");
-    case fx_palette_rainbow: return F("rainbow");
-    case fx_palette_rainbowstripe: return F("rainbowstripe");
-    case fx_palette_party: return F("party");
-    case fx_palette_heat: return F("heat");
+    case fx_palette_lava: Serial.print(F("lava"));break;
+    case fx_palette_cloud: Serial.print(F("cloud"));break;
+    case fx_palette_ocean: Serial.print(F("ocean"));break;
+    case fx_palette_forest: Serial.print(F("forest"));break;
+    case fx_palette_rainbow: Serial.print(F("rainbow"));break;
+    case fx_palette_rainbowstripe: Serial.print(F("rainbowstripe"));break;
+    case fx_palette_party: Serial.print(F("party"));break;
+    case fx_palette_heat: Serial.print(F("heat"));break;
 
-    case fx_palette_dark:    return F("dark");
-    case fx_palette_white:   return F("white");
-    case fx_palette_red:     return F("red");
-    case fx_palette_yellow:  return F("yellow");
-    case fx_palette_green:   return F("green");
-    case fx_palette_cyan:    return F("cyan");
-    case fx_palette_blue:    return F("blue");
-    case fx_palette_magenta: return F("magenta");
-    case fx_palette_orange:  return F("orange");
-    case fx_palette_half:  return F("half");
-    case fx_palette_lowhalf:  return F("lowhalf");
+    case fx_palette_dark:    Serial.print(F("dark"));break;
+    case fx_palette_white:   Serial.print(F("white"));break;
+    case fx_palette_red:     Serial.print(F("red"));break;
+    case fx_palette_yellow:  Serial.print(F("yellow"));break;
+    case fx_palette_green:   Serial.print(F("green"));break;
+    case fx_palette_cyan:    Serial.print(F("cyan"));break;
+    case fx_palette_blue:    Serial.print(F("blue"));break;
+    case fx_palette_magenta: Serial.print(F("magenta"));break;
+    case fx_palette_orange:  Serial.print(F("orange"));break;
+    case fx_palette_half:  Serial.print(F("half"));break;
+    case fx_palette_lowhalf:  Serial.print(F("lowhalf"));break;
 
-    case fx_palette_pulse_dark:    return F("pulse-dark");
-    case fx_palette_pulse_white:   return F("pulse-white");
-    case fx_palette_pulse_red:     return F("pulse-red");
-    case fx_palette_pulse_yellow:  return F("pulse-yellow");
-    case fx_palette_pulse_green:   return F("pulse-green");
-    case fx_palette_pulse_cyan:    return F("pulse-cyan");
-    case fx_palette_pulse_blue:    return F("pulse-blue");
-    case fx_palette_pulse_magenta: return F("pulse-magenta");
-    case fx_palette_pulse_orange:  return F("pulse-orange");
-    case fx_palette_pulse_half:  return F("pulse-half");
-    case fx_palette_pulse_lowhalf:  return F("pulse-lowhalf");
+    case fx_palette_pulse_dark:    Serial.print(F("pulse-dark"));break;
+    case fx_palette_pulse_white:   Serial.print(F("pulse-white"));break;
+    case fx_palette_pulse_red:     Serial.print(F("pulse-red"));break;
+    case fx_palette_pulse_yellow:  Serial.print(F("pulse-yellow"));break;
+    case fx_palette_pulse_green:   Serial.print(F("pulse-green"));break;
+    case fx_palette_pulse_cyan:    Serial.print(F("pulse-cyan"));break;
+    case fx_palette_pulse_blue:    Serial.print(F("pulse-blue"));break;
+    case fx_palette_pulse_magenta: Serial.print(F("pulse-magenta"));break;
+    case fx_palette_pulse_orange:  Serial.print(F("pulse-orange"));break;
+    case fx_palette_pulse_half:  Serial.print(F("pulse-half"));break;
+    case fx_palette_pulse_lowhalf:  Serial.print(F("pulse-lowhalf"));break;
    
-    case fx_palette_dw: return F("dark-white");
-    case fx_palette_dr: return F("dark-red");
-    case fx_palette_dy: return F("dark-yellow");
-    case fx_palette_dg: return F("dark-green");
-    case fx_palette_dc: return F("dark-cyan");
-    case fx_palette_db: return F("dark-blue");
-    case fx_palette_dm: return F("dark-magenta");
-    case fx_palette_wr: return F("white-red");
-    case fx_palette_wy: return F("white-yellow");
-    case fx_palette_wg: return F("white-green");
-    case fx_palette_wc: return F("white-cyan");
-    case fx_palette_wb: return F("white-blue");
-    case fx_palette_wm: return F("white-magenta");
-    case fx_palette_ry: return F("red-yellow");
-    case fx_palette_rg: return F("red-green");
-    case fx_palette_rc: return F("red-cyan");
-    case fx_palette_rb: return F("red-blue");
-    case fx_palette_rm: return F("red-magenta");
-    case fx_palette_yg: return F("yellow-green");
-    case fx_palette_yc: return F("yellow-cyan");
-    case fx_palette_yb: return F("yellow-blue");
-    case fx_palette_ym: return F("yellow-magenta");
-    case fx_palette_gc: return F("green-cyan");
-    case fx_palette_gb: return F("green-blue");
-    case fx_palette_gm: return F("green-magenta");
-    case fx_palette_cb: return F("cyan-blue");
-    case fx_palette_cm: return F("cyan-magenta");
-    case fx_palette_bm: return F("blue-magenta");
+    case fx_palette_dw: Serial.print(F("dark-white"));break;
+    case fx_palette_dr: Serial.print(F("dark-red"));break;
+    case fx_palette_dy: Serial.print(F("dark-yellow"));break;
+    case fx_palette_dg: Serial.print(F("dark-green"));break;
+    case fx_palette_dc: Serial.print(F("dark-cyan"));break;
+    case fx_palette_db: Serial.print(F("dark-blue"));break;
+    case fx_palette_dm: Serial.print(F("dark-magenta"));break;
+    case fx_palette_wr: Serial.print(F("white-red"));break;
+    case fx_palette_wy: Serial.print(F("white-yellow"));break;
+    case fx_palette_wg: Serial.print(F("white-green"));break;
+    case fx_palette_wc: Serial.print(F("white-cyan"));break;
+    case fx_palette_wb: Serial.print(F("white-blue"));break;
+    case fx_palette_wm: Serial.print(F("white-magenta"));break;
+    case fx_palette_ry: Serial.print(F("red-yellow"));break;
+    case fx_palette_rg: Serial.print(F("red-green"));break;
+    case fx_palette_rc: Serial.print(F("red-cyan"));break;
+    case fx_palette_rb: Serial.print(F("red-blue"));break;
+    case fx_palette_rm: Serial.print(F("red-magenta"));break;
+    case fx_palette_yg: Serial.print(F("yellow-green"));break;
+    case fx_palette_yc: Serial.print(F("yellow-cyan"));break;
+    case fx_palette_yb: Serial.print(F("yellow-blue"));break;
+    case fx_palette_ym: Serial.print(F("yellow-magenta"));break;
+    case fx_palette_gc: Serial.print(F("green-cyan"));break;
+    case fx_palette_gb: Serial.print(F("green-blue"));break;
+    case fx_palette_gm: Serial.print(F("green-magenta"));break;
+    case fx_palette_cb: Serial.print(F("cyan-blue"));break;
+    case fx_palette_cm: Serial.print(F("cyan-magenta"));break;
+    case fx_palette_bm: Serial.print(F("blue-magenta"));break;
 
-    case fx_palette_wry:return F("wry");
-    case fx_palette_wrg:return F("wrg");
-    case fx_palette_wrc:return F("wrc");
-    case fx_palette_wrb:return F("wrb");
-    case fx_palette_wrm:return F("wrm");
-    case fx_palette_wyg:return F("wyg");
-    case fx_palette_wyc:return F("wyc");
-    case fx_palette_wyb:return F("wyb");
-    case fx_palette_wym:return F("wym");
-    case fx_palette_wgc:return F("wgc");
-    case fx_palette_wgb:return F("wgb");
-    case fx_palette_wgm:return F("wgm");
-    case fx_palette_wcb:return F("wcb");
-    case fx_palette_wcm:return F("wcm");
-    case fx_palette_wbm:return F("wbm");
+    case fx_palette_wry:Serial.print(F("wry"));break;
+    case fx_palette_wrg:Serial.print(F("wrg"));break;
+    case fx_palette_wrc:Serial.print(F("wrc"));break;
+    case fx_palette_wrb:Serial.print(F("wrb"));break;
+    case fx_palette_wrm:Serial.print(F("wrm"));break;
+    case fx_palette_wyg:Serial.print(F("wyg"));break;
+    case fx_palette_wyc:Serial.print(F("wyc"));break;
+    case fx_palette_wyb:Serial.print(F("wyb"));break;
+    case fx_palette_wym:Serial.print(F("wym"));break;
+    case fx_palette_wgc:Serial.print(F("wgc"));break;
+    case fx_palette_wgb:Serial.print(F("wgb"));break;
+    case fx_palette_wgm:Serial.print(F("wgm"));break;
+    case fx_palette_wcb:Serial.print(F("wcb"));break;
+    case fx_palette_wcm:Serial.print(F("wcm"));break;
+    case fx_palette_wbm:Serial.print(F("wbm"));break;
 
-    case fx_palette_dry:return F("dry");
-    case fx_palette_drg:return F("drg");
-    case fx_palette_drc:return F("drc");
-    case fx_palette_drb:return F("drb");
-    case fx_palette_drm:return F("drm");
-    case fx_palette_dyg:return F("dyg");
-    case fx_palette_dyc:return F("dyc");
-    case fx_palette_dyb:return F("dyb");
-    case fx_palette_dym:return F("dym");
-    case fx_palette_dgc:return F("dgc");
-    case fx_palette_dgb:return F("dgb");
-    case fx_palette_dgm:return F("dgm");
-    case fx_palette_dcb:return F("dcb");
-    case fx_palette_dcm:return F("dcm");
-    case fx_palette_dbm:return F("dbm");
+    case fx_palette_dry:Serial.print(F("dry"));break;
+    case fx_palette_drg:Serial.print(F("drg"));break;
+    case fx_palette_drc:Serial.print(F("drc"));break;
+    case fx_palette_drb:Serial.print(F("drb"));break;
+    case fx_palette_drm:Serial.print(F("drm"));break;
+    case fx_palette_dyg:Serial.print(F("dyg"));break;
+    case fx_palette_dyc:Serial.print(F("dyc"));break;
+    case fx_palette_dyb:Serial.print(F("dyb"));break;
+    case fx_palette_dym:Serial.print(F("dym"));break;
+    case fx_palette_dgc:Serial.print(F("dgc"));break;
+    case fx_palette_dgb:Serial.print(F("dgb"));break;
+    case fx_palette_dgm:Serial.print(F("dgm"));break;
+    case fx_palette_dcb:Serial.print(F("dcb"));break;
+    case fx_palette_dcm:Serial.print(F("dcm"));break;
+    case fx_palette_dbm:Serial.print(F("dbm"));break;
 
-    case fx_palette_accel:return F("accel");
-    case fx_palette_gyro:return F("gyro");
+    case fx_palette_accel:Serial.print(F("accel"));break;
+    case fx_palette_gyro:Serial.print(F("gyro"));break;
 
-    case fx_nothing:return F("nothing");
+    case fx_nothing:Serial.print(F("nothing"));break;
   }
-  return F("unk");
 }
 
-String FxTransitionName(FxTransitionType t)
+void PrintFxTransitionName(FxTransitionType t)
 {
   switch (t)
   {
-    case Transition_Instant:      return F("Fast"); break;
-    case Transition_TimedFade:    return F("Fade"); break;
-    case Transition_TimedWipePos: return F("Wip-"); break;
-    case Transition_TimedWipeNeg: return F("Wip+"); break;
-    default: return F("Unknown");
+    case Transition_Instant:      Serial.print(F("Fast")); break;
+    case Transition_TimedFade:    Serial.print(F("Fade")); break;
+    case Transition_TimedWipePos: Serial.print(F("Wip+")); break;
+    case Transition_TimedWipeNeg: Serial.print(F("Wip-")); break;
+    default: Serial.print("Unknown");
   }
 }
 
@@ -258,6 +265,47 @@ void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
 }
 
+enum    CRGB {
+  AliceBlue =0xF0F8FF, Amethyst =0x9966CC, AntiqueWhite =0xFAEBD7, Aqua =0x00FFFF,
+  Aquamarine =0x7FFFD4, Azure =0xF0FFFF, Beige =0xF5F5DC, Bisque =0xFFE4C4,
+  Black =0x000000, BlanchedAlmond =0xFFEBCD, Blue =0x0000FF, BlueViolet =0x8A2BE2,
+  Brown =0xA52A2A, BurlyWood =0xDEB887, CadetBlue =0x5F9EA0, Chartreuse =0x7FFF00,
+  Chocolate =0xD2691E, Coral =0xFF7F50, CornflowerBlue =0x6495ED, Cornsilk =0xFFF8DC,
+  Crimson =0xDC143C, Cyan =0x00FFFF, DarkBlue =0x00008B, DarkCyan =0x008B8B,
+  DarkGoldenrod =0xB8860B, DarkGray =0xA9A9A9, DarkGrey =0xA9A9A9, DarkGreen =0x006400,
+  DarkKhaki =0xBDB76B, DarkMagenta =0x8B008B, DarkOliveGreen =0x556B2F, DarkOrange =0xFF8C00,
+  DarkOrchid =0x9932CC, DarkRed =0x8B0000, DarkSalmon =0xE9967A, DarkSeaGreen =0x8FBC8F,
+  DarkSlateBlue =0x483D8B, DarkSlateGray =0x2F4F4F, DarkSlateGrey =0x2F4F4F, DarkTurquoise =0x00CED1,
+  DarkViolet =0x9400D3, DeepPink =0xFF1493, DeepSkyBlue =0x00BFFF, DimGray =0x696969,
+  DimGrey =0x696969, DodgerBlue =0x1E90FF, FireBrick =0xB22222, FloralWhite =0xFFFAF0,
+  ForestGreen =0x228B22, Fuchsia =0xFF00FF, Gainsboro =0xDCDCDC, GhostWhite =0xF8F8FF,
+  Gold =0xFFD700, Goldenrod =0xDAA520, Gray =0x808080, Grey =0x808080,
+  Green =0x008000, GreenYellow =0xADFF2F, Honeydew =0xF0FFF0, HotPink =0xFF69B4,
+  IndianRed =0xCD5C5C, Indigo =0x4B0082, Ivory =0xFFFFF0, Khaki =0xF0E68C,
+  Lavender =0xE6E6FA, LavenderBlush =0xFFF0F5, LawnGreen =0x7CFC00, LemonChiffon =0xFFFACD,
+  LightBlue =0xADD8E6, LightCoral =0xF08080, LightCyan =0xE0FFFF, LightGoldenrodYellow =0xFAFAD2,
+  LightGreen =0x90EE90, LightGrey =0xD3D3D3, LightPink =0xFFB6C1, LightSalmon =0xFFA07A,
+  LightSeaGreen =0x20B2AA, LightSkyBlue =0x87CEFA, LightSlateGray =0x778899, LightSlateGrey =0x778899,
+  LightSteelBlue =0xB0C4DE, LightYellow =0xFFFFE0, Lime =0x00FF00, LimeGreen =0x32CD32,
+  Linen =0xFAF0E6, Magenta =0xFF00FF, Maroon =0x800000, MediumAquamarine =0x66CDAA,
+  MediumBlue =0x0000CD, MediumOrchid =0xBA55D3, MediumPurple =0x9370DB, MediumSeaGreen =0x3CB371,
+  MediumSlateBlue =0x7B68EE, MediumSpringGreen =0x00FA9A, MediumTurquoise =0x48D1CC, MediumVioletRed =0xC71585,
+  MidnightBlue =0x191970, MintCream =0xF5FFFA, MistyRose =0xFFE4E1, Moccasin =0xFFE4B5,
+  NavajoWhite =0xFFDEAD, Navy =0x000080, OldLace =0xFDF5E6, Olive =0x808000,
+  OliveDrab =0x6B8E23, Orange =0xFFA500, OrangeRed =0xFF4500, Orchid =0xDA70D6,
+  PaleGoldenrod =0xEEE8AA, PaleGreen =0x98FB98, PaleTurquoise =0xAFEEEE, PaleVioletRed =0xDB7093,
+  PapayaWhip =0xFFEFD5, PeachPuff =0xFFDAB9, Peru =0xCD853F, Pink =0xFFC0CB,
+  Plaid =0xCC5533, Plum =0xDDA0DD, PowderBlue =0xB0E0E6, Purple =0x800080,
+  Red =0xFF0000, RosyBrown =0xBC8F8F, RoyalBlue =0x4169E1, SaddleBrown =0x8B4513,
+  Salmon =0xFA8072, SandyBrown =0xF4A460, SeaGreen =0x2E8B57, Seashell =0xFFF5EE,
+  Sienna =0xA0522D, Silver =0xC0C0C0, SkyBlue =0x87CEEB, SlateBlue =0x6A5ACD,
+  SlateGray =0x708090, SlateGrey =0x708090, Snow =0xFFFAFA, SpringGreen =0x00FF7F,
+  SteelBlue =0x4682B4, Tan =0xD2B48C, Teal =0x008080, Thistle =0xD8BFD8,
+  Tomato =0xFF6347, Turquoise =0x40E0D0, Violet =0xEE82EE, Wheat =0xF5DEB3,
+  White =0xFFFFFF, WhiteSmoke =0xF5F5F5, Yellow =0xFFFF00, YellowGreen =0x9ACD32,
+  FairyLight =0xFFE42D, FairyLightNCC =0xFF9D2A
+};
+
 void FxEventProcess(FxController &fxc,int event)
 {
   switch (event)
@@ -309,15 +357,78 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_palette_follow:CreateSingleBand(fxc, RED);break;
 
     //case fx_palette_dark:break;//CreateDefaultBand(DARK);break;
-/*    case fx_palette_lava:CreatePalette(LavaColors_p);break;
-    case fx_palette_cloud:CreatePalette(CloudColors_p);break;
-    case fx_palette_ocean:CreatePalette(OceanColors_p);break;
-    case fx_palette_forest:CreatePalette(ForestColors_p);break;
-    case fx_palette_rainbow:CreatePalette(RainbowColors_p);break;
-    case fx_palette_rainbowstripe:CreatePalette(RainbowStripeColors_p);break;
-    case fx_palette_party:CreatePalette(PartyColors_p);break;
-    case fx_palette_heat:CreatePalette(HeatColors_p);break;
-*/
+    case fx_palette_lava:CreatePaletteBands(fxc,
+        CRGB::Black,CRGB::Maroon,CRGB::Black,CRGB::Maroon,    
+        CRGB::DarkRed,CRGB::Maroon,CRGB::DarkRed,CRGB::DarkRed,    
+        CRGB::DarkRed,CRGB::DarkRed,CRGB::Red,CRGB::Orange,    
+        CRGB::White,CRGB::Orange,CRGB::Red,CRGB::DarkRed);
+      break;
+    case fx_palette_cloud:CreatePaletteBands(fxc,  
+      CRGB::Blue,CRGB::DarkBlue,CRGB::DarkBlue,CRGB::DarkBlue,
+      CRGB::DarkBlue,CRGB::DarkBlue,CRGB::DarkBlue,CRGB::DarkBlue,
+      CRGB::Blue,CRGB::DarkBlue,CRGB::SkyBlue,CRGB::SkyBlue,
+      CRGB::LightBlue,CRGB::White,CRGB::LightBlue,CRGB::SkyBlue);
+      break;
+    case fx_palette_ocean:CreatePaletteBands(fxc,    
+      CRGB::DarkGreen,
+      CRGB::DarkGreen,
+      CRGB::DarkOliveGreen,
+      CRGB::DarkGreen,
+  
+      CRGB::Green,
+      CRGB::ForestGreen,
+      CRGB::OliveDrab,
+      CRGB::Green,
+  
+      CRGB::SeaGreen,
+      CRGB::MediumAquamarine,
+      CRGB::LimeGreen,
+      CRGB::YellowGreen,
+  
+      CRGB::LightGreen,
+      CRGB::LawnGreen,
+      CRGB::MediumAquamarine,
+      CRGB::ForestGreen);break;
+    case fx_palette_forest:CreatePaletteBands(fxc,    
+      CRGB::DarkGreen,
+      CRGB::DarkGreen,
+      CRGB::DarkOliveGreen,
+      CRGB::DarkGreen,
+  
+      CRGB::Green,
+      CRGB::ForestGreen,
+      CRGB::OliveDrab,
+      CRGB::Green,
+  
+      CRGB::SeaGreen,
+      CRGB::MediumAquamarine,
+      CRGB::LimeGreen,
+      CRGB::YellowGreen,
+  
+      CRGB::LightGreen,
+      CRGB::LawnGreen,
+      CRGB::MediumAquamarine,
+      CRGB::ForestGreen);break;
+    case fx_palette_rainbow:CreatePaletteBands(fxc, 
+      0xFF0000, 0xD52A00, 0xAB5500, 0xAB7F00,
+      0xABAB00, 0x56D500, 0x00FF00, 0x00D52A,
+      0x00AB55, 0x0056AA, 0x0000FF, 0x2A00D5,
+      0x5500AB, 0x7F0081, 0xAB0055, 0xD5002B);break;
+    case fx_palette_rainbowstripe:CreatePaletteBands(fxc,    
+      0xFF0000, 0x000000, 0xAB5500, 0x000000,
+      0xABAB00, 0x000000, 0x00FF00, 0x000000,
+      0x00AB55, 0x000000, 0x0000FF, 0x000000,
+      0x5500AB, 0x000000, 0xAB0055, 0x000000);break;
+    case fx_palette_party:CreatePaletteBands(fxc,   
+      0x5500AB, 0x84007C, 0xB5004B, 0xE5001B,
+      0xE81700, 0xB84700, 0xAB7700, 0xABAB00,
+      0xAB5500, 0xDD2200, 0xF2000E, 0xC2003E,
+      0x8F0071, 0x5F00A1, 0x2F00D0, 0x0007F9);break;
+    case fx_palette_heat:CreatePaletteBands(fxc,
+      0x000000, 0x330000, 0x660000, 0x990000, 
+      0xCC0000, 0xFF0000, 0xFF3300, 0xFF6600, 
+      0xFF9900, 0xFFCC00, 0xFFFF00, 0xFFFF33, 
+      0xFFFF66, 0xFFFF99, 0xFFFFCC, 0xFFFFFF);break;
     case fx_palette_dark:CreateSingleBand(fxc, DARK);break;
     case fx_palette_white:CreateSingleBand(fxc, WHITE);break;
     case fx_palette_red:CreateSingleBand(fxc, RED);break;

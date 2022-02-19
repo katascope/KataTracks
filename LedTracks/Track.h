@@ -1,6 +1,7 @@
 #if !defined TRACK_DEF
 #define TRACK_DEF
 #include <avr/pgmspace.h> 
+#include "Fx.h"
 
 #define LEAD      1                // Set 1 for Dance lead, 0 for Dance follow
 
@@ -156,63 +157,15 @@ const unsigned long SongTrack[] PROGMEM =
 #endif
 const PROGMEM int numSongTracks = sizeof(SongTrack)/(sizeof(unsigned long)*2);
 
-static unsigned long SongTrack_timecode(int i) { return pgm_read_dword(&(SongTrack[i*2+0])); } 
-static unsigned long SongTrack_event(int i) {  return pgm_read_dword(&(SongTrack[i*2+1])); }
+unsigned long SongTrack_timecode(int i);
+unsigned long SongTrack_event(int i);
 
-static int GetNextTimeCodeMatch(int currentMatch) { unsigned long tc = SongTrack_timecode(currentMatch); for (int i=0;i<numSongTracks;i++) if (SongTrack_timecode(i) > tc) return i; return 0; }
-static int GetCurrentTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) <= timecode) match = i; } return match; }
-static int GetPreviousTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) < timecode) match = i; } return match; }
+int GetNextTimeCodeMatch(int currentMatch);
+int GetCurrentTimeCodeMatch(unsigned long timecode);
+int GetPreviousTimeCodeMatch(unsigned long timecode);
 
-static void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode)
-{
-    float tc = (float)matchedTimecode;// / (float)1000.0f;
-    Serial.print(tc);
-    Serial.print(F(" :"));
-    for (int i=0;i<numSongTracks;i++)
-    {
-      if (SongTrack_timecode(i) == matchedTimecode)
-      {
-        Serial.print(F(" "));
-        Serial.print(FxEventName(SongTrack_event(i)));
-      }
-    }
-    Serial.print(F(", next = "));  
-    for (int i=0;i<numSongTracks;i++)
-    {
-      if (SongTrack_timecode(i) == nextMatchedTimecode)
-      {
-          Serial.print(F(" "));
-          Serial.print(FxEventName(SongTrack_event(i)));
-      }
-    }
-  
-    float timeUntil = (float)(nextMatchedTimecode - (float)timecode) / 1000.0f;
-    Serial.print(F(" in "));
-    Serial.print(timeUntil);
-    Serial.print(F("s"));
-    Serial.println();
-}
-
-static void trackStart(FxController &fxc,unsigned long tc)
-{
-  uint32_t dk = LEDRGB(0,0,0);
-  fxc.fxState = FxState_PlayingTrack;
-  fxc.paletteSpeed = 0;
-  fxc.paletteDirection = 1;
-  fxc.transitionType = Transition_Instant;
-  setTimecodeLastMatched(tc);//.timeController.lastMatchedTimecode = tc;
-  setTimecodeTimeOffset((unsigned long)(millis() - (signed long)TRACK_START_DELAY));
-  fxc.transitionMux = 0;
-  PrintLog(F("Playing Track"));
-  PrintLog(F(", Time Offset = "));
-  PrintLogln(String(getTimecodeTimeOffset()));
-}
-
-static void trackStop(FxController &fxc)
-{
-  fxc.fxState = FxState_Default;
-  fxc.animatePalette = false;
-  PrintLog(F("Stopping Track"));
-}
+void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode);
+void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset);
+void trackStop(FxController &fxc);
 
 #endif

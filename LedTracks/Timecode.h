@@ -18,6 +18,4 @@ signed long setTimecodeSongOffset(signed long tc);
 void setTimecodeLastMatched(unsigned long match);
 unsigned long getTimecodeLastMatched();
 
-unsigned long GetTime();
-
 #endif

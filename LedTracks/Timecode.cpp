@@ -1,12 +1,6 @@
-#include <Arduino.h>
 #include "Timecode.h"
 TimeCode timeController;
-//unsigned long millis();
 
-unsigned long GetTime()
-{ 
-  return (unsigned long)((signed long)millis() - (signed long)getTimecodeTimeOffset() + getTimecodeSongOffset()); 
-}
 
 void setTimecodeLastMatched(unsigned long match)
 {
