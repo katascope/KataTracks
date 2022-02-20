@@ -3,15 +3,19 @@
 #include "BLE.h"
 #include <ArduinoBLE.h>
 #include <Arduino_LSM9DS1.h>
+#include "Fx.h"
+#include "IMU.h"
+#include "Commands.h"
 
 const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = LED_PWR;
 
 BLEService lightsuitService( BLE_UUID_LIGHTSUIT_SERVICE );
+BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
 BLEUnsignedLongCharacteristic testCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TEST, BLERead | BLENotify);
 BLEUnsignedLongCharacteristic timecodeCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TIMECODE, BLERead | BLENotify );
-BLEUnsignedLongCharacteristic fxStateCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_FXSTATE, BLEWrite | BLERead | BLENotify );
-BLEUnsignedLongCharacteristic playStateCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_PLAYSTATE, BLEWrite | BLERead | BLENotify );
+BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
+BLEUnsignedLongCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLEWrite  );
 
 BLEFloatCharacteristic accelerationCharacteristicX( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_X, BLERead | BLENotify );
 BLEFloatCharacteristic accelerationCharacteristicY( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Y, BLERead | BLENotify );
@@ -36,6 +40,40 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
   Serial.println(central.address());
 }
 
+/*void switchCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic)
+{
+    // central wrote new value to characteristic, update LED
+    Serial.print("Characteristic event, written: ");
+
+    switch (switchCharacteristic.value())
+    {
+    case 'a':
+        colorWipe(strip.Color(255, 0, 0), 20); // Red
+        break;
+    case 'b':
+        colorWipe(strip.Color(0, 255, 0), 20); // Green
+        break;
+    case 'c':
+        colorWipe(strip.Color(0, 0, 255), 20); // Blue
+        break;
+    case 'd':
+        theaterChase(strip.Color(255, 0, 0), 20); // Red
+        break;
+    case 'e':
+        theaterChase(strip.Color(0, 255, 0), 20); // Green
+        break;
+    case 'f':
+        theaterChase(strip.Color(255, 0, 255), 20); // Cyan
+        break;
+    case 'g':
+        rainbow(10);
+        break;
+    case 'h':
+        theaterChaseRainbow(20);
+        break;
+    }
+}
+*/
 bool bleSetup()
 {
   pinMode( BLE_LED_PIN, OUTPUT );
@@ -52,17 +90,22 @@ bool bleSetup()
   BLE.setAdvertisedService( lightsuitService );
 
   // BLE add characteristics
-  lightsuitService.addCharacteristic( testCharacteristic );
+  //lightsuitService.addCharacteristic( testCharacteristic );
+  lightsuitService.addCharacteristic( authenticateCharacteristic );
   lightsuitService.addCharacteristic( timecodeCharacteristic );
-  lightsuitService.addCharacteristic( accelerationCharacteristicX );
+  lightsuitService.addCharacteristic( statusCharacteristic );
+  lightsuitService.addCharacteristic( commandCharacteristic );
+  /*lightsuitService.addCharacteristic( accelerationCharacteristicX );
   lightsuitService.addCharacteristic( accelerationCharacteristicY );
   lightsuitService.addCharacteristic( accelerationCharacteristicZ );
   lightsuitService.addCharacteristic( gyroCharacteristicX );
   lightsuitService.addCharacteristic( gyroCharacteristicY );
   lightsuitService.addCharacteristic( gyroCharacteristicZ );
   lightsuitService.addCharacteristic( counterCharacteristic );
-  lightsuitService.addCharacteristic( resetCounterCharacteristic );
+  lightsuitService.addCharacteristic( resetCounterCharacteristic );*/
 
+//  playCharacteristic.setEventHandler(BLEWritten, switchCharacteristicWritten);
+ 
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
   
@@ -79,6 +122,8 @@ bool bleSetup()
   gyroCharacteristicY.writeValue( 0.0 );
   gyroCharacteristicZ.writeValue( 0.0 );
   counterCharacteristic.writeValue( 0 );
+
+  statusCharacteristic.writeValue(0);
   // start advertising
   BLE.advertise();
 
@@ -86,7 +131,7 @@ bool bleSetup()
   return true;
 }
 
-void bleloop()
+void bleloop(FxController &fxc)
 {
   static unsigned long counter = 0;
   static long previousMillis = 0;
@@ -102,66 +147,54 @@ void bleloop()
 
     if ( central.connected() )
     {
-      if( resetCounterCharacteristic.written() )
+      if( authenticateCharacteristic.value() == 3838) //authenticated
       {
-        counter = 0;
+        if( resetCounterCharacteristic.written() )
+        {
+          counter = 0;
+        }
+        if (commandCharacteristic.written() )
+        {
+          UserCommandInput(fxc, commandCharacteristic.value());
+        }
+  
+        long interval = 20;
+        unsigned long currentMillis = millis();
+        timecodeCharacteristic.writeValue( currentMillis );
+        
+        if( currentMillis - previousMillis > interval )
+        {
+          previousMillis = currentMillis;
+  
+          if( central.rssi() != 0 )
+          {
+            digitalWrite( RSSI_LED_PIN, LOW );
+            
+            accelerationCharacteristicX.writeValue( getAccelX() );
+            accelerationCharacteristicY.writeValue( getAccelY() );
+            accelerationCharacteristicZ.writeValue( getAccelZ() );
+  
+            gyroCharacteristicZ.writeValue( getGyroX() );
+            gyroCharacteristicZ.writeValue( getGyroY() );
+            gyroCharacteristicZ.writeValue( getGyroZ() );
+  
+            counter++;
+            counterCharacteristic.writeValue( counter );
+  
+            unsigned long u = 
+              ( (fxc.fxState & 0xFF) << 24 ) |
+              ( ((signed char)fxc.paletteSpeed & 0xFF) << 16 ) |
+              ( ((signed char)fxc.paletteDirection & 0xFF) << 8 ) |
+              ( ((signed char)0xFF & 0xFF) );
+            statusCharacteristic.writeValue( u );
+          }
+          else
+          {
+            digitalWrite( RSSI_LED_PIN, HIGH );
+          }
+        } // intervall
+        testCharacteristic.writeValue(0x12345678);
       }
-
-      long interval = 20;
-      unsigned long currentMillis = millis();
-      timecodeCharacteristic.writeValue( currentMillis );
-      
-      if( currentMillis - previousMillis > interval )
-      {
-        previousMillis = currentMillis;
-
-        //Serial.print( "Central RSSI: " );
-       // Serial.println( central.rssi() );
-
-        if( central.rssi() != 0 )
-        {
-          digitalWrite( RSSI_LED_PIN, LOW );
-          if ( IMU.accelerationAvailable() )
-          {
-            float imuAccelX, imuAccelY, imuAccelZ;
-            IMU.readAcceleration( imuAccelX, imuAccelY, imuAccelZ );
-            Serial.print(F("Acc="));
-            Serial.print(imuAccelX);
-            Serial.print('\t');
-            Serial.print(imuAccelY);
-            Serial.print('\t');
-            Serial.print(imuAccelZ);
-            accelerationCharacteristicX.writeValue( imuAccelX );
-            accelerationCharacteristicY.writeValue( imuAccelY );
-            accelerationCharacteristicZ.writeValue( imuAccelZ );
-          }
-
-          if ( IMU.gyroscopeAvailable() )
-          {
-            float imuGyroX, imuGyroY, imuGyroZ;
-            IMU.readGyroscope( imuGyroX, imuGyroY, imuGyroZ );
-            Serial.print(F("Gyro="));
-            Serial.print(imuGyroX);
-            Serial.print('\t');
-            Serial.print(imuGyroY);
-            Serial.print('\t');
-            Serial.print(imuGyroZ);
-            gyroCharacteristicX.writeValue( imuGyroX );
-            gyroCharacteristicY.writeValue( imuGyroY);
-            gyroCharacteristicZ.writeValue( imuGyroZ );
-          }
-
-          counter++;
-          Serial.print(F("Count="));
-          Serial.println(counter);
-          counterCharacteristic.writeValue( counter );
-        }
-        else
-        {
-          digitalWrite( RSSI_LED_PIN, HIGH );
-        }
-      } // intervall
-      testCharacteristic.writeValue(0x12345678);
 
     } // while connected
 

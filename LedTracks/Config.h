@@ -22,7 +22,7 @@ static const char *DeviceName = "LightSuitA";
 
 #ifdef SYSTEM_NANO_33_BLE
 #define ENABLE_MEMORYUSAGE  0
-#define ENABLE_BRIGHTNESS   0
+#define ENABLE_BRIGHTNESS   1
 #define ENABLE_STATUS       1
 #define ENABLE_NEOPIXEL     1
 #define ENABLE_BLUETOOTH    0

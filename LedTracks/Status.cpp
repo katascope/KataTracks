@@ -4,7 +4,6 @@
 #include "Fx.h"
 #include "Track.h"
 #include "Timecode.h"
-unsigned long GetTime();
 
 static unsigned long lastTimeDisplay = 0;
 void FxDisplayStatus(FxController &fxc)

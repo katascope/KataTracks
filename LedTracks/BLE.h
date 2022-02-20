@@ -1,16 +1,19 @@
 #if !defined BLE_DEF
 #define BLE_DEF
-//#include <ArduinoBLE.h>
+#include "Config.h"
+#include "Fx.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 // BLE UUIDs
 //----------------------------------------------------------------------------------------------------------------------
 
 #define BLE_UUID_LIGHTSUIT_SERVICE                      "02FE4875-5056-48B5-AD15-36E30665D9B4"
+#define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_AUTHENTICATE  "4C75BB42-5365-458D-A3EA-2B91339646B7"
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TEST          "BEECBFDC-D6EB-42DC-827E-27D3DF924864"
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TIMECODE      "10365297-362D-44FB-8807-A6AA13B1BD83"
-#define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_FXSTATE       "D01C9106-91BD-4998-9554-85264D33ACB2"
-#define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_PLAYSTATE     "220154BF-1DCE-4F03-85F0-7BA905D2D6B0"
+#define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS        "D01C9106-91BD-4998-9554-85264D33ACB2"
+#define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND       "220154BF-1DCE-4F03-85F0-7BA905D2D6B0"
+
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_X       "C3340E05-7DAE-4BEE-A913-B2631667BFD6"
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Y       "C18AEDF7-CC1B-49D6-8D01-57D43950895E"
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Z       "71DC8A5E-A5E2-45C4-BA3E-268ECD0B5DA5"
@@ -26,6 +29,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 bool bleSetup();
-void bleloop();
+void bleloop(FxController &fxc);
 
 #endif

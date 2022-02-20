@@ -160,6 +160,7 @@ const PROGMEM int numSongTracks = sizeof(SongTrack)/(sizeof(unsigned long)*2);
 unsigned long SongTrack_timecode(int i);
 unsigned long SongTrack_event(int i);
 
+int GetFinalTimeCodeEntry();
 int GetNextTimeCodeMatch(int currentMatch);
 int GetCurrentTimeCodeMatch(unsigned long timecode);
 int GetPreviousTimeCodeMatch(unsigned long timecode);

@@ -98,14 +98,13 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorParty:          InstantEvent(fxc, fx_palette_party, true); break;
     case Cmd_ColorHeat:           InstantEvent(fxc, fx_palette_heat, true); break;
 
-#if ENABLE_NEOPIXEL
-#if ENABLE_BRIGHTNESS
+#if ENABLE_NEOPIXEL && ENABLE_BRIGHTNESS
     case Cmd_Brightness_VeryHigh: neopixelSetBrightness(250);break;
     case Cmd_Brightness_High: neopixelSetBrightness(150);break;
     case Cmd_Brightness_Normal: neopixelSetBrightness(50);break;
     case Cmd_Brightness_Low: neopixelSetBrightness(20);break;
 #endif    
-#endif    
+
     default: break;
   }
 }
@@ -230,6 +229,7 @@ void UserCommandInput(FxController &fxc, int data)
     case 'b': UserCommandExecute(fxc, Cmd_Brightness_High);break;
     case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
     case 'm': UserCommandExecute(fxc, Cmd_Brightness_Low);break;
+    case ',': UserCommandExecute(fxc, Cmd_Brightness_VeryHigh);break;
     
     case 10:
     case 13:

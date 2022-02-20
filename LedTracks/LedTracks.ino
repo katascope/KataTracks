@@ -9,10 +9,8 @@
 
 static FxController fxController;
 
-unsigned long GetTime() { return (unsigned long)((signed long)millis() - (signed long)getTimecodeTimeOffset() + getTimecodeSongOffset()); }
-
 void setup() {
-  fxController.fxState = FxState_Default;//TestPattern;//PlayingTrack;
+  fxController.fxState = FxState_TestPattern;//Default;//TestPattern;//PlayingTrack;
   Serial.begin(SERIAL_BAUD_RATE);
   Serial.print(F("Serial init: "));
   Serial.println(SERIAL_BAUD_RATE);
@@ -71,6 +69,10 @@ void setup() {
     FxEventProcess(fxController, fx_palette_drb);
     fxController.paletteDirection = 1;
     fxController.paletteSpeed = 1;
+#if ENABLE_NEOPIXEL &&  ENABLE_BRIGHTNESS
+    fxController.brightness = 50;
+    neopixelSetBrightness(fxController.brightness);    
+#endif
     fxController.updatePalette = true;
   }
 
@@ -103,6 +105,7 @@ void FxEventPoll(unsigned long timecode)
   unsigned long matchedTimecode = SongTrack_timecode(match);
   unsigned long nextMatchedTimecode = SongTrack_timecode(nextmatch);
 
+
   if (matchedTimecode > getTimecodeLastMatched())
   {
     if (fxController.transitionType == Transition_TimedWipePos || fxController.transitionType == Transition_TimedWipeNeg)
@@ -123,6 +126,7 @@ void FxEventPoll(unsigned long timecode)
 
     setTimecodeLastMatched(timecode);//timeController.lastMatchedTimecode = timecode;
   }
+  
 
   unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
   fxController.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
@@ -166,13 +170,13 @@ void StatePoll(FxController &fxc)
       //PrintLogln(F("IMUMode"));
       //FxEventProcess(fx_palette_drb);
       //FxEventProcess(fx_palette_accel);
-      //byte r = (float)((float)127.0f-(float)imuGyroX*120.0f);
-      //byte g = (float)((float)127.0f-(float)imuGyroY*120.0f);
-      //byte b = (float)((float)127.0f-(float)imuGyroZ*120.0f);
+      byte r = (float)((float)127.0f-(float)getAccelX()*120.0f);
+      byte g = (float)((float)127.0f-(float)getAccelY()*120.0f);
+      byte b = (float)((float)127.0f-(float)getAccelZ()*120.0f);
 
-      byte r = 0;//(float)((float)127.0f-(float)imuGyroX*1.0f);
-      byte g = (float)((float)127.0f-(float)getGyroY()*1.0f);
-      byte b = (float)((float)127.0f-(float)getGyroZ()*1.0f);
+      //byte r = (float)((float)127.0f-(float)getGyroX()*1.0f);
+      //byte g = (float)((float)127.0f-(float)getGyroY()*1.0f);
+      //byte b = (float)((float)127.0f-(float)getGyroZ()*1.0f);
 
       fxc.palette[0] = LEDRGB(r,g,b);
       rotPalette(fxc.palette);
@@ -184,13 +188,22 @@ void StatePoll(FxController &fxc)
   if (fxc.fxState == FxState_TestPattern)
   {
     FxEventProcess(fxc, fx_palette_drb);
-    fxc.paletteDirection = 2;
-    fxc.paletteSpeed = 2;
+    fxc.paletteDirection = 1;
+    fxc.paletteSpeed = 1;
     fxc.updatePalette = true;
   }
 
   if (fxc.fxState == FxState_PlayingTrack)
+  {
+    int finalmatchTimeCode = GetFinalTimeCodeEntry();
+    if (GetTime() > finalmatchTimeCode)
+    {
+      //Serial.println("Done playing");
+    }
+  
+
     FxEventPoll(GetTime());
+  }
 }
 
 
@@ -209,13 +222,12 @@ void loop()
 #endif
 
 #if ENABLE_BLE
-  bleloop();
+  bleloop(fxController);
 #endif
 
 #if ENABLE_IMU
-  imuPoll();
+  imuPoll();  
 #endif
-  
   StatePoll(fxController);
 
   if (fxController.fxState == FxState_PlayingTrack || fxController.updatePalette)
