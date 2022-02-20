@@ -15,7 +15,7 @@ BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_LIGHTSUIT_CHA
 BLEUnsignedLongCharacteristic testCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TEST, BLERead | BLENotify);
 BLEUnsignedLongCharacteristic timecodeCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TIMECODE, BLERead | BLENotify );
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
-BLEUnsignedLongCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLEWrite  );
+BLECharCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
 
 BLEFloatCharacteristic accelerationCharacteristicX( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_X, BLERead | BLENotify );
 BLEFloatCharacteristic accelerationCharacteristicY( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Y, BLERead | BLENotify );
@@ -100,9 +100,9 @@ bool bleSetup()
   lightsuitService.addCharacteristic( accelerationCharacteristicZ );
   lightsuitService.addCharacteristic( gyroCharacteristicX );
   lightsuitService.addCharacteristic( gyroCharacteristicY );
-  lightsuitService.addCharacteristic( gyroCharacteristicZ );
+  lightsuitService.addCharacteristic( gyroCharacteristicZ );*/
   lightsuitService.addCharacteristic( counterCharacteristic );
-  lightsuitService.addCharacteristic( resetCounterCharacteristic );*/
+  lightsuitService.addCharacteristic( resetCounterCharacteristic );
 
 //  playCharacteristic.setEventHandler(BLEWritten, switchCharacteristicWritten);
  
@@ -122,6 +122,7 @@ bool bleSetup()
   gyroCharacteristicY.writeValue( 0.0 );
   gyroCharacteristicZ.writeValue( 0.0 );
   counterCharacteristic.writeValue( 0 );
+  commandCharacteristic.writeValue( 0 );
 
   statusCharacteristic.writeValue(0);
   // start advertising
@@ -147,14 +148,14 @@ void bleloop(FxController &fxc)
 
     if ( central.connected() )
     {
-      if( authenticateCharacteristic.value() == 3838) //authenticated
+      //if( authenticateCharacteristic.value() == 3838) //authenticated
       {
         if( resetCounterCharacteristic.written() )
         {
           counter = 0;
         }
         if (commandCharacteristic.written() )
-        {
+        {   
           UserCommandInput(fxc, commandCharacteristic.value());
         }
   

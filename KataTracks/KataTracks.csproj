@@ -1,8 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -13,8 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="InTheHand.Net.Bluetooth" Version="4.0.26" />
+    <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.22" />
+    <PackageReference Include="InTheHand.Net.Bluetooth" Version="4.0.27" />
     <PackageReference Include="NAudio" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Runtime.WindowsRuntime">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

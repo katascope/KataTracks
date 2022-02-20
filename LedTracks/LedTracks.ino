@@ -10,7 +10,7 @@
 static FxController fxController;
 
 void setup() {
-  fxController.fxState = FxState_TestPattern;//Default;//TestPattern;//PlayingTrack;
+  fxController.fxState = FxState_Default;//TestPattern;//PlayingTrack;
   Serial.begin(SERIAL_BAUD_RATE);
   Serial.print(F("Serial init: "));
   Serial.println(SERIAL_BAUD_RATE);
@@ -216,9 +216,15 @@ void loop()
 {
   while (Serial.available())  
     UserCommandInput(fxController, Serial.read());
-#if BLUETOOTH_ENABLE
+#if ENABLE_BLUETOOTH
   while (bluetooth.available())
-    UserCommandInput(fxController, bluetooth.read());
+  {
+    Serial.println("Got input");
+    int data = bluetooth.read();
+    bluetooth.print("rcv:");
+    bluetooth.println(data);
+    UserCommandInput(fxController, data);
+  }
 #endif
 
 #if ENABLE_BLE

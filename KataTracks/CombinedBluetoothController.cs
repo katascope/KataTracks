@@ -116,7 +116,8 @@ namespace KataTracks
                 lightsuit.pairedBluetoothConnection.Close();
                 lightsuit.pairedBluetoothConnection.Dispose();
             }
-            bluetoothClient.Close();
+            if (bluetoothClient != null)
+                bluetoothClient.Close();
             _Go = false;
             threadsActive = false;
         }

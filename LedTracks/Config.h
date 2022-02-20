@@ -1,7 +1,7 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define NUM_LEDS   80
+#define NUM_LEDS   50
 static const char *DeviceName = "LightSuitA";
 
 #ifdef ARDUINO_AVR_NANO
@@ -15,14 +15,14 @@ static const char *DeviceName = "LightSuitA";
 #define ENABLE_BRIGHTNESS   1 //Allow adjustments to brightness - this can cause excess heat
 #define ENABLE_STATUS       1 //Periodically output heartbeat status to log
 #define ENABLE_NEOPIXEL     1 //Enable Neopixel led library
-#define ENABLE_BLUETOOTH    0 //Enable classic bluetooth
+#define ENABLE_BLUETOOTH    1 //Enable classic bluetooth
 #define ENABLE_BLE          0 //Enable Bluetooth Low-Energy
 #define ENABLE_IMU          0 //Enable Inertial Motion Unit
 #endif
 
 #ifdef SYSTEM_NANO_33_BLE
 #define ENABLE_MEMORYUSAGE  0
-#define ENABLE_BRIGHTNESS   1
+#define ENABLE_BRIGHTNESS   0
 #define ENABLE_STATUS       1
 #define ENABLE_NEOPIXEL     1
 #define ENABLE_BLUETOOTH    0

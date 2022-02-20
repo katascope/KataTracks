@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using InTheHand.Net.Bluetooth;
+//using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
 using System.Linq;
 using System.Text;
@@ -27,7 +27,6 @@ using NAudio.MediaFoundation;
 using NAudio.FileFormats;
 using System.Windows.Threading;
 using System.Windows.Controls.Primitives;
-
 namespace KataTracks
 {
     /// <summary>
@@ -61,15 +60,25 @@ namespace KataTracks
             VolumeSlider.Value = volume;
 
             MainLog.Text = "KataTracks initializing\n";
-            CombinedBluetoothController.Initialize();
+            //CombinedBluetoothController.Initialize();
 
+            MainLog.Text += "Finding BT '" + bluetoothDeviceSearchName + "'\n";
+            DeviceManagerBT.StartMonitoring();
 
-            MainLog.Text += "Finding '" + bluetoothDeviceSearchName + "'\n";
+            var discoveryTask = DeviceManagerBLE.TryToGet("FDB857FE7C3D");
+
+            //MainLog.Text += "Finding BLE '" + bluetoothDeviceSearchName + "'\n";
+            //DeviceManagerBLE.StartMonitoring();
+
+            //BT lightsuit2 = "001403050947"
+            //            discoveryTask.Wait();
+            /*
+            MainLog.Text += "Finding BT '" + bluetoothDeviceSearchName + "'\n";
             Dictionary<string, BluetoothDeviceInfo> paired = CombinedBluetoothController.FindPaired(bluetoothDeviceSearchName);
             foreach (KeyValuePair<string, BluetoothDeviceInfo> kvp in paired)
             {
                 MainLog.Text += " " + kvp.Key + "\n";
-            }
+            }*/
 
             //ConnectPaired();
             TrackView.Text = Fx.Get();
@@ -81,10 +90,9 @@ namespace KataTracks
             dispatcherTimer.Start();
 
             activateConnection = true;MainLog.Text += "Auto-Connect..\n";
-
-            connectionTimer.Tick += new EventHandler(connectionTimer_Tick);
-            connectionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
-            connectionTimer.Start();
+            //connectionTimer.Tick += new EventHandler(connectionTimer_Tick);
+            //connectionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
+            //connectionTimer.Start();
 
             btTextTimer.Tick += new EventHandler(btTextTimer_Tick);
             btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
@@ -143,6 +151,8 @@ namespace KataTracks
 
             string code = "@" + (timePick * 100) + "\r\n";
             CombinedBluetoothController.SendMessage(code);
+            DeviceManagerBT.SendMessage(code);
+
             outputDevice.Play();
             outputDevice.Volume = volume;
             literalTrackStartTime = DateTime.Now;
@@ -161,6 +171,7 @@ namespace KataTracks
                 Canvas.SetLeft(TrackIndexPlay, 0);
             }
             CombinedBluetoothController.SendMessage("(");
+            DeviceManagerBT.SendMessage("(");
         }
 
         private void connectionTimer_Tick(object sender, EventArgs e)
@@ -199,6 +210,24 @@ namespace KataTracks
                     }
                 }
             }
+            MainLog.Text = "Actives:\n";
+            foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
+                MainLog.Text += " (BLE) " + kvp.Value.name + " " + kvp.Value.log + "\n";
+            foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
+            {
+                if (kvp.Value.Connected)
+                    MainLog.Text += " (BT) " + kvp.Key + " ok\n";
+                else if (kvp.Value.Connected)
+                    MainLog.Text += " (BT) " + kvp.Key + " NOT ok\n";
+            }
+            MainLog.Text += "\n";
+
+            MainLog.Text += DeviceManagerBLE.MonitorLog;
+            MainLog.Text += "\n";
+
+            MainLog.Text += DeviceManagerBT.MonitorLog;
+
+            //MainLog.Text = 
             MainLog.ScrollToEnd();
         }
 
@@ -228,9 +257,14 @@ namespace KataTracks
 
         private void Exit(object sender, RoutedEventArgs e)
         {
+            DeviceManagerBLE.StopMonitoring();
+            DeviceManagerBLE.DisconnectAll();
+            DeviceManagerBT.StopMonitoring();
+            //DeviceManagerBT.DisconnectAll();
             MainLog.Text += "Exiting\n";
             CombinedBluetoothController.Close();
             System.Windows.Application.Current.Shutdown();
+            Environment.Exit(0);
         }
 
 
@@ -301,6 +335,8 @@ namespace KataTracks
         void StopAndSendToBoth(string value)
         {
             CombinedBluetoothController.SendMessage(value);
+            DeviceManagerBT.SendMessage(value);
+            DeviceManagerBLE.SendMessage(value);
         }
         private void SendBoth(object sender, RoutedEventArgs e)
         {

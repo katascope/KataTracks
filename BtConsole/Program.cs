@@ -38,7 +38,7 @@ namespace BtConsole
             foreach (BluetoothDeviceInfo di in c.PairedDevices)
             {
                 Console.WriteLine("Device : " + di.DeviceAddress.ToString());
-                if (di.DeviceName == LeaderName)
+                /*if (di.DeviceName == LeaderName)
                 {
                     Console.Write("Found Leader : " + di.DeviceAddress.ToString());
                     try
@@ -54,7 +54,7 @@ namespace BtConsole
                         return;
                     }
                     Console.WriteLine(" - Connected");
-                }
+                }*/
                 if (di.DeviceName == FollowName)
                 {
                     Console.Write("Found Follow : " + di.DeviceAddress.ToString());
@@ -119,14 +119,14 @@ namespace BtConsole
             BluetoothClient c = new BluetoothClient();
 
             CombinedBluetoothController.FindPaired(c, LeaderName, FollowName);
-            CombinedBluetoothController.SendMessage(LeaderName, "!cmy\r\n");
-            CombinedBluetoothController.SendMessage(FollowName, "!cmy\r\n");
+            //CombinedBluetoothController.SendMessage(LeaderName, "!cmy\r\n");
+            CombinedBluetoothController.SendMessage(FollowName, "1\r\n");
             Thread.Sleep(2000);
-            CombinedBluetoothController.SendMessage(LeaderName, "!rgbr\n");
-            CombinedBluetoothController.SendMessage(FollowName, "!rgbr\n");
+            //CombinedBluetoothController.SendMessage(LeaderName, "!rgbr\n");
+            CombinedBluetoothController.SendMessage(FollowName, "2\n");
             Thread.Sleep(2000);
-            CombinedBluetoothController.SendMessage(LeaderName, "!d\n");
-            CombinedBluetoothController.SendMessage(FollowName, "!d\n");
+            //CombinedBluetoothController.SendMessage(LeaderName, "!d\n");
+            CombinedBluetoothController.SendMessage(FollowName, "0\n");
 
             CombinedBluetoothController.CloseConnections();
             
