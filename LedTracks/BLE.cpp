@@ -6,6 +6,8 @@
 #include "Fx.h"
 #include "IMU.h"
 #include "Commands.h"
+#include "Timecode.h"
+#include "Track.h"
 
 const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = LED_PWR;
@@ -16,6 +18,7 @@ BLEUnsignedLongCharacteristic testCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERIS
 BLEUnsignedLongCharacteristic timecodeCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TIMECODE, BLERead | BLENotify );
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
+BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_LIGHTSUIT_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
 
 BLEFloatCharacteristic accelerationCharacteristicX( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_X, BLERead | BLENotify );
 BLEFloatCharacteristic accelerationCharacteristicY( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Y, BLERead | BLENotify );
@@ -95,6 +98,7 @@ bool bleSetup()
   lightsuitService.addCharacteristic( timecodeCharacteristic );
   lightsuitService.addCharacteristic( statusCharacteristic );
   lightsuitService.addCharacteristic( commandCharacteristic );
+  lightsuitService.addCharacteristic( playCharacteristic );
   /*lightsuitService.addCharacteristic( accelerationCharacteristicX );
   lightsuitService.addCharacteristic( accelerationCharacteristicY );
   lightsuitService.addCharacteristic( accelerationCharacteristicZ );
@@ -123,7 +127,7 @@ bool bleSetup()
   gyroCharacteristicZ.writeValue( 0.0 );
   counterCharacteristic.writeValue( 0 );
   commandCharacteristic.writeValue( 0 );
-
+  playCharacteristic.writeValue(0);
   statusCharacteristic.writeValue(0);
   // start advertising
   BLE.advertise();
@@ -157,6 +161,18 @@ void bleloop(FxController &fxc)
         if (commandCharacteristic.written() )
         {   
           UserCommandInput(fxc, commandCharacteristic.value());
+        }
+        if (playCharacteristic.written() )
+        {
+          //Get all our timing setup.
+          unsigned long tc = playCharacteristic.value();
+          int prevmatch = GetPreviousTimeCodeMatch(tc);    
+          setTimecodeLastMatched(SongTrack_timecode(prevmatch));
+          setTimecodeSongOffset(tc);  
+          setTimecodeTimeOffset(millis());
+          
+          //Finally start the track
+          trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd);
         }
   
         long interval = 20;

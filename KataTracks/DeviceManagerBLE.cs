@@ -8,6 +8,7 @@ using InTheHand.Bluetooth;
 
 namespace KataTracks
 {
+
     public class BleCacheCharacteristic
     {
         public BluetoothUuid uuid;
@@ -36,6 +37,14 @@ namespace KataTracks
     public class DeviceManagerBLE
     {
         public static Dictionary<string, BleDevice> bleDevices = new Dictionary<string, BleDevice>();
+        static BluetoothUuid mainServiceUuid = BluetoothUuid.FromGuid(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
+        static BluetoothUuid mainCommandUuid = BluetoothUuid.FromGuid(new Guid("220154BF-1DCE-4F03-85F0-7BA905D2D6B0"));
+        static BluetoothUuid mainAuthenticateUuid = BluetoothUuid.FromGuid(new Guid("4C75BB42-5365-458D-A3EA-2B91339646B7"));
+        static BluetoothUuid mainTimecodeUuid = BluetoothUuid.FromGuid(new Guid("10365297-362D-44FB-8807-A6AA13B1BD83"));
+        static BluetoothUuid mainPlayUuid     = BluetoothUuid.FromGuid(new Guid("3B140EF5-0A72-4891-AD38-83B5A2595622"));
+        static BluetoothUuid mainStatusUuid = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
+        static BluetoothUuid mainCounterUuid = BluetoothUuid.FromGuid(new Guid("612DD356-9632-48CF-A279-935D3D4EF242"));
+        static BluetoothUuid mainCounterResetUuid = BluetoothUuid.FromGuid(new Guid("EA7CE01E-808B-4EF3-8735-2A05F1C48DFF"));
 
         public static int Count()
         {
@@ -66,13 +75,69 @@ namespace KataTracks
             return false;
         }
 
-        static BluetoothUuid mainServiceUuid        = BluetoothUuid.FromGuid(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
-        static BluetoothUuid mainCommandUuid        = BluetoothUuid.FromGuid(new Guid("220154BF-1DCE-4F03-85F0-7BA905D2D6B0"));
-        static BluetoothUuid mainAuthenticateUuid   = BluetoothUuid.FromGuid(new Guid("4C75BB42-5365-458D-A3EA-2B91339646B7"));
-        static BluetoothUuid mainTimecodeUuid       = BluetoothUuid.FromGuid(new Guid("10365297-362D-44FB-8807-A6AA13B1BD83"));
-        static BluetoothUuid mainStatusUuid         = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
-        static BluetoothUuid mainCounterUuid        = BluetoothUuid.FromGuid(new Guid("612DD356-9632-48CF-A279-935D3D4EF242"));
-        static BluetoothUuid mainCounterResetUuid   = BluetoothUuid.FromGuid(new Guid("EA7CE01E-808B-4EF3-8735-2A05F1C48DFF"));
+        public static async void poll()
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            { 
+                BleDevice bd = kvp.Value;
+                if (bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicStatus = bd.serviceCache[mainServiceUuid].characteristics[mainStatusUuid].gattCharacteristic;
+                            byte[] valuesStatus = await gattCharacteristicStatus.ReadValueAsync();
+                            bd.log = String.Format("{0}-{1}-{2}", valuesStatus[3], valuesStatus[2], valuesStatus[1]);
+
+                            GattCharacteristic gattCharacteristicTimecode = bd.serviceCache[mainServiceUuid].characteristics[mainTimecodeUuid].gattCharacteristic;
+                            byte[] valuesTimecode = await gattCharacteristicTimecode.ReadValueAsync();
+                            ulong timecode = BitConverter.ToUInt32(valuesTimecode, 0);
+                            bd.log += String.Format("{0}", timecode);
+
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
+
+        public static async void Play(ulong tc)
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            {
+                BleDevice bd = kvp.Value;
+                if (bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainPlayUuid].gattCharacteristic;
+                            byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
+                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
 
         public static async void SendMessage(string message)
         {
@@ -83,75 +148,16 @@ namespace KataTracks
                 {
                     try
                     {
-                        //byte[] bytes = Encoding.ASCII.GetBytes(message+"\r\n");
-
-                        //GattCharacteristic gattCharacteristic = bd.serviceCache[mainServiceUuid].characteristics[mainAuthenticateUuid].gattCharacteristic;
-                        //byte[] bytesAuth = { 38,38 };
-                        //await gattCharacteristic.WriteValueWithResponseAsync(bytesAuth);
                         if (bd.serviceCache.Count > 0)
                         {
-                            //mainTimecodeUuid
-                            GattCharacteristic gattCharacteristicCounter = bd.serviceCache[mainServiceUuid].characteristics[mainCounterUuid].gattCharacteristic;
-                            byte[] valuesCounter = await gattCharacteristicCounter.ReadValueAsync();
-                            ulong counter = BitConverter.ToUInt32(valuesCounter, 0);
-                            bd.log = String.Format("{0}", counter);
-
-                            GattCharacteristic gattCharacteristicCounterReset = bd.serviceCache[mainServiceUuid].characteristics[mainCounterResetUuid].gattCharacteristic;
-                            byte[] bytesReset = { (byte)'1' };
-                            await gattCharacteristicCounterReset.WriteValueWithoutResponseAsync(bytesReset);
-
-                            gattCharacteristicCounter = bd.serviceCache[mainServiceUuid].characteristics[mainCounterUuid].gattCharacteristic;
-                            valuesCounter = await gattCharacteristicCounter.ReadValueAsync();
-                            counter = BitConverter.ToUInt32(valuesCounter, 0);
-                            //    bd.log = String.Format("{0}", counter);
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
+                            byte[] bytesCommand = Encoding.ASCII.GetBytes(message + "\r\n");
+                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);
                         }
                         else
                         {
                             QueryGATT(bd.bluetoothDevice);
                             bd.log = " waiting";
-                        }
-
-                        /*
-                        GattCharacteristic gattCharacteristicStatus = bd.serviceCache[mainServiceUuid].characteristics[mainStatusUuid].gattCharacteristic;
-                        byte[] valuesStatus = await gattCharacteristicStatus.ReadValueAsync();
-                        bd.log = String.Format("{0}-{1}-{2}", valuesStatus[3], valuesStatus[2], valuesStatus[1]);
-
-                        GattCharacteristic gattCharacteristicTimecode = bd.serviceCache[mainServiceUuid].characteristics[mainTimecodeUuid].gattCharacteristic;
-                        byte[] valuesTimecode = await gattCharacteristicTimecode.ReadValueAsync();
-                        ulong timecode = BitConverter.ToUInt32(valuesTimecode,0);
-                        bd.log += String.Format("{0}", timecode);
-                        */
-                        GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
-                        //byte[] bytesWhite = { (byte)'0'};
-                        byte[] bytesCommand = Encoding.ASCII.GetBytes(message+"\r\n");
-                        await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);
-
-                        GattCharacteristic gattCharacteristicCommandRead = bd.serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
-                        byte[] valuesCommandRead = await gattCharacteristicCommandRead.ReadValueAsync();
-                        bd.log += String.Format("{0}-{1}-{2}", valuesCommandRead[0]);
-
-
-                        //if (gattCharacteristic)
-
-                        //var result = gattCharacteristic.WriteValueWithoutResponseAsync(bytes);
-                        //var t = Task.Run(() => gattCharacteristic.WriteValueWithResponseAsync(bytes));
-                        //t.Wait();
-                        //var result = t
-                        //var t = gattCharacteristic.WriteValueWithResponseAsync(bytes);
-                        //await gattCharacteristic.WriteValueWithoutResponseAsync(bytes);
-                        //var result = t.Wait();
-
-                        //if (result == GattCommunicationStatus.Success)
-                        {
-
-                            //WriteValueWithoutResponseAsync
-                            //
-                            //Stream peerStream = kvp.Value.GetStream();
-                            //if (peerStream != null)
-                            //{
-                            //  byte[] bMessage = System.Text.Encoding.ASCII.GetBytes(message);
-                            //                            peerStream.Write(bMessage, 0, bMessage.Length);
-                            //}
                         }
                     }
                     catch (Exception ex)
@@ -260,6 +266,7 @@ namespace KataTracks
                 {
                     MonitorLog += " (ble)" + bd.Name + "\n";                    
                 }*/
+
 
                 Thread.Sleep(1);
             }

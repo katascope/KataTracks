@@ -47,6 +47,7 @@ namespace KataTracks
         static bool b1Down = false;
         static Dictionary<int,string> connectionSlots = new Dictionary<int, string>();
         static bool activateConnection = false;
+        static ulong textTickCount = 0;
 
         public MainWindow()
         {
@@ -152,6 +153,7 @@ namespace KataTracks
             string code = "@" + (timePick * 100) + "\r\n";
             CombinedBluetoothController.SendMessage(code);
             DeviceManagerBT.SendMessage(code);
+            DeviceManagerBLE.Play((ulong)timePick * 100);
 
             outputDevice.Play();
             outputDevice.Volume = volume;
@@ -172,6 +174,7 @@ namespace KataTracks
             }
             CombinedBluetoothController.SendMessage("(");
             DeviceManagerBT.SendMessage("(");
+            DeviceManagerBLE.SendMessage("(");
         }
 
         private void connectionTimer_Tick(object sender, EventArgs e)
@@ -184,6 +187,8 @@ namespace KataTracks
 
         private void btTextTimer_Tick(object sender, EventArgs e)
         {
+            DeviceManagerBLE.poll();
+
             for (int i=0;i<4;i++)
             {
                 if (connectionSlots.ContainsKey(i))
@@ -210,7 +215,9 @@ namespace KataTracks
                     }
                 }
             }
-            MainLog.Text = "Actives:\n";
+            textTickCount++;
+            MainLog.Text = "Update #" + textTickCount + "\n";
+            MainLog.Text += "Actives:\n";
             foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
                 MainLog.Text += " (BLE) " + kvp.Value.name + " " + kvp.Value.log + "\n";
             foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
