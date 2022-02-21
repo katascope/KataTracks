@@ -63,6 +63,13 @@ void setup() {
   Serial.println(F("No IMU init"));
 #endif
 
+#if ENABLE_TEST_TRACK
+  fxController.fxState = FxState_PlayingTrack;
+#endif  
+#if ENABLE_TEST_PATTERN
+  fxController.fxState = FxState_TestPattern;
+#endif  
+
   if (fxController.fxState == FxState_TestPattern)
   {
     Serial.println("Setting test pattern.");

@@ -27,7 +27,7 @@ enum UserCommand
   Cmd_PlayFrom,
   Cmd_PlayStop,
   
-  Cmd_ColorDark,
+  Cmd_ColorDark, 
   Cmd_ColorWhite,
   Cmd_ColorRed,
   Cmd_ColorYellow,

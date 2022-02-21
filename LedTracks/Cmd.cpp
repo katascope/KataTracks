@@ -66,7 +66,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_State_Test:    fxc.fxState = FxState_TestPattern;break;
     case Cmd_State_IMU:     fxc.fxState = FxState_IMU;break;
       
-    case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
+    case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd); break;
     case Cmd_PlayFrom:      fxc.fxState = FxState_PlayingTrack;break;
     case Cmd_PlayStop:      trackStop(fxc); break;
 

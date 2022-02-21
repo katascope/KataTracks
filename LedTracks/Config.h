@@ -13,6 +13,8 @@ static const char *DeviceName = "LightSuitA";
 #endif
 
 #ifdef SYSTEM_NANO
+#define ENABLE_TEST_PATTERN 0 //Show a simple test pattern
+#define ENABLE_TEST_TRACK   0 //Play Test Track from Track.h
 #define ENABLE_MEMORYUSAGE  1 //Do AVR-based memory check in beginning
 #define ENABLE_BRIGHTNESS   1 //Allow adjustments to brightness - this can cause excess heat
 #define ENABLE_STATUS       1 //Periodically output heartbeat status to log
@@ -23,6 +25,8 @@ static const char *DeviceName = "LightSuitA";
 #endif
 
 #ifdef SYSTEM_NANO_33_BLE
+#define ENABLE_TEST_PATTERN 0
+#define ENABLE_TESTM_TRACK  0
 #define ENABLE_MEMORYUSAGE  0
 #define ENABLE_BRIGHTNESS   0
 #define ENABLE_STATUS       1

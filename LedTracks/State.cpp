@@ -68,10 +68,6 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
         break;
     }
   }
-  else
-  {
-    
-  }
   
   int match = GetCurrentTimeCodeMatch(timecode);
   int nextmatch = GetNextTimeCodeMatch(match);
@@ -84,7 +80,7 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
     {
       CopyPalette(fxc.palette, fxc.nextPalette);
     }
-    fxc.transitionType = Transition_Instant;
+    //fxc.transitionType = Transition_Instant;
     fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
     FxTrackSay(timecode, matchedTimecode, nextMatchedTimecode);
     /*Serial.print(((float)matchedTimecode / (float)1000.0f);
