@@ -10,16 +10,12 @@ void State_Poll_TestPattern(FxController &fxc)
     FxEventProcess(fxc, fx_palette_drb);
     fxc.paletteDirection = 1;
     fxc.paletteSpeed = 1;
-    fxc.updatePalette = true;
+    fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
 }
 
 #if ENABLE_IMU
 void State_Poll_IMU(FxController &fxc)
 {
-
-      //PrintLogln(F("IMUMode"));
-      //FxEventProcess(fx_palette_drb);
-      //FxEventProcess(fx_palette_accel);
       byte r = (float)((float)127.0f-(float)getAccelX()*120.0f);
       byte g = (float)((float)127.0f-(float)getAccelY()*120.0f);
       byte b = (float)((float)127.0f-(float)getAccelZ()*120.0f);
@@ -49,17 +45,17 @@ void State_Poll_IMU(FxController &fxc)
 
 void State_Poll_Play(FxController &fxc, unsigned long timecode)
 {
-    int finalmatchTimeCode = GetFinalTimeCodeEntry();
-    if (GetTime() > finalmatchTimeCode)
-    {
-      //Serial.println("Done playing");
-    }
+  int finalmatchTimeCode = GetFinalTimeCodeEntry();
+  if (GetTime() > finalmatchTimeCode)
+  {
+    Serial.println(F("Done playing"));
+    fxc.fxState = FxState_Default;
+  }
   
   int match = GetCurrentTimeCodeMatch(timecode);
   int nextmatch = GetNextTimeCodeMatch(match);
   unsigned long matchedTimecode = SongTrack_timecode(match);
   unsigned long nextMatchedTimecode = SongTrack_timecode(nextmatch);
-
 
   if (matchedTimecode > getTimecodeLastMatched())
   {
@@ -68,8 +64,7 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
       CopyPalette(fxc.palette, fxc.nextPalette);
     }
     fxc.transitionType = Transition_Instant;
-    fxc.updatePalette = true;
-
+    fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
     FxTrackSay(timecode, matchedTimecode, nextMatchedTimecode);
     /*Serial.print(((float)matchedTimecode / (float)1000.0f);
       Serial.print(F(" : next @ "));
@@ -100,20 +95,22 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   if (fxc.transitionType == Transition_TimedWipePos)
   {
     float mux = (1 - fxc.transitionMux);
-    int limit = mux * (NUM_LEDS - 1);
-    CopyPalette(fxc.palette, fxc.initialPalette);
+    int limit = mux * (NUM_LEDS );
     for (int i = NUM_LEDS - 1; i >= limit; i--)
       fxc.palette[i] = fxc.nextPalette[i];
-    fxc.paletteIndex = mux * NUM_LEDS;
+    fxc.paletteIndex = 0;
+    fxc.paletteSpeed = 0;
+    fxc.paletteDirection = 0;
   }
   if (fxc.transitionType == Transition_TimedWipeNeg)
   {
-    float mux = fxc.transitionMux;
-    int limit = mux * (NUM_LEDS - 1);
-    CopyPalette(fxc.palette, fxc.initialPalette);
-    for (int i = NUM_LEDS; i >= limit; i--)
+    float mux = (fxc.transitionMux);
+    int limit = mux * (NUM_LEDS -1);
+    for (int i = 0;i < limit; i++)
       fxc.palette[i] = fxc.nextPalette[i];
-    fxc.paletteIndex = mux * NUM_LEDS;
+    fxc.paletteIndex = 0;
+    fxc.paletteSpeed = 0;
+    fxc.paletteDirection = 0;
   }
 }
 

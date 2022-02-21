@@ -63,6 +63,6 @@ void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset, FxTr
 void trackStop(FxController &fxc)
 {
   fxc.fxState = FxState_Default;
-  fxc.updatePalette = false;
+  fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;
   //Serial.println(F("Stopping Track"));
 }

@@ -26,6 +26,14 @@
 #define CRGB_HALF    LEDRGB(HALF)
 #define CRGB_LOWHALF LEDRGB(LOWHALF)
 
+enum FxPaletteUpdateType
+{
+ None,
+ Once,
+ Done,
+ Always  
+};
+
 enum FxState
 {
   FxState_Default       = 0,
@@ -34,36 +42,6 @@ enum FxState
   FxState_IMU           = 3,
 };
 
-
-/*
-solution = "color slots" 
- # actives (1 to 16?)
- 1 red
- 2 green
- 3 blue
--then generate palette from # slots
-
-so..*/
-/* rgb
- *  fx_color1_red
- *  fx_color2_green
- *  fx_color3_blue
- *  fx_palette_colors3
- * 
- * drdgdb
- *  fx_color1_dark
- *  fx_color2_red
- *  fx_color3_dark
- *  fx_color4_green
- *  fx_color5_dark
- *  fx_color6_blue
- *  fx_palette_color6
- * 
- * 
- * 
- */
-
- 
 /*
  * Event types:
  *  Adjust speed/dir
@@ -341,6 +319,7 @@ void CopyPalette(uint32_t *dst, uint32_t *src);
 
 uint32_t ShortnameToCRGB(char shortName);
 
+void PrintFxPaletteUpdateType(FxPaletteUpdateType paletteUpdateType);
 void PrintFxStateName(FxState s);
 void PrintFxEventName(int event);
 void PrintFxTransitionName(FxTransitionType t);

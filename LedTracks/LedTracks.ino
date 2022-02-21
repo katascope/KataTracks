@@ -6,15 +6,7 @@
 #include "Cmd.h"
 #include "State.h"
 #include "Devices.h"
-
-namespace KataFxLed
-{
-  
-}
-//FXLED and MicroPalette
-
 static FxController fxController;
-static unsigned long lastTimeLedUpdate = 0;
 
 void setup() {
   fxController.fxState = FxState_Default;//TestPattern;//PlayingTrack;
@@ -81,7 +73,7 @@ void setup() {
     fxController.brightness = 50;
     neopixelSetBrightness(fxController.brightness);    
 #endif
-    fxController.updatePalette = true;
+    fxController.fxPaletteUpdateType = FxPaletteUpdateType::Always;
   }
 
   if (fxController.fxState == FxState_PlayingTrack)
@@ -93,7 +85,7 @@ void setup() {
 
 void UpdatePalette()
 {
-  if (fxController.updatePalette)
+  if ((int)fxController.fxPaletteUpdateType != 0)
   {
     fxController.paletteIndex = fxController.paletteIndex + (fxController.paletteSpeed * fxController.paletteDirection);
     if (fxController.paletteIndex >= NUM_LEDS)
@@ -125,14 +117,19 @@ void loop()
 
   State_Poll(fxController);
 
-  if (fxController.fxState == FxState_PlayingTrack || fxController.updatePalette)
+  if (fxController.fxState == FxState_PlayingTrack 
+  || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Once
+  || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Always)
   {
     unsigned long t =  millis();
-    if (t - lastTimeLedUpdate > 45)//delay to let bluetooth get data(fastled issue)
+    if (t - fxController.lastTimeLedUpdate > 45)//delay to let bluetooth get data(fastled issue)
     {
       UpdatePalette();
-      lastTimeLedUpdate = t;
+      fxController.lastTimeLedUpdate = t;
     }
+
+    if (fxController.fxPaletteUpdateType == FxPaletteUpdateType::Once)
+      fxController.fxPaletteUpdateType == FxPaletteUpdateType::Done;
   }
 
 #if ENABLE_STATUS

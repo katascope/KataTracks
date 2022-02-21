@@ -8,6 +8,7 @@ struct FxController
 {
   FxState fxState = FxState_Default;
   FxTransitionType transitionType = Transition_Instant;  
+  FxPaletteUpdateType fxPaletteUpdateType = FxPaletteUpdateType::None;
   uint32_t microPalette[16] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
   unsigned int microPaletteSize = 1;
   uint32_t palette[NUM_LEDS];
@@ -16,10 +17,10 @@ struct FxController
   int paletteSpeed = 0;
   int paletteDirection = 1;
   int paletteIndex = 0;
-  bool updatePalette = false;
   float transitionMux = 0;
   FxTrackEndAction trackEndAction;
   unsigned char brightness = 50;
+  unsigned long lastTimeLedUpdate = 0;  
 };
 
 void FxEventProcess(FxController &fxc,int event);

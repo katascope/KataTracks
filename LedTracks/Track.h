@@ -16,12 +16,15 @@ const unsigned long SongTrack[] PROGMEM =
   1,fx_palette_dark,
   1,fx_speed_0,  
   1,fx_speed_pos,
+
+
+
   
 //Lead CrossStep
   2500,fx_transition_timed_wipe_pos,
   2500,fx_palette_blue,
 //Follow CrossStep
-  4800,fx_transition_timed_wipe_pos,
+  4800,fx_transition_timed_wipe_neg,
   4800,fx_palette_red,  
 //Lead CrossStep
   7300,fx_transition_timed_wipe_pos,
@@ -29,6 +32,7 @@ const unsigned long SongTrack[] PROGMEM =
 //Follow CrossStep
   9700,fx_transition_timed_fade,
   9700,fx_palette_rb,
+
 
 //March together
 //Arms up
@@ -71,6 +75,8 @@ const unsigned long SongTrack[] PROGMEM =
   54600,fx_transition_timed_fade,
   54600,fx_palette_orange,
 
+  60000,fx_speed_1,
+  60000,fx_speed_neg,
   60000,fx_palette_heat,
 //CHAPTER 2
   72700,fx_speed_0,
@@ -138,12 +144,6 @@ const unsigned long SongTrack[] PROGMEM =
 
   10000,fx_transition_timed_fade,
   10000,fx_palette_green,
-  /*
-  13000,fx_transition_timed_fade,
-  13000,fx_palette_dark,
-
-  15000,fx_transition_timed_wipe_pos,
-  15000,fx_palette_rgb,*/
   13000,fx_transition_timed_fade,
   13000,fx_palette_white,
 
@@ -152,7 +152,7 @@ const unsigned long SongTrack[] PROGMEM =
   80500, fx_palette_dark,
 
   //the end
-  205000, fx_palette_dark
+  205000, fx_palette_dark*
 };
 #endif
 const PROGMEM int numSongTracks = sizeof(SongTrack)/(sizeof(unsigned long)*2);

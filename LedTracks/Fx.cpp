@@ -4,6 +4,92 @@
 #include "Fx.h"
 #include "Track.h"
 
+
+void FxCreatePalette(FxController &fxController, uint32_t *pal16, unsigned int palSize)
+{
+    if (fxController.transitionType == Transition_Instant)
+    {
+      LerpPaletteFromMicroPalette(fxController.palette, NUM_LEDS, pal16, palSize);
+    }
+    else if (fxController.transitionType == Transition_TimedFade)
+    {
+      CopyPalette(fxController.initialPalette, fxController.palette);
+      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
+    }
+    else if (fxController.transitionType == Transition_TimedWipePos)
+    {
+      CopyPalette(fxController.initialPalette, fxController.palette);
+      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
+    }
+    else if (fxController.transitionType == Transition_TimedWipeNeg)
+    {
+      CopyPalette(fxController.initialPalette, fxController.palette);
+      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
+    }
+}
+
+void SetMicroPaletteSlot(FxController &fxc, int slot, uint32_t rgb)
+{
+  if (slot < 16 )
+  {
+    fxc.microPalette[slot] = rgb;  
+    if (fxc.microPaletteSize < slot)
+      fxc.microPaletteSize = slot + 1;  
+    FxCreatePalette(fxc,fxc.microPalette, fxc.microPaletteSize);
+  }
+}
+
+void SetMicroPalette(FxController &fxc, byte r, byte g, byte b)
+{
+  SetMicroPaletteSlot(fxc, 0, LEDRGB(r,g,b));
+  fxc.microPaletteSize = 1;
+}
+void SetMicroPalette2(FxController &fxc, byte r1, byte g1, byte b1, byte r2, byte g2, byte b2)
+{
+  SetMicroPaletteSlot(fxc,0, LEDRGB(r1,g1,b1) );
+  SetMicroPaletteSlot(fxc,1, LEDRGB(r2,g2,b2) );
+  fxc.microPaletteSize = 2;
+}
+void SetMicroPalette4(FxController &fxc, 
+  byte r1, byte g1, byte b1, 
+  byte r2, byte g2, byte b2,
+  byte r3, byte g3, byte b3,
+  byte r4, byte g4, byte b4)
+{
+  SetMicroPaletteSlot(fxc, 0, LEDRGB(r1,g1,b1) );
+  SetMicroPaletteSlot(fxc, 1, LEDRGB(r2,g2,b2) );
+  SetMicroPaletteSlot(fxc, 2, LEDRGB(r3,g3,b3) );
+  SetMicroPaletteSlot(fxc, 3, LEDRGB(r4,g4,b4) );
+  fxc.microPaletteSize = 4;
+}
+void SetMicroPalette16(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7,
+                        uint32_t b8,uint32_t b9,uint32_t b10,uint32_t b11, uint32_t b12,uint32_t b13,uint32_t b14,uint32_t b15)
+{
+  SetMicroPaletteSlot(fxc, 0, b0 );
+  SetMicroPaletteSlot(fxc, 1, b1 );
+  SetMicroPaletteSlot(fxc, 2, b2 );
+  SetMicroPaletteSlot(fxc, 3, b3 );
+  SetMicroPaletteSlot(fxc, 4, b4 );
+  SetMicroPaletteSlot(fxc, 5, b5 );
+  SetMicroPaletteSlot(fxc, 6, b6 );
+  SetMicroPaletteSlot(fxc, 7, b7 );
+  SetMicroPaletteSlot(fxc, 8, b8 );
+  SetMicroPaletteSlot(fxc, 9, b9 );
+  SetMicroPaletteSlot(fxc, 10, b10 );
+  SetMicroPaletteSlot(fxc, 11, b11 );
+  SetMicroPaletteSlot(fxc, 12, b12 );
+  SetMicroPaletteSlot(fxc, 13, b13 );
+  SetMicroPaletteSlot(fxc, 14, b14 );
+  SetMicroPaletteSlot(fxc, 15, b15 );
+  fxc.microPaletteSize = 16;
+}
+
+void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
+  SetMicroPalette16(fxc, LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
+                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
+                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
+}
 static unsigned long lastTimeDisplay = 0;
 void FxDisplayStatus(FxController &fxc)
 {
@@ -19,6 +105,8 @@ void FxDisplayStatus(FxController &fxc)
       PrintFxStateName(fxc.fxState);
       Serial.print(F("-"));
       PrintFxTransitionName(fxc.transitionType);
+      Serial.print(F("-"));
+      PrintFxPaletteUpdateType(fxc.fxPaletteUpdateType);
       Serial.print(F("]"));
       if (fxc.fxState == FxState_PlayingTrack)
       {
@@ -103,8 +191,8 @@ void FxEventProcess(FxController &fxc,int event)
       break;
     case fx_transition_fast:          fxc.transitionType = Transition_Instant;break;
     case fx_transition_timed_fade:    fxc.transitionType = Transition_TimedFade;break;
-    case fx_transition_timed_wipe_pos:fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.updatePalette = false;break;
-    case fx_transition_timed_wipe_neg:fxc.transitionType = Transition_TimedWipeNeg;fxc.paletteIndex = 15;fxc.updatePalette = false;break;
+    case fx_transition_timed_wipe_pos:fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
+    case fx_transition_timed_wipe_neg:fxc.transitionType = Transition_TimedWipeNeg;fxc.paletteIndex = 15;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
 
     case fx_palette_lead:   SetMicroPalette(fxc, BLUE);break;
     case fx_palette_follow: SetMicroPalette(fxc, RED);break;
@@ -336,90 +424,4 @@ void FxEventProcess(FxController &fxc,int event)
       break;
     }*/
  }
-}
-
-void FxCreatePalette(FxController &fxController, uint32_t *pal16, unsigned int palSize)
-{
-    if (fxController.transitionType == Transition_Instant)
-    {
-      LerpPaletteFromMicroPalette(fxController.palette, NUM_LEDS, pal16, palSize);
-    }
-    else if (fxController.transitionType == Transition_TimedFade)
-    {
-      CopyPalette(fxController.initialPalette, fxController.palette);
-      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
-    }
-    else if (fxController.transitionType == Transition_TimedWipePos)
-    {
-      CopyPalette(fxController.initialPalette, fxController.palette);
-      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
-    }
-    else if (fxController.transitionType == Transition_TimedWipeNeg)
-    {
-      CopyPalette(fxController.initialPalette, fxController.palette);
-      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
-    }
-}
-
-void SetMicroPaletteSlot(FxController &fxc, int slot, uint32_t rgb)
-{
-  if (slot < 16 )
-  {
-    fxc.microPalette[slot] = rgb;  
-    if (fxc.microPaletteSize < slot)
-      fxc.microPaletteSize = slot + 1;  
-    FxCreatePalette(fxc,fxc.microPalette, fxc.microPaletteSize);
-  }
-}
-
-void SetMicroPalette(FxController &fxc, byte r, byte g, byte b)
-{
-  SetMicroPaletteSlot(fxc, 0, LEDRGB(r,g,b));
-  fxc.microPaletteSize = 1;
-}
-void SetMicroPalette2(FxController &fxc, byte r1, byte g1, byte b1, byte r2, byte g2, byte b2)
-{
-  SetMicroPaletteSlot(fxc,0, LEDRGB(r1,g1,b1) );
-  SetMicroPaletteSlot(fxc,1, LEDRGB(r2,g2,b2) );
-  fxc.microPaletteSize = 2;
-}
-void SetMicroPalette4(FxController &fxc, 
-  byte r1, byte g1, byte b1, 
-  byte r2, byte g2, byte b2,
-  byte r3, byte g3, byte b3,
-  byte r4, byte g4, byte b4)
-{
-  SetMicroPaletteSlot(fxc, 0, LEDRGB(r1,g1,b1) );
-  SetMicroPaletteSlot(fxc, 1, LEDRGB(r2,g2,b2) );
-  SetMicroPaletteSlot(fxc, 2, LEDRGB(r3,g3,b3) );
-  SetMicroPaletteSlot(fxc, 3, LEDRGB(r4,g4,b4) );
-  fxc.microPaletteSize = 4;
-}
-void SetMicroPalette16(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7,
-                        uint32_t b8,uint32_t b9,uint32_t b10,uint32_t b11, uint32_t b12,uint32_t b13,uint32_t b14,uint32_t b15)
-{
-  SetMicroPaletteSlot(fxc, 0, b0 );
-  SetMicroPaletteSlot(fxc, 1, b1 );
-  SetMicroPaletteSlot(fxc, 2, b2 );
-  SetMicroPaletteSlot(fxc, 3, b3 );
-  SetMicroPaletteSlot(fxc, 4, b4 );
-  SetMicroPaletteSlot(fxc, 5, b5 );
-  SetMicroPaletteSlot(fxc, 6, b6 );
-  SetMicroPaletteSlot(fxc, 7, b7 );
-  SetMicroPaletteSlot(fxc, 8, b8 );
-  SetMicroPaletteSlot(fxc, 9, b9 );
-  SetMicroPaletteSlot(fxc, 10, b10 );
-  SetMicroPaletteSlot(fxc, 11, b11 );
-  SetMicroPaletteSlot(fxc, 12, b12 );
-  SetMicroPaletteSlot(fxc, 13, b13 );
-  SetMicroPaletteSlot(fxc, 14, b14 );
-  SetMicroPaletteSlot(fxc, 15, b15 );
-  fxc.microPaletteSize = 16;
-}
-
-void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
-  SetMicroPalette16(fxc, LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
-                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
-                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
-                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
 }
