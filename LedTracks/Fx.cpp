@@ -107,7 +107,13 @@ void FxDisplayStatus(FxController &fxc)
       PrintFxTransitionName(fxc.transitionType);
       Serial.print(F("-"));
       PrintFxPaletteUpdateType(fxc.fxPaletteUpdateType);
-      Serial.print(F("]"));
+      Serial.print(F("-"));
+      PrintFxTrackEndAction(fxc.fxTrackEndAction);
+      Serial.print(F(":"));
+      Serial.print(GetFinalTimeCodeEntry());      
+      Serial.print(F("]("));
+      Serial.print(getTimecodeLastMatched());
+      Serial.print(F(")"));
       if (fxc.fxState == FxState_PlayingTrack)
       {
         int match = GetCurrentTimeCodeMatch(GetTime());

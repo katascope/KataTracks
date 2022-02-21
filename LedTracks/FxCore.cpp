@@ -1,6 +1,7 @@
 #include "Config.h"
 #include <Arduino.h>
 #include "FxCore.h"
+
 static TimeCode timeController;
 //#include <avr/pgmspace.h> 
 
@@ -35,6 +36,17 @@ uint32_t ShortnameToCRGB(char shortName)
     case 'l': return CRGB_LOWHALF;
   }
   return CRGB_DARK;
+}
+
+
+void PrintFxTrackEndAction(FxTrackEndAction fxTrackEndAction)
+{  
+  switch (fxTrackEndAction)
+  {
+    case StopAtEnd: Serial.print(F("StopAtEnd")); break;
+    case LoopAtEnd: Serial.print(F("LoopAtEnd")); break;
+    default: Serial.print(F("Unk"));
+  }
 }
 
 void PrintFxPaletteUpdateType(FxPaletteUpdateType paletteUpdateType)

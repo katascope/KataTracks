@@ -1,6 +1,6 @@
 #ifndef CMD_DEF
 #define CMD_DEF
-#include "Fx.h"
+struct FxController;
 
 enum CaptureTextMode
 {

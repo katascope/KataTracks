@@ -77,7 +77,10 @@ void setup() {
   }
 
   if (fxController.fxState == FxState_PlayingTrack)
-    trackStart(fxController, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), fxController.trackEndAction);
+  {
+    fxController.fxTrackEndAction = FxTrackEndAction::LoopAtEnd;
+    trackStart(fxController, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), fxController.fxTrackEndAction);
+  }
   else Serial.println(F("Ready"));
 
   Serial.println("Setup complete.");

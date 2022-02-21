@@ -18,7 +18,7 @@ struct FxController
   int paletteDirection = 1;
   int paletteIndex = 0;
   float transitionMux = 0;
-  FxTrackEndAction trackEndAction;
+  FxTrackEndAction fxTrackEndAction;
   unsigned char brightness = 50;
   unsigned long lastTimeLedUpdate = 0;  
 };

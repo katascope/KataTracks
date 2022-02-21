@@ -45,11 +45,32 @@ void State_Poll_IMU(FxController &fxc)
 
 void State_Poll_Play(FxController &fxc, unsigned long timecode)
 {
-  int finalmatchTimeCode = GetFinalTimeCodeEntry();
-  if (GetTime() > finalmatchTimeCode)
+  unsigned long finalTimeCode = GetFinalTimeCodeEntry();
+  if (GetTime() > finalTimeCode)
   {
-    Serial.println(F("Done playing"));
-    fxc.fxState = FxState_Default;
+    Serial.print(F("Done playing, time = "));
+    Serial.print(GetTime());
+    Serial.print(F(", restart = "));
+    Serial.print(finalTimeCode);
+    Serial.print(F(" "));
+
+    switch (fxc.fxTrackEndAction) 
+    {
+      case FxTrackEndAction::StopAtEnd:
+        Serial.println(F("StopAtEnd"));
+        fxc.fxState = FxState_Default;    
+        break;
+      case FxTrackEndAction::LoopAtEnd:
+        Serial.println(F("LoopAtEnd"));
+        //trackStart(fxc, 0, timecode, fxc.trackEndAction); break;
+        trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd);         
+        timecode = GetTime();
+        break;
+    }
+  }
+  else
+  {
+    
   }
   
   int match = GetCurrentTimeCodeMatch(timecode);

@@ -319,6 +319,7 @@ void CopyPalette(uint32_t *dst, uint32_t *src);
 
 uint32_t ShortnameToCRGB(char shortName);
 
+void PrintFxTrackEndAction(FxTrackEndAction fxTrackEndAction);
 void PrintFxPaletteUpdateType(FxPaletteUpdateType paletteUpdateType);
 void PrintFxStateName(FxState s);
 void PrintFxEventName(int event);

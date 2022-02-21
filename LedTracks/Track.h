@@ -33,7 +33,6 @@ const unsigned long SongTrack[] PROGMEM =
   9700,fx_transition_timed_fade,
   9700,fx_palette_rb,
 
-
 //March together
 //Arms up
   
@@ -152,7 +151,7 @@ const unsigned long SongTrack[] PROGMEM =
   80500, fx_palette_dark,
 
   //the end
-  205000, fx_palette_dark*
+  205000, fx_palette_dark
 };
 #endif
 const PROGMEM int numSongTracks = sizeof(SongTrack)/(sizeof(unsigned long)*2);
@@ -160,7 +159,7 @@ const PROGMEM int numSongTracks = sizeof(SongTrack)/(sizeof(unsigned long)*2);
 unsigned long SongTrack_timecode(int i);
 unsigned long SongTrack_event(int i);
 
-int GetFinalTimeCodeEntry();
+unsigned long GetFinalTimeCodeEntry();
 int GetNextTimeCodeMatch(int currentMatch);
 int GetCurrentTimeCodeMatch(unsigned long timecode);
 int GetPreviousTimeCodeMatch(unsigned long timecode);
