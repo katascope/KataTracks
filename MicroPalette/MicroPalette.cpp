@@ -15,21 +15,6 @@
 #define LOWHALF 0x4F,0x4F,0x4F
 #define MAKERGB(r,g,b) ((unsigned int)((((r)&0xff)<<16)|(((g)&0xff)<<8)|((b)&0xff)))
 
-const unsigned int colorLookups[11] =
-{    
-    0x00000000,
-    0x00FFFFFF,
-    0x00FF0000,
-    0x00FFFF00,
-    0x0000FF00,
-    0x0000FFFF,
-    0x000000FF,
-    0x007F00FF,
-    0x00FF7F00,
-    0x007F7F7F,
-    0x004F4F4F
-};
-
 unsigned char lerp(float mux, unsigned char a, unsigned char b) { return (unsigned char)(a * (1.0 - mux) + b * mux); }
 uint32_t LerpRGB(float t, unsigned char r1, unsigned char g1, unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2) { return MAKERGB(lerp(t, r1, r2), lerp(t, g1, g2), lerp(t, b1, b2)); }
 uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2) {
