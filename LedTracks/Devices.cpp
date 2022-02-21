@@ -1,17 +1,101 @@
 #include "Config.h"
+#include "Fx.h"
+#include "Devices.h"
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+#if ENABLE_NEOPIXEL
+#include <Adafruit_NeoPixel.h>
+static Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
+void neopixelSetup()
+{
+  strip.begin();
+  strip.setBrightness(50);
+}
+void neopixelSetBrightness(unsigned char brightness)
+{
+  strip.setBrightness(brightness);
+  strip.show();
+}
+void neopixelSetPalette(uint32_t *palette, int paletteIndex)
+{  
+  uint32_t offset = paletteIndex;
+  for(uint16_t i=0; i<strip.numPixels(); i++)
+  {
+    if (offset >= strip.numPixels())
+     offset=0;    
+    strip.setPixelColor(offset, palette[i]);
+    offset++;    
+  }
+  strip.show();
+}
+#endif
+
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+#if ENABLE_IMU
+#include <Arduino_LSM9DS1.h>
+struct IMUData imu;
+float getAccelX() { return imu.accelX; }
+float getAccelY() { return imu.accelY; }
+float getAccelZ() { return imu.accelZ; }
+float getGyroX() { return imu.gyroX; }
+float getGyroY() { return imu.gyroY; }
+float getGyroZ() { return imu.gyroZ; }
+void imuPoll()
+{
+  if ( IMU.accelerationAvailable() )
+    IMU.readAcceleration( imu.accelX, imu.accelY, imu.accelZ );
+  if ( IMU.gyroscopeAvailable() )
+    IMU.readGyroscope( imu.gyroX, imu.gyroY, imu.gyroZ );
+}
+void imuSetup()
+{
+  if ( !IMU.begin() )
+  {
+    Serial.print( F("Failed to initialize IMU!" ));
+    while ( 1 );
+  }
+  Serial.print(F("Accelerometer sample rate = " ));
+  Serial.print(IMU.accelerationSampleRate() );
+  Serial.print(F(" Hz" ));
+}
+#endif
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+#if ENABLE_BLUETOOTH
+#include "FxCore.h"
+#include "Fx.h"
+#include "Cmd.h"
+void bluetoothPoll(FxController &fxc)
+{
+  while (bluetooth.available())
+  {
+    Serial.println(F("Got input"));
+    int data = bluetooth.read();
+    bluetooth.print(F("rcv:"));
+    bluetooth.println(data);
+    UserCommandInput(fxc, data);
+  }
+}
+#endif
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 #if ENABLE_BLE
 #include "BLE.h"
 #include <ArduinoBLE.h>
 #include <Arduino_LSM9DS1.h>
 #include "Fx.h"
-#include "IMU.h"
-#include "Commands.h"
-#include "Timecode.h"
+#include "Cmd.h"
 #include "Track.h"
-
 const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = LED_PWR;
-
 BLEService lightsuitService( BLE_UUID_LIGHTSUIT_SERVICE );
 BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
 BLEUnsignedLongCharacteristic testCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TEST, BLERead | BLENotify);
@@ -19,64 +103,24 @@ BLEUnsignedLongCharacteristic timecodeCharacteristic( BLE_UUID_LIGHTSUIT_CHARACT
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
 BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_LIGHTSUIT_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
-
 BLEFloatCharacteristic accelerationCharacteristicX( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_X, BLERead | BLENotify );
 BLEFloatCharacteristic accelerationCharacteristicY( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Y, BLERead | BLENotify );
 BLEFloatCharacteristic accelerationCharacteristicZ( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Z, BLERead | BLENotify );
-
 BLEFloatCharacteristic gyroCharacteristicX( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_GYRO_X, BLERead | BLENotify );
 BLEFloatCharacteristic gyroCharacteristicY( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_GYRO_Y, BLERead | BLENotify );
 BLEFloatCharacteristic gyroCharacteristicZ( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_GYRO_Z, BLERead | BLENotify );
-
 BLEUnsignedLongCharacteristic counterCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COUNTER, BLERead | BLENotify );
 BLEBoolCharacteristic resetCounterCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COUNTER_RESET, BLEWriteWithoutResponse );
-
 void blePeripheralConnectHandler(BLEDevice central) {
   // central connected event handler
   Serial.print(F("Connected event, central: "));
   Serial.println(central.address());
 }
-
 void blePeripheralDisconnectHandler(BLEDevice central) {
   // central disconnected event handler
   Serial.print(F("Disconnected event, central: "));
   Serial.println(central.address());
 }
-
-/*void switchCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic)
-{
-    // central wrote new value to characteristic, update LED
-    Serial.print("Characteristic event, written: ");
-
-    switch (switchCharacteristic.value())
-    {
-    case 'a':
-        colorWipe(strip.Color(255, 0, 0), 20); // Red
-        break;
-    case 'b':
-        colorWipe(strip.Color(0, 255, 0), 20); // Green
-        break;
-    case 'c':
-        colorWipe(strip.Color(0, 0, 255), 20); // Blue
-        break;
-    case 'd':
-        theaterChase(strip.Color(255, 0, 0), 20); // Red
-        break;
-    case 'e':
-        theaterChase(strip.Color(0, 255, 0), 20); // Green
-        break;
-    case 'f':
-        theaterChase(strip.Color(255, 0, 255), 20); // Cyan
-        break;
-    case 'g':
-        rainbow(10);
-        break;
-    case 'h':
-        theaterChaseRainbow(20);
-        break;
-    }
-}
-*/
 bool bleSetup()
 {
   pinMode( BLE_LED_PIN, OUTPUT );
@@ -135,8 +179,7 @@ bool bleSetup()
   digitalWrite( BLE_LED_PIN, HIGH );    
   return true;
 }
-
-void bleloop(FxController &fxc)
+void blePoll(FxController &fxc)
 {
   static unsigned long counter = 0;
   static long previousMillis = 0;

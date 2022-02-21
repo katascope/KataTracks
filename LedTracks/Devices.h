@@ -1,12 +1,58 @@
-#if !defined BLE_DEF
-#define BLE_DEF
-#include "Config.h"
+#ifndef NEOPIXEL_DEF
+#define NEOPIXEL_DEF
+
+//////////////// NeoPixel Section ////////////////
+#if ENABLE_NEOPIXEL
+#define LED_PIN    3 //3 most of the time, 5 on old things
+#include <Adafruit_NeoPixel.h>
+void neopixelSetup();
+void neopixelSetBrightness(unsigned char brightness);
+void neopixelSetPalette(uint32_t *palette, int paletteIndex);
+#endif
+//////////////// NeoPixel Section ////////////////
+
+
+
+ /////////////////// IMU Section ///////////////////
+#if ENABLE_IMU
+struct IMUData
+{
+  float accelX = 0.0f;
+  float accelY = 0.0f;
+  float accelZ = 0.0f;
+  float gyroX = 0.0f;
+  float gyroY = 0.0f;
+  float gyroZ = 0.0f;
+};
+
+void imuSetup();
+void imuPoll();
+
+float getAccelX();
+float getAccelY();
+float getAccelZ();
+
+float getGyroX();
+float getGyroY();
+float getGyroZ();
+#endif
+/////////////////// IMU Section ///////////////////
+
+
+//////////////// BlueTooth Section ////////////////
+#if ENABLE_BLUETOOTH
+#include <SoftwareSerial.h>
+const PROGMEM int RX_PIN = 5;
+const PROGMEM int TX_PIN = 6;
+const PROGMEM unsigned long BLUETOOTH_BAUD_RATE = 9600;
 #include "Fx.h"
+static SoftwareSerial bluetooth(RX_PIN, TX_PIN);
+void bluetoothPoll(FxController &fxc);
+#endif
 
-//----------------------------------------------------------------------------------------------------------------------
+#if ENABLE_BLE
+#include "Fx.h"
 // BLE UUIDs
-//----------------------------------------------------------------------------------------------------------------------
-
 #define BLE_UUID_LIGHTSUIT_SERVICE                      "02FE4875-5056-48B5-AD15-36E30665D9B4"
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_AUTHENTICATE  "4C75BB42-5365-458D-A3EA-2B91339646B7"
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TEST          "BEECBFDC-D6EB-42DC-827E-27D3DF924864"
@@ -25,11 +71,9 @@
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COUNTER       "612DD356-9632-48CF-A279-935D3D4EF242"
 #define BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COUNTER_RESET "EA7CE01E-808B-4EF3-8735-2A05F1C48DFF"
 
-//----------------------------------------------------------------------------------------------------------------------
-// BLE
-//----------------------------------------------------------------------------------------------------------------------
-
+// BLE Functions
 bool bleSetup();
-void bleloop(FxController &fxc);
+void blePoll(FxController &fxc);
+#endif
 
 #endif

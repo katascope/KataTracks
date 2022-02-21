@@ -1,14 +1,23 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {
-      "InTheHand.Net.Bluetooth/4.0.26": {
+    "net5.0-windows10.0.19041": {
+      "InTheHand.BluetoothLE/4.0.22": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/InTheHand.Net.Bluetooth.dll": {}
+          "lib/net5.0-windows10.0.19041/InTheHand.BluetoothLE.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/InTheHand.Net.Bluetooth.dll": {}
+          "lib/net5.0-windows10.0.19041/InTheHand.BluetoothLE.dll": {}
+        }
+      },
+      "InTheHand.Net.Bluetooth/4.0.27": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0-windows7.0/InTheHand.Net.Bluetooth.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/InTheHand.Net.Bluetooth.dll": {}
         },
         "runtimeTargets": {
           "runtimes/win/lib/netcoreapp3.1/InTheHand.Net.Bluetooth.dll": {
@@ -181,15 +190,38 @@
     }
   },
   "libraries": {
-    "InTheHand.Net.Bluetooth/4.0.26": {
-      "sha512": "F8OGA4BHCuxqhXAO7bia/jb9fBeMg5KDvNGU7n3O6VK0Z+5vO9Ank3CcZN9z1uGdEi7cg4XmhRRlcypb6PW/dA==",
+    "InTheHand.BluetoothLE/4.0.22": {
+      "sha512": "0fa+f8g9KX57KBihbsz4lhyvcXU8ljBQB9BeKi1JF/4Fe96b2UGhVe+/KDjCF5TwDNhvDn8zy2DHscLavgCroQ==",
       "type": "package",
-      "path": "inthehand.net.bluetooth/4.0.26",
+      "path": "inthehand.bluetoothle/4.0.22",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "32feet-package-icon.png",
-        "inthehand.net.bluetooth.4.0.26.nupkg.sha512",
+        "inthehand.bluetoothle.4.0.22.nupkg.sha512",
+        "inthehand.bluetoothle.nuspec",
+        "lib/monoandroid81/InTheHand.BluetoothLE.dll",
+        "lib/net461/InTheHand.BluetoothLE.dll",
+        "lib/net5.0-windows10.0.19041/InTheHand.BluetoothLE.dll",
+        "lib/netcoreapp3.1/InTheHand.BluetoothLE.dll",
+        "lib/netstandard2.0/InTheHand.BluetoothLE.dll",
+        "lib/uap10.0.18362/InTheHand.BluetoothLE.dll",
+        "lib/uap10.0.18362/InTheHand.BluetoothLE.pri",
+        "lib/xamarinios10/InTheHand.BluetoothLE.dll",
+        "lib/xamarinmac20/InTheHand.BluetoothLE.dll",
+        "lib/xamarintvos10/InTheHand.BluetoothLE.dll",
+        "lib/xamarinwatchos10/InTheHand.BluetoothLE.dll"
+      ]
+    },
+    "InTheHand.Net.Bluetooth/4.0.27": {
+      "sha512": "dW5nd0MzNY0vAU3KolH2v2IbQGGc50z7JkAPbgPjWOWsCaCHouondfQEZq1myp+mK/VVXm9z1DnjXdP07tzfnQ==",
+      "type": "package",
+      "path": "inthehand.net.bluetooth/4.0.27",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "32feet-package-icon.png",
+        "inthehand.net.bluetooth.4.0.27.nupkg.sha512",
         "inthehand.net.bluetooth.nuspec",
         "lib/monoandroid90/InTheHand.Net.Bluetooth.dll",
         "lib/monoandroid90/InTheHand.Net.Bluetooth.xml",
@@ -471,8 +503,9 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": [
-      "InTheHand.Net.Bluetooth >= 4.0.26",
+    "net5.0-windows10.0.19041": [
+      "InTheHand.BluetoothLE >= 4.0.22",
+      "InTheHand.Net.Bluetooth >= 4.0.27",
       "NAudio >= 2.0.1"
     ]
   },
@@ -500,15 +533,15 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "netcoreapp3.1"
+        "net5.0-windows10.0.19041"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
+        "net5.0-windows10.0.19041": {
+          "targetAlias": "net5.0-windows10.0.19041.0",
           "projectReferences": {}
         }
       },
@@ -519,12 +552,16 @@
       }
     },
     "frameworks": {
-      "netcoreapp3.1": {
-        "targetAlias": "netcoreapp3.1",
+      "net5.0-windows10.0.19041": {
+        "targetAlias": "net5.0-windows10.0.19041.0",
         "dependencies": {
+          "InTheHand.BluetoothLE": {
+            "target": "Package",
+            "version": "[4.0.22, )"
+          },
           "InTheHand.Net.Bluetooth": {
             "target": "Package",
-            "version": "[4.0.26, )"
+            "version": "[4.0.27, )"
           },
           "NAudio": {
             "target": "Package",
@@ -541,15 +578,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.Windows.SDK.NET.Ref",
+            "version": "[10.0.19041.22, 10.0.19041.22]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.Windows.SDK.NET.Ref": {
             "privateAssets": "all"
           },
           "Microsoft.WindowsDesktop.App.WPF": {
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
       }
     }
   }

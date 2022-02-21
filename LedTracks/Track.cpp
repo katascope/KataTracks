@@ -3,7 +3,6 @@
 #include <avr/pgmspace.h> 
 #include "Fx.h"
 #include "Track.h"
-#include "Timecode.h"
 
 //extern unsigned long millis();
 unsigned long SongTrack_timecode(int i) { return pgm_read_dword(&(SongTrack[i*2+0])); } 
@@ -48,7 +47,6 @@ void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned l
 
 void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset, FxTrackEndAction tae)
 {
-  uint32_t dk = LEDRGB(0,0,0);
   fxc.fxState = FxState_PlayingTrack;
   fxc.paletteSpeed = 0;
   fxc.paletteDirection = 1;
@@ -59,7 +57,7 @@ void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset, FxTr
   fxc.transitionMux = 0;
   //Serial.print(F("Playing Track"));
   //Serial.print(F(", Time Offset = "));
-  //Serial.println(String(getTimecodeTimeOffset()));
+  //Serial.println(getTimecodeTimeOffset());
 }
 
 void trackStop(FxController &fxc)

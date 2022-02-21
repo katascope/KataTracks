@@ -1,5 +1,5 @@
-#if !defined USER_COMMAND_DEF
-#define USER_COMMAND_DEF
+#ifndef CMD_DEF
+#define CMD_DEF
 #include "Fx.h"
 
 enum CaptureTextMode

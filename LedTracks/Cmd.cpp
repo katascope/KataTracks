@@ -1,16 +1,12 @@
-#include "Commands.h"
+#include "Cmd.h"
 #include "Fx.h"
 #include "Track.h"
-#include "Timecode.h"
-#if ENABLE_NEOPIXEL
-#include "NeoPixel.h"
-#endif
+#include "Devices.h"
 
 void UpdatePalette();
 unsigned long GetTime();
 
 static CaptureTextMode captureMode = CaptureNone;
-static uint32_t palette16[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static char captureBuffer[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static int captureCount = 0;
 
@@ -28,22 +24,22 @@ void InstantEvent(FxController &fxc, int event, bool setUpdatePalette)
 void magicColors(FxController &fxc, int count)
 {
   int index = 0;
-  for (int i=0;i<16;i++)
+  if (count > 16) count = 16;
+  for (int i=0;i<count;i++)
   {
-    char c = captureBuffer[index];
+    char c = captureBuffer[i];
     uint32_t crgb = ShortnameToCRGB(c);
-    palette16[i] = crgb;
-    index++;
-    if (index > count) index = 0;  
+    fxc.microPalette[i] = crgb;
+    Serial.print(F("Colors["));
+    Serial.print(i);
+    Serial.print(F("] "));
+    Serial.print(c);
+    Serial.print(F(" = "));
+    Serial.println(crgb,HEX);
   }
+  fxc.microPaletteSize = count;
 
-  CreatePaletteBands(fxc,
-    palette16[0],  palette16[1],  palette16[2],  palette16[3], 
-    palette16[4],  palette16[5],  palette16[6],  palette16[7], 
-    palette16[8],  palette16[9],  palette16[10], palette16[11], 
-    palette16[12], palette16[13], palette16[14], palette16[15]);
- 
-  //InstantEvent(fxc, fx_nothing, true);
+  FxCreatePalette(fxc, fxc.microPalette, fxc.microPaletteSize);
   UpdatePalette(); 
 }
 
@@ -78,16 +74,16 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_SpeedInc:      InstantEvent(fxc, fx_speed_inc, true); break;
     case Cmd_SpeedRst:      InstantEvent(fxc, fx_speed_0, true); break;
     
-    case Cmd_ColorDark:     InstantEvent(fxc, fx_palette_dark, false); break;
-    case Cmd_ColorWhite:    InstantEvent(fxc, fx_palette_white, false); break;
-    case Cmd_ColorRed:      InstantEvent(fxc, fx_palette_red, false); break;
-    case Cmd_ColorYellow:   InstantEvent(fxc, fx_palette_yellow, false); break;
-    case Cmd_ColorGreen:    InstantEvent(fxc, fx_palette_green, false); break;
-    case Cmd_ColorCyan:     InstantEvent(fxc, fx_palette_cyan, false); break;
-    case Cmd_ColorBlue:     InstantEvent(fxc, fx_palette_blue, false); break;
-    case Cmd_ColorMagenta:  InstantEvent(fxc, fx_palette_magenta, false); break;
-    case Cmd_ColorOrange:   InstantEvent(fxc, fx_palette_orange, false); break;
-    case Cmd_ColorHalf:     InstantEvent(fxc, fx_palette_half, false); break;
+    case Cmd_ColorDark:     InstantEvent(fxc, fx_color1_dark, false); break;
+    case Cmd_ColorWhite:    InstantEvent(fxc, fx_color1_white, false); break;
+    case Cmd_ColorRed:      InstantEvent(fxc, fx_color1_red, false); break;
+    case Cmd_ColorYellow:   InstantEvent(fxc, fx_color2_yellow, false); break;
+    case Cmd_ColorGreen:    InstantEvent(fxc, fx_color2_green, false); break;
+    case Cmd_ColorCyan:     InstantEvent(fxc, fx_color2_cyan, false); break;
+    case Cmd_ColorBlue:     InstantEvent(fxc, fx_color2_blue, false); break;
+    case Cmd_ColorMagenta:  InstantEvent(fxc, fx_color3_magenta, false); break;
+    case Cmd_ColorOrange:   InstantEvent(fxc, fx_color3_orange, false); break;
+    case Cmd_ColorHalf:     InstantEvent(fxc, fx_color3_half, false); break;
 
     case Cmd_ColorLava:           InstantEvent(fxc, fx_palette_lava, true); break;
     case Cmd_ColorCloud:          InstantEvent(fxc, fx_palette_cloud, true); break;

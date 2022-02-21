@@ -1,14 +1,15 @@
-#if !defined FX_DEF
+#ifndef FX_DEF
 #define FX_DEF
-#include <avr/pgmspace.h> 
-
+#include <Arduino.h>
 #include "Config.h"
-#include "FxTypes.h"
+#include "FxCore.h"
 
 struct FxController
 {
   FxState fxState = FxState_Default;
   FxTransitionType transitionType = Transition_Instant;  
+  uint32_t microPalette[16] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+  unsigned int microPaletteSize = 1;
   uint32_t palette[NUM_LEDS];
   uint32_t nextPalette[NUM_LEDS];
   uint32_t initialPalette[NUM_LEDS];
@@ -21,26 +22,20 @@ struct FxController
   unsigned char brightness = 50;
 };
 
-uint8_t lerp(float mux, uint8_t a, uint8_t b);
-uint32_t LerpRGB(float t, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2);
-uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2);
-
-uint32_t ShortnameToCRGB(char shortName);
-
-void PrintFxStateName(FxState s);
-void PrintFxEventName(int event);
-void PrintFxTransitionName(FxTransitionType t);
-
-void CreatePalette(FxController &fxController, uint32_t *pal16);
-void CreatePaletteBands(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7, 
-                        uint32_t b8,uint32_t b9,uint32_t b10,uint32_t b11, uint32_t b12,uint32_t b13,uint32_t b14,uint32_t b15);
-
-void CreateQuadBand(FxController &fxc, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2, uint8_t r3, uint8_t g3, uint8_t b3, uint8_t r4, uint8_t g4, uint8_t b4);
-void CreateTripleBand(FxController &fxc, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2, uint8_t r3, uint8_t g3, uint8_t b3);
-void CreateDoubleBand(FxController &fxc, uint8_t r1, uint8_t g1, uint8_t b1,uint8_t r2, uint8_t g2, uint8_t b2);
-void CreateSingleBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b);
-void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b);
-
 void FxEventProcess(FxController &fxc,int event);
+void FxDisplayStatus(FxController &fxc);
+
+void FxCreatePalette(FxController &fxController, uint32_t *pal16, unsigned int palSize);
+void SetMicroPaletteSlot(FxController &fxc, int slot, uint32_t rgb);
+void SetMicroPalette(FxController &fxc, byte r, byte g, byte b);
+void SetMicroPalette2(FxController &fxc, byte r1, byte g1, byte b1, byte r2, byte g2, byte b2);
+void SetMicroPalette4(FxController &fxc, 
+  byte r1, byte g1, byte b1, 
+  byte r2, byte g2, byte b2,
+  byte r3, byte g3, byte b3,
+  byte r4, byte g4, byte b4);
+void SetMicroPalette16(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7,
+                        uint32_t b8,uint32_t b9,uint32_t b10,uint32_t b11, uint32_t b12,uint32_t b13,uint32_t b14,uint32_t b15);
+void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) ;
 
 #endif

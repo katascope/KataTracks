@@ -3,17 +3,19 @@
 
 uint32_t palette[NUM_LEDS];
 
-static uint32_t LEDRGB(uint8_t r, uint8_t g, uint8_t b) {
+#define LEDRGB(r,g,b) ((unsigned int)((((r)&0xff)<<16)|(((g)&0xff)<<8)|((b)&0xff)))
+
+static uint32_t MAKELEDRGB(uint8_t r, uint8_t g, uint8_t b) {
   return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
 }
 
 static void sayPalette()
 {
-  Serial.print("Pal = ");
+  Serial.print(F("Pal = "));
   for(uint16_t i=0;i<8;i++)
   {
     Serial.print(palette[i]);
-    Serial.print(" ");
+    Serial.print(F(" "));
   }
   Serial.println();
 }

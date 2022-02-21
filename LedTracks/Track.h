@@ -1,7 +1,7 @@
-#if !defined TRACK_DEF
+#ifndef TRACK_DEF
 #define TRACK_DEF
 #include <avr/pgmspace.h> 
-#include "FxTypes.h"
+#include "FxCore.h"
 
 #define LEAD      1                // Set 1 for Dance lead, 0 for Dance follow
 
