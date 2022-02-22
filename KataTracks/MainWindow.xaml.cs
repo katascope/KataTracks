@@ -67,8 +67,11 @@ namespace KataTracks
             DeviceManagerBT.StartMonitoring();
 
             //MainLog.Text += "Finding BLE '" + bluetoothDeviceSearchName + "'\n";
-            string BleDeviceIdPower = "FDB857FE7C3D";
-            var discoveryTask = DeviceManagerBLE.TryToGet(BleDeviceIdPower);
+            string BleDeviceIdPowerB = "FA642247BCCD";//lightsuitB
+            var discoveryTaskB = DeviceManagerBLE.TryToGet(BleDeviceIdPowerB);
+
+            string BleDeviceIdPowerA = "FDB857FE7C3D";//lightsuitA
+            var discoveryTaskA = DeviceManagerBLE.TryToGet(BleDeviceIdPowerA);
 
             //MainLog.Text += "Finding BLE '" + bluetoothDeviceSearchName + "'\n";
             //DeviceManagerBLE.StartMonitoring();
@@ -84,7 +87,7 @@ namespace KataTracks
             }*/
 
             //ConnectPaired();
-            TrackView.Text = Fx.Get();
+            ScannerView.Text = "";// Fx.Get();
             
             MainLog.Text += "Ready to Connect\n";
 
@@ -235,27 +238,26 @@ namespace KataTracks
 
 
             textTickCount++;
-            MainLog.Text = "Update #" + textTickCount + "\n";
-            MainLog.Text += "Actives:\n";
+            ScannerView.Text = "Update #" + textTickCount + "\n";
+            ScannerView.Text += "Actives:\n";
             foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
-                MainLog.Text += " (BLE) " + kvp.Value.name + " " + kvp.Value.log + "\n";
+                ScannerView.Text += " " + kvp.Value.log + "\n";
 
             foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
             {
                 if (kvp.Value.Connected)
-                    MainLog.Text += " (BT) " + kvp.Key + " ok\n";
+                    ScannerView.Text += " (BT) " + kvp.Key + " ok\n";
                 else if (kvp.Value.Connected)
-                    MainLog.Text += " (BT) " + kvp.Key + " NOT ok\n";
+                    ScannerView.Text += " (BT) " + kvp.Key + " NOT ok\n";
             }
-            MainLog.Text += "\n";
+            ScannerView.Text += "\n";
 
-            MainLog.Text += DeviceManagerBLE.MonitorLog;
-            MainLog.Text += "\n";
+            ScannerView.Text += DeviceManagerBLE.MonitorLog;
+            ScannerView.Text += "\n";
 
-            MainLog.Text += DeviceManagerBT.MonitorLog;
+            ScannerView.Text += DeviceManagerBT.MonitorLog;
 
-            //MainLog.Text = 
-            MainLog.ScrollToEnd();
+            ScannerView.ScrollToEnd();
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -359,9 +361,8 @@ namespace KataTracks
         }
         void StopAndSendToBoth(string value)
         {
-            //CombinedBluetoothController.SendMessage(value);
-            DeviceManagerBT.SendMessage(value);
             DeviceManagerBLE.SendMessage(value);
+            DeviceManagerBT.SendMessage(value);
         }
         private void SendBoth(object sender, RoutedEventArgs e)
         {

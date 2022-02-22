@@ -69,51 +69,64 @@ namespace KataTracks
 
         public static async Task<bool> TryToGet(string id)
         {
-            MonitorLog += "BLE: " + id + "\n";
             BluetoothDevice bd = await BluetoothDevice.FromIdAsync(id);
+
+            MonitorLog += "BLE: " + id + "\n";
+            while (bd == null)
+            {
+                bd = await BluetoothDevice.FromIdAsync(id);
+            }
             MonitorLog += " Conn: " + bd.Name + "\n";
             if (bd != null)
-                QueryGATT(bd);
+               QueryGATT(bd);
+            
             return false;
         }
 
         public static async void poll()
         {
-            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
-            { 
-                BleDevice bd = kvp.Value;
-                if (bd.bluetoothDevice.Gatt != null)
+            try
+            {
+                foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
                 {
-                    try
+                    BleDevice bd = kvp.Value;
+                    if (bd.bluetoothDevice.Gatt != null)
                     {
-                        if (bd.serviceCache.Count > 0)
+                        try
                         {
-                            string logUpdate = "";
-                            GattCharacteristic gattCharacteristicStatus = bd.serviceCache[mainServiceUuid].characteristics[mainStatusUuid].gattCharacteristic;
-                            byte[] valuesStatus = await gattCharacteristicStatus.ReadValueAsync();
-                            logUpdate = String.Format("{0}-{1}-{2}", valuesStatus[3], valuesStatus[2], valuesStatus[1]);
-                            byte b = valuesStatus[0];
-                            int rssi = 255 - b;
-                            logUpdate += "(-" + rssi + ")\n";
+                            if (bd.serviceCache.Count > 0)
+                            {
+                                string logUpdate = kvp.Key + " connected (BLE)\n";
+                                GattCharacteristic gattCharacteristicStatus = bd.serviceCache[mainServiceUuid].characteristics[mainStatusUuid].gattCharacteristic;
+                                byte[] valuesStatus = await gattCharacteristicStatus.ReadValueAsync();
+                                logUpdate += String.Format(" {0}-{1}-{2}", valuesStatus[3], valuesStatus[2], valuesStatus[1]);
+                                byte b = valuesStatus[0];
+                                int rssi = 255 - b;
+                                logUpdate += "(-" + rssi + ")\n";
 
-                            GattCharacteristic gattCharacteristicTimecode = bd.serviceCache[mainServiceUuid].characteristics[mainTimecodeUuid].gattCharacteristic;
-                            byte[] valuesTimecode = await gattCharacteristicTimecode.ReadValueAsync();
-                            ulong timecode = BitConverter.ToUInt32(valuesTimecode, 0);
-                            logUpdate += String.Format("  Timecode={0}", timecode);
+                                GattCharacteristic gattCharacteristicTimecode = bd.serviceCache[mainServiceUuid].characteristics[mainTimecodeUuid].gattCharacteristic;
+                                byte[] valuesTimecode = await gattCharacteristicTimecode.ReadValueAsync();
+                                ulong timecode = BitConverter.ToUInt32(valuesTimecode, 0);
+                                logUpdate += String.Format("  Timecode={0}", timecode);
 
-                            bd.log = logUpdate;
+                                bd.log = logUpdate;
+                            }
+                            else
+                            {
+                                QueryGATT(bd.bluetoothDevice);
+                                bd.log = " waiting";
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            QueryGATT(bd.bluetoothDevice);
-                            bd.log = " waiting";
+                            Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                return;
             }
         }
 
@@ -159,7 +172,7 @@ namespace KataTracks
                         {
                             GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
                             byte[] bytesCommand = Encoding.ASCII.GetBytes(message + "\r\n");
-                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);
+                            gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);//for complex?                            
                         }
                         else
                         {

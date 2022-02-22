@@ -57,7 +57,7 @@ Advertisement:
 
 namespace ConsoleBLE
 {
-    public class BLEDevice
+    public class BLEDevice : IDisposable
     {
         public BluetoothLEDevice device;
         public GattDeviceServicesResult servicesResult;
@@ -68,6 +68,10 @@ namespace ConsoleBLE
             if (api.ContainsKey(serviceUuid) && api[serviceUuid].ContainsKey(characteristiUuid))
                 return api[serviceUuid][characteristiUuid];
             else return null;
+        }
+        public void Dispose()
+        {
+            device.Dispose();
         }
     }
     public class DeviceManagerBLE
@@ -101,7 +105,7 @@ namespace ConsoleBLE
 
         async static void DoDirectConnections()
         {
-            BLEDevice d = await ConnectDevice(166213468539006);
+            await ConnectDevice(166213468539006);
 
             DisconnectDevices();
             Thread.Sleep(1000);
@@ -267,82 +271,83 @@ namespace ConsoleBLE
         }
 
 
-        static async Task<BLEDevice> ConnectDevice(ulong bluetoothDeviceId)
+        static async Task ConnectDevice(ulong bluetoothDeviceId)
         {
-            BLEDevice bled = new BLEDevice();
-
-            // Note: BluetoothLEDevice.FromIdAsync must be called from a UI thread because it may prompt for consent.
-            //BluetoothLEDevice bluetoothLeDevice = await BluetoothLEDevice.FromBluetoothAddressAsync(bluetoothDeviceId);
-
-            bled.device = await BluetoothLEDevice.FromBluetoothAddressAsync(bluetoothDeviceId);
-            Console.WriteLine("<<" + bled.device.ConnectionStatus);
-            Console.WriteLine("Bluetooth Name:" + bled.device.Name);
-            Console.WriteLine("Bluetooth DeviceId:" + bled.device.DeviceId);
-
-            bled.servicesResult = await bled.device.GetGattServicesForUuidAsync(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
-            //bled.servicesResult = await bled.device.GetGattServicesAsync();
-            if (bled.servicesResult.Status == GattCommunicationStatus.Success)
+            using (BLEDevice bled = new BLEDevice())
             {
-                foreach (GattDeviceService service in bled.servicesResult.Services)
-                    Console.WriteLine(" Service:" + service.Uuid);
 
-                Console.WriteLine("Service fetch start");
-                var services = bled.servicesResult.Services;
-                Console.WriteLine("Service fetch done");
+                // Note: BluetoothLEDevice.FromIdAsync must be called from a UI thread because it may prompt for consent.
+                //BluetoothLEDevice bluetoothLeDevice = await BluetoothLEDevice.FromBluetoothAddressAsync(bluetoothDeviceId);
 
-                if (services.Count == 0)
-                    Console.WriteLine("No services found.");
+                bled.device = await BluetoothLEDevice.FromBluetoothAddressAsync(bluetoothDeviceId);
+                Console.WriteLine("<<" + bled.device.ConnectionStatus);
+                Console.WriteLine("Bluetooth Name:" + bled.device.Name);
+                Console.WriteLine("Bluetooth DeviceId:" + bled.device.DeviceId);
 
-                foreach (GattDeviceService service in services)
+                bled.servicesResult = await bled.device.GetGattServicesForUuidAsync(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
+                //bled.servicesResult = await bled.device.GetGattServicesAsync();
+                if (bled.servicesResult.Status == GattCommunicationStatus.Success)
                 {
-                    Console.WriteLine(" Service:" + service.Uuid);
-                    GattCharacteristicsResult cresult = await service.GetCharacteristicsAsync();
-                    bled.api[service.Uuid.ToString()] = new Dictionary<string, GattCharacteristic>();
-                    if (cresult.Status == GattCommunicationStatus.Success)
+                    foreach (GattDeviceService service in bled.servicesResult.Services)
+                        Console.WriteLine(" Service:" + service.Uuid);
+
+                    Console.WriteLine("Service fetch start");
+                    var services = bled.servicesResult.Services;
+                    Console.WriteLine("Service fetch done");
+
+                    if (services.Count == 0)
+                        Console.WriteLine("No services found.");
+
+                    foreach (GattDeviceService service in services)
                     {
-                        var characteristics = cresult.Characteristics;
-                        foreach (GattCharacteristic characteristic in characteristics)
+                        Console.WriteLine(" Service:" + service.Uuid);
+                        GattCharacteristicsResult cresult = await service.GetCharacteristicsAsync();
+                        bled.api[service.Uuid.ToString()] = new Dictionary<string, GattCharacteristic>();
+                        if (cresult.Status == GattCommunicationStatus.Success)
                         {
-                            bled.api[service.Uuid.ToString()][characteristic.Uuid.ToString()] = characteristic;
-                            Console.WriteLine("  Characteristic:" + characteristic.Uuid);
-                            GattCharacteristicProperties properties = characteristic.CharacteristicProperties;
-                            if (properties.HasFlag(GattCharacteristicProperties.Write))
+                            var characteristics = cresult.Characteristics;
+                            foreach (GattCharacteristic characteristic in characteristics)
                             {
-                                Console.WriteLine("   Write");
-                            }
-                            if (properties.HasFlag(GattCharacteristicProperties.Read))
-                            {
-                                Console.WriteLine("   Read: ");
-                            }
-                            if (properties.HasFlag(GattCharacteristicProperties.Notify))
-                            {
-                                Console.WriteLine("   Notify");
+                                bled.api[service.Uuid.ToString()][characteristic.Uuid.ToString()] = characteristic;
+                                Console.WriteLine("  Characteristic:" + characteristic.Uuid);
+                                GattCharacteristicProperties properties = characteristic.CharacteristicProperties;
+                                if (properties.HasFlag(GattCharacteristicProperties.Write))
+                                {
+                                    Console.WriteLine("   Write");
+                                }
+                                if (properties.HasFlag(GattCharacteristicProperties.Read))
+                                {
+                                    Console.WriteLine("   Read: ");
+                                }
+                                if (properties.HasFlag(GattCharacteristicProperties.Notify))
+                                {
+                                    Console.WriteLine("   Notify");
+                                }
                             }
                         }
+
                     }
+                    /*
+                    //GattCharacteristic gcName = bled.GetCharacteristic("00001800-0000-1000-8000-00805f9b34fb", "1a3ac130-31ee-758a-bc50-54a61958ef81"); 
+                    GattCharacteristic gcAccel= bled.GetCharacteristic("9a48ecba-2e92-082f-c079-9e75aae428b1", "00002713-0000-1000-8000-00805f9b34fb");
+                    //while (true)                    ReadBle(gcName);
 
+                    GattCommunicationStatus status = await gcAccel.WriteClientCharacteristicConfigurationDescriptorAsync(
+                            GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                    if (status == GattCommunicationStatus.Success)
+                    {
+                        // Server has been informed of clients interest.
+                        gcAccel.ValueChanged += Characteristic_ValueChanged;
+                    }
+                    */
                 }
-                /*
-                //GattCharacteristic gcName = bled.GetCharacteristic("00001800-0000-1000-8000-00805f9b34fb", "1a3ac130-31ee-758a-bc50-54a61958ef81"); 
-                GattCharacteristic gcAccel= bled.GetCharacteristic("9a48ecba-2e92-082f-c079-9e75aae428b1", "00002713-0000-1000-8000-00805f9b34fb");
-                //while (true)                    ReadBle(gcName);
-
-                GattCommunicationStatus status = await gcAccel.WriteClientCharacteristicConfigurationDescriptorAsync(
-                        GattClientCharacteristicConfigurationDescriptorValue.Notify);
-                if (status == GattCommunicationStatus.Success)
+                else if (bled.servicesResult.Status == GattCommunicationStatus.Unreachable)
                 {
-                    // Server has been informed of clients interest.
-                    gcAccel.ValueChanged += Characteristic_ValueChanged;
+                    Console.WriteLine("Remote device unreachable");
                 }
-                */
+                else Console.WriteLine("Failed");
             }
-            else if (bled.servicesResult.Status == GattCommunicationStatus.Unreachable)
-            {
-                Console.WriteLine("Remote device unreachable");
-            }
-            else Console.WriteLine("Failed");
-
-            return bled;
+            
         }
 
         static bool inProcess = false;
@@ -350,7 +355,7 @@ namespace ConsoleBLE
         private static void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
         {
 
-            if (eventArgs.Advertisement.LocalName.Contains("LightSuit"))
+            if (eventArgs.Advertisement.LocalName.Contains("LightSuitB"))
             {
                 Console.WriteLine(String.Format("Found:" + eventArgs.Advertisement.LocalName + " / " + eventArgs.Advertisement.ServiceUuids.ToString()));
                 if (!inProcess)

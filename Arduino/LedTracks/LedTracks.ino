@@ -10,11 +10,10 @@ static FxController fxController;
 static unsigned long lastTimeDisplay = 0;
 
 void setup() {
-  fxController.fxState = FxState_Default;//TestPattern;//PlayingTrack;
   Serial.begin(SERIAL_BAUD_RATE);
+  Serial.print(DeviceName);
   Serial.print(F("Serial init: "));
   Serial.println(SERIAL_BAUD_RATE);
-
 #if SYSTEM_NANO_33_BLE
   Serial.println(F("System: Arduino Nano 33 BLE"));
 #endif
@@ -70,6 +69,7 @@ void setup() {
 #if ENABLE_TEST_PATTERN
   fxController.fxState = FxState_TestPattern;
 #endif  
+  fxController.fxState = FxState_IMU;//Default;//TestPattern;//PlayingTrack;
 
   if (fxController.fxState == FxState_TestPattern)
   {
@@ -133,7 +133,8 @@ void loop()
     || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Always)
   {
     unsigned long t =  millis();
-    if (t - fxController.lastTimeLedUpdate > 45)//delay to let bluetooth get data(fastled issue)
+    int ledDelay = 30;
+    if (t - fxController.lastTimeLedUpdate > ledDelay)//delay to let bluetooth get data(fastled issue)
     {
       UpdatePalette();
       fxController.lastTimeLedUpdate = t;

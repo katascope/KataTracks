@@ -51,7 +51,7 @@ namespace KataTracks
                 {
                     BluetoothClient client = clients[deviceName];
                     
-                    clientLogs[deviceName] = deviceName + " connected\n";
+                    clientLogs[deviceName] = deviceName + " connected (BT)\n";
                     Stream s = clients[deviceName].GetStream();
                     if (clients[deviceName].Connected)
                     {
@@ -59,7 +59,7 @@ namespace KataTracks
                         try
                         {
                             string value = reader.ReadLine();
-                            clientLogs[deviceName] += value + "\n";
+                            clientLogs[deviceName] += " Status=" + value + "\n";
                         }
                         catch (Exception ex)
                         {
@@ -115,8 +115,7 @@ namespace KataTracks
                         }
                         else
                         {
-                            clientLogs[pd.DeviceName] = pd.DeviceName + " ??";
-                            tempLog += "+" + pd.DeviceName + " ??\n";
+                            //tempLog += "+" + pd.DeviceName + " ??\n";
                         }
                     }
                     else tempLog += "-" + pd.DeviceName + "\n";

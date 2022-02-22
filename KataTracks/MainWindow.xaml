@@ -27,7 +27,7 @@
         <TextBox x:Name="Log2" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="617" Text="Not connected." TextWrapping="Wrap" Width="200" Height="247" Background="Black" Foreground="#FF59ABF0" Canvas.Left="405"/>
-        <TextBox x:Name="TrackView" HorizontalScrollBarVisibility="Visible"
+        <TextBox x:Name="ScannerView" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="60" Text="" TextWrapping="Wrap" Width="236" Height="510" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1300"/>
         <Button Click="PlayFromStartButton_Click" Content="Start" Height="38" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Top="1"/>
