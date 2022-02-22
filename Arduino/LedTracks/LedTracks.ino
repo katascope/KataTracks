@@ -69,7 +69,7 @@ void setup() {
 #if ENABLE_TEST_PATTERN
   fxController.fxState = FxState_TestPattern;
 #endif  
-  fxController.fxState = FxState_IMU;//Default;//TestPattern;//PlayingTrack;
+  //fxController.fxState = FxState_IMU;//Default;//TestPattern;//PlayingTrack;
 
   if (fxController.fxState == FxState_TestPattern)
   {

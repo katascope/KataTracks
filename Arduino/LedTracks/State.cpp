@@ -76,7 +76,8 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
 
   if (matchedTimecode > getTimecodeLastMatched())
   {
-    if (fxc.transitionType == Transition_TimedWipePos || fxc.transitionType == Transition_TimedWipeNeg)
+    if (fxc.transitionType >= Transition_TimedWipePos         
+        && fxc.transitionType <= Transition_TimedWipeInOut)
     {
       CopyPalette(fxc.palette, fxc.nextPalette);
     }
@@ -102,12 +103,7 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   {
     //Interpolate initial palette to next palette, based on transition (0 to 1)
     for (int i = 0; i < NUM_LEDS; i++)
-     {
-      uint32_t rgb = LerpRGB(fxc.transitionMux,
-                             fxc.initialPalette[i],
-                             fxc.nextPalette[i]);
-      fxc.palette[i] = rgb;
-    }
+      fxc.palette[i] = LerpRGB(fxc.transitionMux,fxc.initialPalette[i],fxc.nextPalette[i]);
   }
   if (fxc.transitionType == Transition_TimedWipePos)
   {
@@ -125,6 +121,35 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
     int limit = mux * (NUM_LEDS -1);
     for (int i = 0;i < limit; i++)
       fxc.palette[i] = fxc.nextPalette[i];
+    fxc.paletteIndex = 0;
+    fxc.paletteSpeed = 0;
+    fxc.paletteDirection = 0;
+  }
+  if (fxc.transitionType == Transition_TimedWipeOutIn)
+  {
+    float mux = (fxc.transitionMux);
+    int limit = mux * (NUM_LEDS/2);
+    for (int i = 0;i < limit; i++)
+      fxc.palette[i] = fxc.nextPalette[i];
+
+    for (int i = NUM_LEDS-1;i > NUM_LEDS-limit; i--)
+      fxc.palette[i] = fxc.nextPalette[i];
+    
+    fxc.paletteIndex = 0;
+    fxc.paletteSpeed = 0;
+    fxc.paletteDirection = 0;
+    
+  }
+  if (fxc.transitionType == Transition_TimedWipeInOut)
+  {
+    float mux = (fxc.transitionMux);
+    int limit = mux * (NUM_LEDS/2);
+    for (int i = NUM_LEDS/2;i>=NUM_LEDS/2-limit;i--)
+      fxc.palette[i] = fxc.nextPalette[i];
+
+    for (int i = NUM_LEDS/2;i<NUM_LEDS/2+limit; i++)
+      fxc.palette[i] = fxc.nextPalette[i];
+    
     fxc.paletteIndex = 0;
     fxc.paletteSpeed = 0;
     fxc.paletteDirection = 0;

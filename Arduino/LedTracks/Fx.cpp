@@ -16,12 +16,8 @@ void FxCreatePalette(FxController &fxController, uint32_t *pal16, unsigned int p
       CopyPalette(fxController.initialPalette, fxController.palette);
       LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
     }
-    else if (fxController.transitionType == Transition_TimedWipePos)
-    {
-      CopyPalette(fxController.initialPalette, fxController.palette);
-      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
-    }
-    else if (fxController.transitionType == Transition_TimedWipeNeg)
+    else if (fxController.transitionType >= Transition_TimedWipePos        
+        && fxController.transitionType <= Transition_TimedWipeInOut)
     {
       CopyPalette(fxController.initialPalette, fxController.palette);
       LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
@@ -189,10 +185,12 @@ void FxEventProcess(FxController &fxc,int event)
       if (fxc.paletteSpeed < 0)
         fxc.paletteSpeed = 0;
       break;
-    case fx_transition_fast:          fxc.transitionType = Transition_Instant;break;
-    case fx_transition_timed_fade:    fxc.transitionType = Transition_TimedFade;break;
-    case fx_transition_timed_wipe_pos:fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
-    case fx_transition_timed_wipe_neg:fxc.transitionType = Transition_TimedWipeNeg;fxc.paletteIndex = 15;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
+    case fx_transition_fast:            fxc.transitionType = Transition_Instant;break;
+    case fx_transition_timed_fade:      fxc.transitionType = Transition_TimedFade;break;
+    case fx_transition_timed_wipe_pos:  fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
+    case fx_transition_timed_wipe_neg:  fxc.transitionType = Transition_TimedWipeNeg;fxc.paletteIndex = 15;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
+    case fx_transition_timed_wipe_outin: fxc.transitionType = Transition_TimedWipeOutIn;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
+    case fx_transition_timed_wipe_inout: fxc.transitionType = Transition_TimedWipeInOut;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
 
     case fx_palette_lead:   SetMicroPalette(fxc, BLUE);break;
     case fx_palette_follow: SetMicroPalette(fxc, RED);break;

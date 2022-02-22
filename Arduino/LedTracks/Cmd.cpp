@@ -247,7 +247,7 @@ void UserCommandInput(FxController &fxc, int data)
         Serial.println(F("Capture end"));
         processCapturedText(fxc);
       }
-      else Serial.println(F("UnkCR"));
+      //else Serial.println(F("UnkCR"));
     case 0:
     case 225: break;
     default:
