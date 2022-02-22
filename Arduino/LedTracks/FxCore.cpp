@@ -129,8 +129,8 @@ void PrintFxEventName(int event)
     case fx_palette_blue:    Serial.print(F("blue"));break;
     case fx_palette_magenta: Serial.print(F("magenta"));break;
     case fx_palette_orange:  Serial.print(F("orange"));break;
-    case fx_palette_half:  Serial.print(F("half"));break;
-    case fx_palette_lowhalf:  Serial.print(F("lowhalf"));break;
+    case fx_palette_half:    Serial.print(F("half"));break;
+    case fx_palette_lowhalf: Serial.print(F("lowhalf"));break;
 
     case fx_color1_dark:    Serial.print(F("dark1"));break;
     case fx_color1_white:   Serial.print(F("white1"));break;

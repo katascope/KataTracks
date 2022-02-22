@@ -71,15 +71,73 @@ void imuSetup()
 #include "FxCore.h"
 #include "Fx.h"
 #include "Cmd.h"
-void bluetoothPoll(FxController &fxc)
+static SoftwareSerial bluetooth(RX_PIN, TX_PIN);
+void bluetoothBegin(unsigned long baud)
 {
+  bluetooth.begin(baud);  
+}
+void bluetoothStatus()
+{
+  bluetooth.print(GetTime());
+  bluetooth.print(F(":"));
+  bluetooth.print(getTimecodeSongOffset());
+  bluetooth.print(F(":"));
+  bluetooth.print(getTimecodeTimeOffset());
+  if (bluetooth.available())
+    bluetooth.println(F("!"));
+  else
+    bluetooth.println(F("."));
+}
+char buff[20]; 
+void bluetoothPoll(FxController &fxc)
+{ 
+  bool gotCapture = false;
   while (bluetooth.available())
   {
-    Serial.println(F("Got input"));
-    int data = bluetooth.read();
-    bluetooth.print(F("rcv:"));
-    bluetooth.println(data);
-    UserCommandInput(fxc, data);
+    char data = bluetooth.read();
+
+    if (data == '@')
+    {      
+      int index = 0;
+      Serial.print(F("TimeCap { "));
+      Serial.println(data);
+      while (bluetooth.available()&&index < 32)
+        buff[index++] = (char)bluetooth.read();
+      for (int i=0;i<index;i++)
+      {
+        Serial.print(" ");
+        Serial.print(buff[i]);
+      }
+      Serial.println(F("}, processing."));
+      UserCommandInput(fxc, (char)data);
+      for (int i=0;i<index;i++)
+        UserCommandInput(fxc, buff[i]);
+    }
+    else if (data == '!')
+    {
+      int index = 0;
+      Serial.print(F("ColorCap { "));
+      Serial.println(data);
+      while (bluetooth.available()&&index < 32)
+        buff[index++] = (char)bluetooth.read();
+      for (int i=0;i<index;i++)
+      {
+        Serial.print(" ");
+        Serial.print(buff[i]);
+      }
+      Serial.println(F("}, processing."));
+      UserCommandInput(fxc, data);
+      for (int i=0;i<index;i++)
+        UserCommandInput(fxc, buff[i]);
+    }
+    else
+    {
+      Serial.print(F("BT:"));
+      Serial.println(data);
+      bluetooth.print(F("BT:"));
+      bluetooth.println(data);
+      UserCommandInput(fxc, data);
+    }
   }
 }
 #endif
@@ -103,6 +161,8 @@ BLEUnsignedLongCharacteristic timecodeCharacteristic( BLE_UUID_LIGHTSUIT_CHARACT
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
 BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_LIGHTSUIT_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
+BLEUnsignedLongCharacteristic rssiCharacteristic(BLE_UUID_LIGHTSUIT_CHARACTERISTIC_RSSI, BLERead  );
+
 BLEFloatCharacteristic accelerationCharacteristicX( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_X, BLERead | BLENotify );
 BLEFloatCharacteristic accelerationCharacteristicY( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Y, BLERead | BLENotify );
 BLEFloatCharacteristic accelerationCharacteristicZ( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_ACCEL_Z, BLERead | BLENotify );
@@ -143,6 +203,8 @@ bool bleSetup()
   lightsuitService.addCharacteristic( statusCharacteristic );
   lightsuitService.addCharacteristic( commandCharacteristic );
   lightsuitService.addCharacteristic( playCharacteristic );
+  lightsuitService.addCharacteristic( rssiCharacteristic );
+  
   /*lightsuitService.addCharacteristic( accelerationCharacteristicX );
   lightsuitService.addCharacteristic( accelerationCharacteristicY );
   lightsuitService.addCharacteristic( accelerationCharacteristicZ );
@@ -229,6 +291,8 @@ void blePoll(FxController &fxc)
           if( central.rssi() != 0 )
           {
             digitalWrite( RSSI_LED_PIN, LOW );
+
+            
             
             accelerationCharacteristicX.writeValue( getAccelX() );
             accelerationCharacteristicY.writeValue( getAccelY() );
@@ -240,12 +304,13 @@ void blePoll(FxController &fxc)
   
             counter++;
             counterCharacteristic.writeValue( counter );
-  
+
             unsigned long u = 
               ( (fxc.fxState & 0xFF) << 24 ) |
               ( ((signed char)fxc.paletteSpeed & 0xFF) << 16 ) |
               ( ((signed char)fxc.paletteDirection & 0xFF) << 8 ) |
-              ( ((signed char)0xFF & 0xFF) );
+              ( ((unsigned char)central.rssi() & 0xFF) );
+              
             statusCharacteristic.writeValue( u );
           }
           else

@@ -2,9 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
 
@@ -12,11 +9,12 @@ namespace KataTracks
 {
     class DeviceManagerBT
     {
-        static public Thread listenerThread = null;
+        static public Thread monitorThread = null;
         static public bool keepListening = true;
-        static public string MonitorLog = "";
-
         public static Dictionary<string, BluetoothClient> clients = new Dictionary<string, BluetoothClient>();
+        public static Dictionary<string, Thread> threads = new Dictionary<string, Thread>();
+        public static Dictionary<string, string> clientLogs = new Dictionary<string, string>();
+        static public string MonitorLog = "";
 
         public static void SendMessage(string message)
         {
@@ -29,8 +27,9 @@ namespace KataTracks
                         Stream peerStream = kvp.Value.GetStream();
                         if (peerStream != null)
                         {
-                            byte[] bMessage = System.Text.Encoding.ASCII.GetBytes(message);
-                            peerStream.Write(bMessage, 0, bMessage.Length);
+                            byte[] msg = System.Text.Encoding.ASCII.GetBytes(message);
+                            peerStream.Write(msg, 0, msg.Length);
+                            //peerStream.Flush();
                         }
                     }
                     catch (Exception ex)
@@ -41,7 +40,39 @@ namespace KataTracks
             }
         }
 
-            static private void ListenToConnected(object in_name)
+
+        static private void ListenToConnected(object in_name)
+        {
+            while (keepListening)
+            {
+                string deviceName = (string)in_name;
+
+                if (clients.ContainsKey(deviceName) && clients[deviceName].Connected)
+                {
+                    BluetoothClient client = clients[deviceName];
+                    
+                    clientLogs[deviceName] = deviceName + " connected\n";
+                    Stream s = clients[deviceName].GetStream();
+                    if (clients[deviceName].Connected)
+                    {
+                        StreamReader reader = new StreamReader(s);
+                        try
+                        {
+                            string value = reader.ReadLine();
+                            clientLogs[deviceName] += value + "\n";
+                        }
+                        catch (Exception ex)
+                        {
+                            clientLogs[deviceName] += ex.ToString();
+                        }
+                    }
+                }
+                        
+                Thread.Sleep(1000); //don't check again for 5 seconds
+            }
+        }
+
+        static private void MonitorBluetoothDevices(object in_name)
         {
             while (keepListening)
             {
@@ -50,28 +81,43 @@ namespace KataTracks
                 string tempLog = "Inactive Paired Devices\n";
                 foreach (var pd in pds)
                 {
-                    if ( (pd.DeviceName.Contains("Lightsuit")) || (pd.DeviceName.Contains("LightSuit")))
+                    if ((pd.DeviceName.Contains("Lightsuit")) || (pd.DeviceName.Contains("LightSuit")))
                     {
-                        if ( !clients.ContainsKey(pd.DeviceName) || !clients[pd.DeviceName].Connected)
+                        if (!clients.ContainsKey(pd.DeviceName) || !clients[pd.DeviceName].Connected)
                         {
+                            string deviceLog = "";
                             clients[pd.DeviceName] = new BluetoothClient();
                             try
                             {
+                                deviceLog += " " + pd.DeviceName + " connecting.\n";
+                                clientLogs[pd.DeviceName] = deviceLog;
                                 clients[pd.DeviceName].Connect(pd.DeviceAddress, BluetoothService.SerialPort);
-                                tempLog += " " + pd.DeviceName + " connecting.\n";
+                                if (clients[pd.DeviceName].Connected)
+                                {
+                                    threads[pd.DeviceName] = new Thread(ListenToConnected);
+                                    threads[pd.DeviceName].Start(pd.DeviceName);
+                                    MonitorLog += "Thread start " + pd.DeviceName + "\n";
+                                }
+
                             }
                             catch (Exception ex)
                             {
                                 if (ex.Message.Contains("did not pr"))
-                                    tempLog += " " + pd.DeviceName + " not found"; 
+                                    deviceLog += " " + pd.DeviceName + " not found";
                                 else if (ex.Message.Contains("is not valid"))
-                                    tempLog += " " + pd.DeviceName + " invalid";
+                                    deviceLog += " " + pd.DeviceName + " invalid";
                                 else
-                                    tempLog += " " + pd.DeviceName + " unk err";
-                                tempLog += ", retrying\n";
+                                    deviceLog += " " + pd.DeviceName + " unk err";
+                                deviceLog += ", retrying\n";
                             }
+                            clientLogs[pd.DeviceName] = deviceLog;
+                            tempLog += deviceLog;
                         }
-                        else tempLog += "+" + pd.DeviceName + " ok\n";
+                        else
+                        {
+                            clientLogs[pd.DeviceName] = pd.DeviceName + " ??";
+                            tempLog += "+" + pd.DeviceName + " ??\n";
+                        }
                     }
                     else tempLog += "-" + pd.DeviceName + "\n";
                 }
@@ -83,8 +129,8 @@ namespace KataTracks
 
         public async static void StartMonitoring()
         {
-            listenerThread = new Thread(ListenToConnected);
-            listenerThread.Start("FindBT");
+            monitorThread = new Thread(MonitorBluetoothDevices);
+            monitorThread.Start("FindBT");
             MonitorLog = "Searching BLE Nearby..\n";
         }
 

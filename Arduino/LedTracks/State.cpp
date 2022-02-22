@@ -39,7 +39,7 @@ void State_Poll_IMU(FxController &fxc)
       //rotPalette(fxc.palette);
       fxc.paletteDirection = 1;
       fxc.paletteSpeed = 1;
-      fxc.updatePalette = true;
+      fxc.fxPaletteUpdateType = FxPaletteUpdateType::Once;
 }
 #endif
 

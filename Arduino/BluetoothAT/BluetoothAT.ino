@@ -28,7 +28,7 @@ Serial.begin(9600);
 Serial.println("Enter AT commands:");
 //seems to be 38400?
 //getting E⸮=I⸮J⸮⸮ - this happens if you print btserial back to btserial causing looping
-BTSerial.begin(38400); // HC-05 default speed in AT command more
+BTSerial.begin(9600); // HC-05 default speed in AT command more
 
 }
 
@@ -37,7 +37,7 @@ void loop()
   if (BTSerial.available())
   {// read from HC-05 and send to Arduino Serial Monitor
     String data = BTSerial.readString();
-    //BTSerial.print(data); //Don't enable this if AT mode
+    BTSerial.print(data); //Don't enable this if AT mode
     Serial.print(data);
     //Serial.print("/");
     //Serial.print(String((int)data));

@@ -7,6 +7,7 @@
 #include "State.h"
 #include "Devices.h"
 static FxController fxController;
+static unsigned long lastTimeDisplay = 0;
 
 void setup() {
   fxController.fxState = FxState_Default;//TestPattern;//PlayingTrack;
@@ -51,7 +52,7 @@ void setup() {
 #if ENABLE_BLUETOOTH
   Serial.print(F("BT init: "));
   Serial.println(BLUETOOTH_BAUD_RATE);
-  bluetooth.begin(BLUETOOTH_BAUD_RATE);
+  bluetoothBegin(BLUETOOTH_BAUD_RATE);
 #else
   Serial.println(F("No BT init"));
 #endif
@@ -128,8 +129,8 @@ void loop()
   State_Poll(fxController);
 
   if (fxController.fxState == FxState_PlayingTrack 
-  || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Once
-  || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Always)
+    || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Once
+    || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Always)
   {
     unsigned long t =  millis();
     if (t - fxController.lastTimeLedUpdate > 45)//delay to let bluetooth get data(fastled issue)
@@ -143,6 +144,14 @@ void loop()
   }
 
 #if ENABLE_STATUS
-  FxDisplayStatus(fxController);
+    unsigned long t =  millis();
+    if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
+    {      
+#if ENABLE_BLUETOOTH
+      bluetoothStatus();
+#endif
+      FxDisplayStatus(fxController);      
+      lastTimeDisplay = t;
+    }
 #endif
 }

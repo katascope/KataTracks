@@ -352,6 +352,7 @@ namespace ConsoleBLE
 
             if (eventArgs.Advertisement.LocalName.Contains("LightSuit"))
             {
+                Console.WriteLine(String.Format("Found:" + eventArgs.Advertisement.LocalName + " / " + eventArgs.Advertisement.ServiceUuids.ToString()));
                 if (!inProcess)
                 {
                     inProcess = true;
@@ -360,11 +361,11 @@ namespace ConsoleBLE
                     log += String.Format("  BT_ADDR: {0}", eventArgs.BluetoothAddress);
                     log += String.Format("  FR_NAME: {0}", eventArgs.Advertisement.LocalName) + "\n";
                     
-                    //ConnectDevice(eventArgs.BluetoothAddress);
+                    ConnectDevice(eventArgs.BluetoothAddress);
                     inProcess = false;
                 }
             }
-            //else Console.WriteLine(String.Format("Skipping:" + eventArgs.Advertisement.LocalName));
+//            else Console.WriteLine(String.Format("Skipping:" + eventArgs.Advertisement.LocalName + " / " + eventArgs.Advertisement.ServiceUuids.ToString()));
         }
 
     }

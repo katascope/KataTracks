@@ -40,7 +40,7 @@
         <Button Click="SendBoth" Tag="6" Content="Blue" Canvas.Left="1055" Canvas.Top="760" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="65"/>
         <Button Click="SendBoth" Tag="7" Content="Magenta" Canvas.Left="1055" Canvas.Top="790" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="65"/>
         <Button Click="SendBoth" Tag="8" Content="Orange" Canvas.Left="1055" Canvas.Top="820" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="65"/>
-        <Button Click="SendBoth" Tag="9" Content="RGB" Canvas.Left="1130" Canvas.Top="582" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBothCRLF" Tag="!rgb" Content="RGB" Canvas.Left="1130" Canvas.Top="582" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="q" Content="Lava" Canvas.Left="1130" Canvas.Top="612" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="w" Content="Cloud" Canvas.Left="1130" Canvas.Top="642" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="e" Content="Ocean" Canvas.Left="1130" Canvas.Top="671" Background="#FF012461" Foreground="White" BorderBrush="Black"/>

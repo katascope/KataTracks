@@ -7,7 +7,7 @@ void UpdatePalette();
 unsigned long GetTime();
 
 static CaptureTextMode captureMode = CaptureNone;
-static char captureBuffer[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static char captureBuffer[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0};
 static int captureCount = 0;
 
 void InstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType)
@@ -74,27 +74,27 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_SpeedPos:      InstantEvent(fxc, fx_speed_pos, FxPaletteUpdateType::Once); break;
     case Cmd_SpeedDec:      InstantEvent(fxc, fx_speed_dec, FxPaletteUpdateType::Once); break;
     case Cmd_SpeedInc:      InstantEvent(fxc, fx_speed_inc, FxPaletteUpdateType::Once); break;
-    case Cmd_SpeedRst:      InstantEvent(fxc, fx_speed_0, FxPaletteUpdateType::Once); break;
+    case Cmd_SpeedRst:      InstantEvent(fxc, fx_speed_0,   FxPaletteUpdateType::Once); break;
     
-    case Cmd_ColorDark:     InstantEvent(fxc, fx_color1_dark, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhite:    InstantEvent(fxc, fx_color1_white, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorRed:      InstantEvent(fxc, fx_color1_red, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorYellow:   InstantEvent(fxc, fx_color2_yellow, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorGreen:    InstantEvent(fxc, fx_color2_green, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCyan:     InstantEvent(fxc, fx_color2_cyan, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorBlue:     InstantEvent(fxc, fx_color2_blue, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorMagenta:  InstantEvent(fxc, fx_color3_magenta, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorOrange:   InstantEvent(fxc, fx_color3_orange, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorHalf:     InstantEvent(fxc, fx_color3_half, FxPaletteUpdateType::Once); break;
+    case Cmd_ColorDark:     InstantEvent(fxc, fx_palette_dark,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhite:    InstantEvent(fxc, fx_palette_white,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorRed:      InstantEvent(fxc, fx_palette_red,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorYellow:   InstantEvent(fxc, fx_palette_yellow,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorGreen:    InstantEvent(fxc, fx_palette_green,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCyan:     InstantEvent(fxc, fx_palette_cyan,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorBlue:     InstantEvent(fxc, fx_palette_blue,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorMagenta:  InstantEvent(fxc, fx_palette_magenta,  FxPaletteUpdateType::Once); break;
+    case Cmd_ColorOrange:   InstantEvent(fxc, fx_palette_orange,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorHalf:     InstantEvent(fxc, fx_palette_half,     FxPaletteUpdateType::Once); break;
 
-    case Cmd_ColorLava:           InstantEvent(fxc, fx_palette_lava, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCloud:          InstantEvent(fxc, fx_palette_cloud, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorOcean:          InstantEvent(fxc, fx_palette_ocean, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorForest:         InstantEvent(fxc, fx_palette_forest, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorRainbow:        InstantEvent(fxc, fx_palette_rainbow, FxPaletteUpdateType::Once); break;
+    case Cmd_ColorLava:           InstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCloud:          InstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once); break;
+    case Cmd_ColorOcean:          InstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once); break;
+    case Cmd_ColorForest:         InstantEvent(fxc, fx_palette_forest,        FxPaletteUpdateType::Once); break;
+    case Cmd_ColorRainbow:        InstantEvent(fxc, fx_palette_rainbow,       FxPaletteUpdateType::Once); break;
     case Cmd_ColorRainbowstripe:  InstantEvent(fxc, fx_palette_rainbowstripe, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorParty:          InstantEvent(fxc, fx_palette_party, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorHeat:           InstantEvent(fxc, fx_palette_heat, FxPaletteUpdateType::Once); break;
+    case Cmd_ColorParty:          InstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once); break;
+    case Cmd_ColorHeat:           InstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once); break;
 
 #if ENABLE_NEOPIXEL && ENABLE_BRIGHTNESS
     case Cmd_Brightness_VeryHigh: neopixelSetBrightness(250);break;
@@ -115,9 +115,7 @@ void processCapturedText(FxController &fxc)
     Serial.print(captureCount);
     Serial.print(F(")=("));
     for (int i = 0; i < captureCount; i++)
-    {
       Serial.print((char)captureBuffer[i]);
-    }
     Serial.print(F(")"));
     Serial.println();
 
@@ -129,12 +127,23 @@ void processCapturedText(FxController &fxc)
   else if (captureMode == CaptureTimeCode)
   { 
     captureMode = CaptureNone;
-    unsigned long tc = atoi(captureBuffer);
+    Serial.print(F("TimeCodeBuf( "));
+    for (int i = 0; i < captureCount; i++)
+    {
+      Serial.print((char)captureBuffer[i]);    
+      Serial.print(F(" "));
+    }
+    Serial.print(F(")"));
+    captureBuffer[captureCount] = 0;
+    Serial.print(F("=\""));
+    Serial.print(captureBuffer);
+    Serial.print(F("\""));
+    unsigned long tc = atol(captureBuffer);
+    Serial.print(F("TC:"));
+    Serial.print(tc);
     int prevmatch = GetPreviousTimeCodeMatch(tc);    
     setTimecodeLastMatched(SongTrack_timecode(prevmatch));
     setTimecodeSongOffset(tc);  
-    Serial.print(F("TC:"));
-    Serial.print(tc);
     Serial.print(F(" vs t="));
     Serial.print(GetTime());
     Serial.print(F(", to="));
@@ -168,6 +177,8 @@ void UserCommandInput(FxController &fxc, int data)
   {
     if (captureCount < 15)
     {
+      Serial.print(F("CC="));
+      Serial.print(data);
       captureBuffer[captureCount] = (char)data;
       captureBuffer[captureCount+1] = 0;
       captureCount++;
@@ -178,12 +189,12 @@ void UserCommandInput(FxController &fxc, int data)
   switch (data)
   {
     case '!':
-      //PrintLogln(F("Capturing ColorCode"));
+      Serial.print(F("Capturing ColorCode"));
       captureCount = 0;
       captureMode = CaptureColorCode;
       break;
     case '@':
-      //PrintLogln(F("Capturing TimeCode"));
+      Serial.print(F("Capturing TimeCode"));
       captureCount = 0;
       //capturedTimeCode = "";
       captureMode = CaptureTimeCode;
@@ -232,7 +243,11 @@ void UserCommandInput(FxController &fxc, int data)
     case 10:
     case 13:
       if (captureMode != CaptureNone)
+      {
+        Serial.println(F("Capture end"));
         processCapturedText(fxc);
+      }
+      else Serial.println(F("UnkCR"));
     case 0:
     case 225: break;
     default:

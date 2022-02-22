@@ -41,14 +41,14 @@ void SetMicroPaletteSlot(FxController &fxc, int slot, uint32_t rgb)
 
 void SetMicroPalette(FxController &fxc, byte r, byte g, byte b)
 {
-  SetMicroPaletteSlot(fxc, 0, LEDRGB(r,g,b));
   fxc.microPaletteSize = 1;
+  SetMicroPaletteSlot(fxc, 0, LEDRGB(r,g,b));
 }
 void SetMicroPalette2(FxController &fxc, byte r1, byte g1, byte b1, byte r2, byte g2, byte b2)
 {
+  fxc.microPaletteSize = 2;
   SetMicroPaletteSlot(fxc,0, LEDRGB(r1,g1,b1) );
   SetMicroPaletteSlot(fxc,1, LEDRGB(r2,g2,b2) );
-  fxc.microPaletteSize = 2;
 }
 void SetMicroPalette4(FxController &fxc, 
   byte r1, byte g1, byte b1, 
@@ -56,15 +56,16 @@ void SetMicroPalette4(FxController &fxc,
   byte r3, byte g3, byte b3,
   byte r4, byte g4, byte b4)
 {
+  fxc.microPaletteSize = 4;
   SetMicroPaletteSlot(fxc, 0, LEDRGB(r1,g1,b1) );
   SetMicroPaletteSlot(fxc, 1, LEDRGB(r2,g2,b2) );
   SetMicroPaletteSlot(fxc, 2, LEDRGB(r3,g3,b3) );
   SetMicroPaletteSlot(fxc, 3, LEDRGB(r4,g4,b4) );
-  fxc.microPaletteSize = 4;
 }
 void SetMicroPalette16(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7,
                         uint32_t b8,uint32_t b9,uint32_t b10,uint32_t b11, uint32_t b12,uint32_t b13,uint32_t b14,uint32_t b15)
 {
+  fxc.microPaletteSize = 16;
   SetMicroPaletteSlot(fxc, 0, b0 );
   SetMicroPaletteSlot(fxc, 1, b1 );
   SetMicroPaletteSlot(fxc, 2, b2 );
@@ -81,7 +82,6 @@ void SetMicroPalette16(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,ui
   SetMicroPaletteSlot(fxc, 13, b13 );
   SetMicroPaletteSlot(fxc, 14, b14 );
   SetMicroPaletteSlot(fxc, 15, b15 );
-  fxc.microPaletteSize = 16;
 }
 
 void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
@@ -90,12 +90,8 @@ void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
 }
-static unsigned long lastTimeDisplay = 0;
 void FxDisplayStatus(FxController &fxc)
 {
-    unsigned long t =  millis();
-    if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
-    {      
       Serial.print(GetTime());
       Serial.print(F(":"));
       Serial.print(getTimecodeSongOffset());
@@ -105,15 +101,16 @@ void FxDisplayStatus(FxController &fxc)
       PrintFxStateName(fxc.fxState);
       Serial.print(F("-"));
       PrintFxTransitionName(fxc.transitionType);
-      Serial.print(F("-"));
+      Serial.print(F("]Pal="));
       PrintFxPaletteUpdateType(fxc.fxPaletteUpdateType);
-      Serial.print(F("-"));
+      Serial.print(F(","));
       PrintFxTrackEndAction(fxc.fxTrackEndAction);
-      Serial.print(F(":"));
+      Serial.print(F(",tc="));
       Serial.print(GetFinalTimeCodeEntry());      
-      Serial.print(F("]("));
+      Serial.print(F(",end="));
       Serial.print(getTimecodeLastMatched());
       Serial.print(F(")"));
+      /*
       if (fxc.fxState == FxState_PlayingTrack)
       {
         int match = GetCurrentTimeCodeMatch(GetTime());
@@ -121,7 +118,7 @@ void FxDisplayStatus(FxController &fxc)
         PrintFxEventName(SongTrack_event(match));
         Serial.print(F(" "));
         Serial.print(SongTrack_timecode(match));
-      }
+      }*/
 
 #if ENABLE_IMU
       Serial.print(F(" IMU:"));
@@ -138,18 +135,15 @@ void FxDisplayStatus(FxController &fxc)
       Serial.print(getGyroZ());
 #endif            
 
-      Serial.print(F(" pal("));
+     /* Serial.print(F(" pal("));
       Serial.print(fxc.microPaletteSize);
       Serial.print(F(")="));
       for (int i=0;i<fxc.microPaletteSize;i++)
       {
         Serial.print(fxc.microPalette[i], HEX);
         Serial.print(F(" "));
-      }
-      Serial.println(F(""));      
-
-      lastTimeDisplay = t;
-    }
+      }*/
+      Serial.println(F(""));    
 }
 void FxEventProcess(FxController &fxc,int event)
 {

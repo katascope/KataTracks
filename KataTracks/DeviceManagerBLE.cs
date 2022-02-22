@@ -69,7 +69,9 @@ namespace KataTracks
 
         public static async Task<bool> TryToGet(string id)
         {
+            MonitorLog += "BLE: " + id + "\n";
             BluetoothDevice bd = await BluetoothDevice.FromIdAsync(id);
+            MonitorLog += " Conn: " + bd.Name + "\n";
             if (bd != null)
                 QueryGATT(bd);
             return false;
@@ -86,15 +88,20 @@ namespace KataTracks
                     {
                         if (bd.serviceCache.Count > 0)
                         {
+                            string logUpdate = "";
                             GattCharacteristic gattCharacteristicStatus = bd.serviceCache[mainServiceUuid].characteristics[mainStatusUuid].gattCharacteristic;
                             byte[] valuesStatus = await gattCharacteristicStatus.ReadValueAsync();
-                            bd.log = String.Format("{0}-{1}-{2}", valuesStatus[3], valuesStatus[2], valuesStatus[1]);
+                            logUpdate = String.Format("{0}-{1}-{2}", valuesStatus[3], valuesStatus[2], valuesStatus[1]);
+                            byte b = valuesStatus[0];
+                            int rssi = 255 - b;
+                            logUpdate += "(-" + rssi + ")\n";
 
                             GattCharacteristic gattCharacteristicTimecode = bd.serviceCache[mainServiceUuid].characteristics[mainTimecodeUuid].gattCharacteristic;
                             byte[] valuesTimecode = await gattCharacteristicTimecode.ReadValueAsync();
                             ulong timecode = BitConverter.ToUInt32(valuesTimecode, 0);
-                            bd.log += String.Format("{0}", timecode);
+                            logUpdate += String.Format("  Timecode={0}", timecode);
 
+                            bd.log = logUpdate;
                         }
                         else
                         {
