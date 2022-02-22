@@ -198,6 +198,8 @@ const unsigned long SongTrack[] PROGMEM =
   5750,fx_palette_half,
   6000,fx_palette_lowhalf,
 
+  //7000,fx_palette_lowhalf,  
+
   6250,fx_transition_timed_wipe_neg,
   6500,fx_palette_white,    
   6750,fx_palette_red,  
@@ -231,7 +233,7 @@ const unsigned long SongTrack[] PROGMEM =
   19000,fx_transition_timed_wipe_inout,
   19000,fx_palette_lowhalf,  
 
-
+/*
   20000,fx_transition_timed_wipe_pos,
   20000,fx_palette_white,
   21000,fx_transition_timed_wipe_neg,
@@ -250,8 +252,8 @@ const unsigned long SongTrack[] PROGMEM =
   27000,fx_palette_orange,
   28000,fx_transition_timed_wipe_neg,
   28000,fx_palette_half,
-  29000,fx_transition_timed_fade,
-  29000,fx_palette_lowhalf,  
+  29000,fx_transition_timed_fade,*
+  29000,fx_palette_lowhalf,  */
 
 };
 #endif

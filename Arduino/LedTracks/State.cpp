@@ -43,6 +43,16 @@ void State_Poll_IMU(FxController &fxc)
 }
 #endif
 
+void CopyRange(FxController &fxc,int first, int last)
+{
+  if (first < last)
+    for (int i = first;i<last; i++)
+      fxc.palette[i] = fxc.nextPalette[i];
+  else
+    for (int i = first;i>=last;i--)
+      fxc.palette[i] = fxc.nextPalette[i];
+}
+
 void State_Poll_Play(FxController &fxc, unsigned long timecode)
 {
   unsigned long finalTimeCode = GetFinalTimeCodeEntry();
@@ -101,58 +111,30 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
 
   if (fxc.transitionType == Transition_TimedFade)
   {
-    //Interpolate initial palette to next palette, based on transition (0 to 1)
     for (int i = 0; i < NUM_LEDS; i++)
       fxc.palette[i] = LerpRGB(fxc.transitionMux,fxc.initialPalette[i],fxc.nextPalette[i]);
   }
   if (fxc.transitionType == Transition_TimedWipePos)
   {
-    float mux = (1 - fxc.transitionMux);
-    int limit = mux * (NUM_LEDS );
-    for (int i = NUM_LEDS - 1; i >= limit; i--)
-      fxc.palette[i] = fxc.nextPalette[i];
-    fxc.paletteIndex = 0;
-    fxc.paletteSpeed = 0;
-    fxc.paletteDirection = 0;
+    int limit = fxc.transitionMux * (NUM_LEDS -1);
+    CopyRange(fxc, NUM_LEDS - 1, NUM_LEDS -1 - limit);      
   }
   if (fxc.transitionType == Transition_TimedWipeNeg)
   {
-    float mux = (fxc.transitionMux);
-    int limit = mux * (NUM_LEDS -1);
-    for (int i = 0;i < limit; i++)
-      fxc.palette[i] = fxc.nextPalette[i];
-    fxc.paletteIndex = 0;
-    fxc.paletteSpeed = 0;
-    fxc.paletteDirection = 0;
+    int limit = fxc.transitionMux * (NUM_LEDS -1);
+    CopyRange(fxc,0,limit);
   }
   if (fxc.transitionType == Transition_TimedWipeOutIn)
   {
-    float mux = (fxc.transitionMux);
-    int limit = mux * (NUM_LEDS/2);
-    for (int i = 0;i < limit; i++)
-      fxc.palette[i] = fxc.nextPalette[i];
-
-    for (int i = NUM_LEDS-1;i > NUM_LEDS-limit; i--)
-      fxc.palette[i] = fxc.nextPalette[i];
-    
-    fxc.paletteIndex = 0;
-    fxc.paletteSpeed = 0;
-    fxc.paletteDirection = 0;
-    
+    int limit = fxc.transitionMux * (NUM_LEDS/2);
+    CopyRange(fxc,0,limit);
+    CopyRange(fxc,NUM_LEDS-1,NUM_LEDS-limit);
   }
   if (fxc.transitionType == Transition_TimedWipeInOut)
   {
-    float mux = (fxc.transitionMux);
-    int limit = mux * (NUM_LEDS/2);
-    for (int i = NUM_LEDS/2;i>=NUM_LEDS/2-limit;i--)
-      fxc.palette[i] = fxc.nextPalette[i];
-
-    for (int i = NUM_LEDS/2;i<NUM_LEDS/2+limit; i++)
-      fxc.palette[i] = fxc.nextPalette[i];
-    
-    fxc.paletteIndex = 0;
-    fxc.paletteSpeed = 0;
-    fxc.paletteDirection = 0;
+    int limit = fxc.transitionMux * (NUM_LEDS/2);
+    CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2-limit);
+    CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2+limit);
   }
 }
 
