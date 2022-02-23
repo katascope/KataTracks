@@ -63,12 +63,13 @@ namespace KataTracks
             MainLog.Text = "KataTracks initializing\n";
             //CombinedBluetoothController.Initialize();
 
-            MainLog.Text += "Finding BT '" + bluetoothDeviceSearchName + "'\n";
-            DeviceManagerBT.StartMonitoring();
 
-            //MainLog.Text += "Finding BLE '" + bluetoothDeviceSearchName + "'\n";
+            MainLog.Text += "Finding BLE '" + bluetoothDeviceSearchName + "'\n";
             string BleDeviceIdPowerB = "FA642247BCCD";//lightsuitB
             var discoveryTaskB = DeviceManagerBLE.TryToGet(BleDeviceIdPowerB);
+
+            MainLog.Text += "Finding BT '" + bluetoothDeviceSearchName + "'\n";
+            DeviceManagerBT.StartMonitoring();
 
             string BleDeviceIdPowerA = "FDB857FE7C3D";//lightsuitA
             var discoveryTaskA = DeviceManagerBLE.TryToGet(BleDeviceIdPowerA);

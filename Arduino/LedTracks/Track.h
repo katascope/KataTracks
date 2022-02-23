@@ -6,8 +6,8 @@
 
 //#define TRACK_FOLLOW    0
 #if ENABLE_TEST_TRACK
-#define TRACK_TEST_TRANSITIONS      1
-//#define TRACK_TEST_FULL      1
+//#define TRACK_TEST_TRANSITIONS      1
+#define TRACK_TEST_FULL      1
 #else
 #define TRACK_LEAD      1
 #endif

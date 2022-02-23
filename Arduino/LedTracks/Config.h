@@ -4,7 +4,7 @@
 #define NUM_LEDS            60
 #define LED_PIN             3
 #define SERIAL_BAUD_RATE    9600
-static const char *DeviceName = "LightSuitA";
+static const char *DeviceName = "LightSuitC";
 
 #ifdef ARDUINO_AVR_NANO
  #define SYSTEM_NANO         1
@@ -25,7 +25,7 @@ static const char *DeviceName = "LightSuitA";
 #endif
 
 #ifdef SYSTEM_NANO_33_BLE
-#define ENABLE_TEST_PATTERN 1
+#define ENABLE_TEST_PATTERN 0
 #define ENABLE_TEST_TRACK   0
 #define ENABLE_MEMORYUSAGE  0
 #define ENABLE_BRIGHTNESS   1
