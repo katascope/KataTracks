@@ -1,5 +1,5 @@
-#ifndef NEOPIXEL_DEF
-#define NEOPIXEL_DEF
+#ifndef DEVICES_DEF
+#define DEVIES_DEF
 
 //////////////// NeoPixel Section ////////////////
 #if ENABLE_NEOPIXEL
@@ -77,6 +77,20 @@ void bluetoothPoll(FxController &fxc);
 // BLE Functions
 bool bleSetup();
 void blePoll(FxController &fxc);
+#endif
+
+//////////////// Microphone Section ////////////////
+#if ENABLE_MIC
+#define MIC_PIN 0
+class MicrophoneSampler
+{
+  private:
+    static const int sampleWindow; // Sample window width in mS (50 mS = 20Hz)
+    static float level;
+  public:
+    static double GetLevel();
+    static void Poll();
+};
 #endif
 
 #endif

@@ -116,6 +116,11 @@ void FxDisplayStatus(FxController &fxc)
         Serial.print(SongTrack_timecode(match));
       }*/
 
+#if ENABLE_MIC
+      Serial.print(F(" MIC:"));
+      Serial.print(MicrophoneSampler::GetLevel());
+#endif
+
 #if ENABLE_IMU
       Serial.print(F(" IMU:"));
       Serial.print(getAccelX());

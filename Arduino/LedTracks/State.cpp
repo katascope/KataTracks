@@ -43,6 +43,25 @@ void State_Poll_IMU(FxController &fxc)
 }
 #endif
 
+#if ENABLE_MIC
+void State_Poll_MIC(FxController &fxc)
+{
+    int numleds = 10;
+  for (int i=0;i<NUM_LEDS;i++)
+    fxc.palette[i] = 0;
+      
+  int scalar = (int)((float)MicrophoneSampler::GetLevel()*(float)numleds);
+
+  uint8_t lum = (uint8_t)( MicrophoneSampler::GetLevel() * 255.0f);
+  for (int i=0;i<scalar;i++)
+    fxc.palette[i] = LEDRGB(lum,lum,lum);
+        
+  fxc.paletteDirection = 1;
+  fxc.paletteSpeed = 0;
+  fxc.fxPaletteUpdateType = FxPaletteUpdateType::Once;
+}
+#endif
+
 void CopyRange(FxController &fxc,int first, int last)
 {
   if (first < last)
@@ -140,6 +159,11 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
 
 void State_Poll(FxController &fxc)
 {
+#if ENABLE_MIC
+  if (fxc.fxState == FxState_MIC)
+    State_Poll_MIC(fxc);
+#endif
+  
 #if ENABLE_IMU
   if (fxc.fxState == FxState_IMU)
     State_Poll_IMU(fxc);

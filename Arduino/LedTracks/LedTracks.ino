@@ -16,9 +16,12 @@ void setup() {
   Serial.println(SERIAL_BAUD_RATE);
 #if SYSTEM_NANO_33_BLE
   Serial.println(F("System: Arduino Nano 33 BLE"));
-#endif
-#if SYSTEM_NANO
+#elif SYSTEM_UNO
+  Serial.println(F("System: Arduino UNO"));
+#elif SYSTEM_NANO
   Serial.println(F("System: Arduino Nano"));
+#else
+  Serial.println(F("System: UNKNOWN"));
 #endif
 
 #if ENABLE_MEMORYUSAGE
@@ -41,6 +44,12 @@ void setup() {
   Serial.println(F("No NeoPixel init"));
 #endif
 
+#if ENABLE_MIC
+  Serial.println(F("Mic init"));
+#else  
+  Serial.println(F("No Mic init"));
+#endif
+
 #if ENABLE_BLE
   Serial.println(F("BLE init"));
   bleSetup();
@@ -58,7 +67,7 @@ void setup() {
 
 #if ENABLE_IMU
   Serial.println(F("IMU init"));
-  imuSetup();
+  imuSetup(); 
 #else
   Serial.println(F("No IMU init"));
 #endif
@@ -69,7 +78,7 @@ void setup() {
 #if ENABLE_TEST_PATTERN
   fxController.fxState = FxState_TestPattern;
 #endif  
-  //fxController.fxState = FxState_IMU;//Default;//TestPattern;//PlayingTrack;
+  fxController.fxState = FxState_Default;//TestPattern;//PlayingTrack;
 
   if (fxController.fxState == FxState_TestPattern)
   {
@@ -78,7 +87,7 @@ void setup() {
     fxController.paletteDirection = 1;
     fxController.paletteSpeed = 1;
 #if ENABLE_NEOPIXEL &&  ENABLE_BRIGHTNESS
-    fxController.brightness = 50;
+    fxController.brightness = 192;
     neopixelSetBrightness(fxController.brightness);    
 #endif
     fxController.fxPaletteUpdateType = FxPaletteUpdateType::Always;
@@ -114,6 +123,10 @@ void loop()
   while (Serial.available())  
     UserCommandInput(fxController, Serial.read());
 
+#if ENABLE_MIC
+  MicrophoneSampler::Poll();
+#endif
+  
 #if ENABLE_BLUETOOTH
   bluetoothPoll(fxController);
 #endif

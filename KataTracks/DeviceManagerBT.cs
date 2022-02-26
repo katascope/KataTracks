@@ -7,14 +7,17 @@ using InTheHand.Net.Sockets;
 
 namespace KataTracks
 {
-    class DeviceManagerBT
+    public class DeviceManagerBT
     {
         static public Thread monitorThread = null;
         static public bool keepListening = true;
+        public static Dictionary<string, string> discoveredBT = new Dictionary<string, string>();
+        public static Dictionary<string, string> clientNames = new Dictionary<string, string>();
         public static Dictionary<string, BluetoothClient> clients = new Dictionary<string, BluetoothClient>();
-        public static Dictionary<string, Thread> threads = new Dictionary<string, Thread>();
+        public static Dictionary<string, Thread> clientThreads = new Dictionary<string, Thread>();
         public static Dictionary<string, string> clientLogs = new Dictionary<string, string>();
         static public string MonitorLog = "";
+        static public string DiscoveryLog = "";
 
         public static void SendMessage(string message)
         {
@@ -72,6 +75,26 @@ namespace KataTracks
             }
         }
 
+        static public string[] DiscoverPaired()
+        {
+            BluetoothClient client = new BluetoothClient();
+            var pds = client.PairedDevices;
+            DiscoveryLog = "Paired BT Lightsuits:\n";
+            discoveredBT = new Dictionary<string, string>();
+            List<string> suits = new List<string>();
+            foreach (var pd in pds)
+            {
+                if ((pd.DeviceName.Contains("Lightsuit")) || (pd.DeviceName.Contains("LightSuit")))
+                {
+                    DiscoveryLog += " + " + pd.DeviceName + " " + pd.DeviceAddress + "\n";
+                    discoveredBT[pd.DeviceAddress.ToString()] = pd.DeviceName;
+                    suits.Add(pd.DeviceAddress.ToString());
+                }
+                else DiscoveryLog += " - " + pd.DeviceName + " " + pd.DeviceAddress + "\n";
+            }
+            return suits.ToArray();
+        }
+
         static private void MonitorBluetoothDevices(object in_name)
         {
             while (keepListening)
@@ -94,8 +117,8 @@ namespace KataTracks
                                 clients[pd.DeviceName].Connect(pd.DeviceAddress, BluetoothService.SerialPort);
                                 if (clients[pd.DeviceName].Connected)
                                 {
-                                    threads[pd.DeviceName] = new Thread(ListenToConnected);
-                                    threads[pd.DeviceName].Start(pd.DeviceName);
+                                    clientThreads[pd.DeviceName] = new Thread(ListenToConnected);
+                                    clientThreads[pd.DeviceName].Start(pd.DeviceName);
                                     MonitorLog += "Thread start " + pd.DeviceName + "\n";
                                 }
 
@@ -125,6 +148,70 @@ namespace KataTracks
             }
         }
 
+        static private void WatchBluetoothDevice(object in_name)
+        {
+            InTheHand.Net.BluetoothAddress deviceAddress = (InTheHand.Net.BluetoothAddress)in_name;
+            string btAddress = (string)in_name.ToString();
+            while (keepListening)
+            {
+                BluetoothClient client = clients[btAddress];
+                string deviceName = clientNames[btAddress];
+                string deviceLog = deviceName + " thread(" + clientThreads[btAddress].ManagedThreadId.ToString() + ")\n";
+                if (!clients[btAddress].Connected)
+                {
+                    deviceLog += " " + deviceName + " connecting.\n";
+                    try
+                    {
+                        clients[btAddress].Connect(deviceAddress, BluetoothService.SerialPort); ;
+                    }
+                    catch (Exception ex)
+                    {
+                        deviceLog += ex;
+                    }
+                    if (clients[btAddress].Connected)
+                    {
+                        deviceLog += " " + deviceName + " connected ok.\n";
+                    }
+                }
+                else
+                {
+                    deviceLog += " " + deviceName + " is connected.\n";
+                    Stream s = clients[btAddress].GetStream();
+                    if (clients[btAddress].Connected)
+                    {
+                        StreamReader reader = new StreamReader(s);
+                        try
+                        {
+                            string value = reader.ReadLine();
+                            if (value == null)
+                            {
+                                //this is a problem
+                                clients[btAddress].Dispose();
+                                clients[btAddress] = new BluetoothClient();
+                            }
+                            deviceLog += " Status=" + value + "\n";
+                        }
+                        catch (Exception ex)
+                        {
+                            deviceLog += ex.ToString();
+                        }
+                    }
+                }
+                clientLogs[btAddress] = deviceLog;
+            }
+        }
+
+        public async static void EnsureConnection(InTheHand.Net.BluetoothAddress btAddress, string btName)
+        {
+            string address = (string)btAddress.ToString();
+            if (!clients.ContainsKey(address))
+            {
+                clients[address] = new BluetoothClient();
+                clientNames[address] = btName;
+                clientThreads[address] = new Thread(WatchBluetoothDevice);
+                clientThreads[address].Start(btAddress);
+            }
+        }
 
         public async static void StartMonitoring()
         {

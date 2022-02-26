@@ -69,6 +69,7 @@ void PrintFxStateName(FxState s)
     case FxState_TestPattern:   Serial.print(F("Test")); break;
     case FxState_PlayingTrack:  Serial.print(F("Play")); break;
     case FxState_IMU:           Serial.print(F("IMU")); break;
+    case FxState_MIC:           Serial.print(F("MIC")); break;
     default: Serial.print(F("Unk"));
   }
 }
@@ -262,6 +263,7 @@ void PrintFxEventName(int event)
 
     case fx_palette_accel:Serial.print(F("accel"));break;
     case fx_palette_gyro:Serial.print(F("gyro"));break;
+    case fx_palette_mic:Serial.print(F("mic"));break;
 
     case fx_nothing:Serial.print(F("nothing"));break;
   }

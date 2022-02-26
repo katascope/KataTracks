@@ -40,6 +40,7 @@ enum FxState
   FxState_TestPattern   = 1,
   FxState_PlayingTrack  = 2,
   FxState_IMU           = 3,
+  FxState_MIC           = 4,
 };
 
 /*
@@ -198,6 +199,7 @@ enum FxEvent
 
   fx_palette_accel,
   fx_palette_gyro,
+  fx_palette_mic,
 
   fx_color1_dark,
   fx_color1_white,

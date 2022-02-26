@@ -50,6 +50,15 @@ void UserCommandExecute(FxController &fxc, int cmd)
   switch (cmd)
   {
     case Cmd_Help:
+#if SYSTEM_NANO_33_BLE
+  Serial.println(F("System: Arduino Nano 33 BLE"));
+#elif SYSTEM_UNO
+  Serial.println(F("System: Arduino UNO"));
+#elif SYSTEM_NANO
+  Serial.println(F("System: Arduino Nano"));
+#else
+  Serial.println(F("System: UNKNOWN"));
+#endif
       Serial.println(F("? : Help Menu"));
       Serial.println(F("+ : Rotate Pos"));
       Serial.println(F("- : Rotate Neg"));
@@ -61,6 +70,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("z:default mode x:test c:imu"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("q:lava w:cloud e:ocean r:forest t:rainbow y:rainbowstripe u:party i:heat"));
+        
       break;
     case Cmd_State_Default: fxc.fxState = FxState_Default;break;
     case Cmd_State_Test:    fxc.fxState = FxState_TestPattern;break;

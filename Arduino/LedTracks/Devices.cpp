@@ -146,7 +146,7 @@ void bluetoothPoll(FxController &fxc)
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 #if ENABLE_BLE
-#include "BLE.h"
+//#include "BLE.h"
 #include <ArduinoBLE.h>
 #include <Arduino_LSM9DS1.h>
 #include "Fx.h"
@@ -327,5 +327,44 @@ void blePoll(FxController &fxc)
     Serial.println( central.address() );
   } // if central
 } // loop
+#endif
 
+#if ENABLE_MIC
+const int MicrophoneSampler::sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
+float MicrophoneSampler::level = 0.0f;
+static double MicrophoneSampler::GetLevel()
+{
+  return level;
+}
+
+void MicrophoneSampler::Poll()
+{
+  unsigned long startMillis = millis(); // Start of sample window
+  unsigned int peakToPeak = 0;   // peak-to-peak level
+
+  unsigned int signalMax = 0;
+  unsigned int signalMin = 1024;
+
+  // collect data for 50 mS
+  while (millis() - startMillis < sampleWindow)
+  {
+    unsigned int sample = analogRead(MIC_PIN);
+    if (sample < 1024)  // toss out spurious readings
+    {
+      if (sample > signalMax)
+      {
+        signalMax = sample;  // save just the max levels
+      }
+      else if (sample < signalMin)
+      {
+        signalMin = sample;  // save just the min levels
+      }
+    }
+  }
+  peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
+  //   double volts = (peakToPeak * 5.0) / 1024;  // convert to volts
+  // Serial.println(volts);
+
+  level = (double)peakToPeak  / 1024.0f;  // convert to volts  
+}
 #endif

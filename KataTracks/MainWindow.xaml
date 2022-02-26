@@ -27,9 +27,9 @@
         <TextBox x:Name="Log2" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="617" Text="Not connected." TextWrapping="Wrap" Width="200" Height="247" Background="Black" Foreground="#FF59ABF0" Canvas.Left="405"/>
-        <TextBox x:Name="ScannerView" HorizontalScrollBarVisibility="Visible"
+        <TextBox x:Name="BTScannerView" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
-            Canvas.Top="60" Text="" TextWrapping="Wrap" Width="236" Height="510" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1300"/>
+            Canvas.Top="60" Text="" TextWrapping="Wrap" Width="236" Height="213" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1300"/>
         <Button Click="PlayFromStartButton_Click" Content="Start" Height="38" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Top="1"/>
         <Button Click="SendBoth" Tag="0" Content="Dark" Canvas.Left="1055" Canvas.Top="583" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="65"/>
         <Button Click="SendBoth" Tag="1" Content="White" Canvas.Left="1055" Canvas.Top="613" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="65"/>
@@ -72,5 +72,9 @@
         <Label x:Name="Log3Label" Content="Device 3" Canvas.Left="611" Canvas.Top="576" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Label x:Name="Log4Label" Content="Device 4" Canvas.Left="816" Canvas.Top="576" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Button x:Name="ConnectButton" Click="ConnectButton_Click"  Content="Connect" Height="38" Width="80" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1438" BorderBrush="#FF120351"/>
+        <TextBox x:Name="BleScannerView" HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Visible"
+            Canvas.Top="342" Text="" TextWrapping="Wrap" Width="236" Height="230" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1300"/>
+        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="BluetoothLE Search" Height="38" Width="130" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1290" BorderBrush="#FF120351" Canvas.Top="278"/>
     </Canvas>
 </Window>

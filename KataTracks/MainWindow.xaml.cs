@@ -37,7 +37,7 @@ namespace KataTracks
         static string filename = "..\\..\\..\\TronGame.m4a";
         static string bluetoothDeviceSearchName = "Lightsuit";
         static WaveOutEvent outputDevice = null;
-        static DispatcherTimer dispatcherTimer;
+        static DispatcherTimer animationTimer;
         static DispatcherTimer connectionTimer;
         static DispatcherTimer btTextTimer;
         static bool playing = false;
@@ -45,15 +45,14 @@ namespace KataTracks
         float volume = 0.15f;
         static long timePick = 0;
         static bool b1Down = false;
-        static Dictionary<int,string> connectionSlots = new Dictionary<int, string>();
-        static bool activateConnection = false;
         static ulong textTickCount = 0;
-
+        static Thread discoverBleThread;
+        static Dictionary<string, string> foundDevices = null;
         public MainWindow()
         {
             InitializeComponent();
             outputDevice = new WaveOutEvent();
-            dispatcherTimer = new DispatcherTimer();
+            animationTimer = new DispatcherTimer();
             connectionTimer = new DispatcherTimer();
             btTextTimer = new DispatcherTimer();
             Canvas.SetLeft(TrackIndex, 0);
@@ -63,87 +62,20 @@ namespace KataTracks
             MainLog.Text = "KataTracks initializing\n";
             //CombinedBluetoothController.Initialize();
 
-
-            MainLog.Text += "Finding BLE '" + bluetoothDeviceSearchName + "'\n";
-            string BleDeviceIdPowerB = "FA642247BCCD";//lightsuitB
-            var discoveryTaskB = DeviceManagerBLE.TryToGet(BleDeviceIdPowerB);
-
-            MainLog.Text += "Finding BT '" + bluetoothDeviceSearchName + "'\n";
-            DeviceManagerBT.StartMonitoring();
-
-            string BleDeviceIdPowerA = "FDB857FE7C3D";//lightsuitA
-            var discoveryTaskA = DeviceManagerBLE.TryToGet(BleDeviceIdPowerA);
-
-            //MainLog.Text += "Finding BLE '" + bluetoothDeviceSearchName + "'\n";
-            //DeviceManagerBLE.StartMonitoring();
-
-            //BT lightsuit2 = "001403050947"
-            //            discoveryTask.Wait();
-            /*
-            MainLog.Text += "Finding BT '" + bluetoothDeviceSearchName + "'\n";
-            Dictionary<string, BluetoothDeviceInfo> paired = CombinedBluetoothController.FindPaired(bluetoothDeviceSearchName);
-            foreach (KeyValuePair<string, BluetoothDeviceInfo> kvp in paired)
-            {
-                MainLog.Text += " " + kvp.Key + "\n";
-            }*/
+            DeviceWatcher.StartMonitoring();
 
             //ConnectPaired();
-            ScannerView.Text = "";// Fx.Get();
-            
+
             MainLog.Text += "Ready to Connect\n";
 
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
-            dispatcherTimer.Start();
-
-            activateConnection = true;MainLog.Text += "Auto-Connect..\n";
-            //connectionTimer.Tick += new EventHandler(connectionTimer_Tick);
-            //connectionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
-            //connectionTimer.Start();
+            animationTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            animationTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            animationTimer.Start();
 
             btTextTimer.Tick += new EventHandler(btTextTimer_Tick);
             btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             btTextTimer.Start();
-
-
         }
-
-        private void ConnectPaired()
-        {
-            MainLog.Text += "Connecting...\n";
-            connectionSlots = new Dictionary<int, string>();
-
-            Log1Label.Content = "Device";
-            Log1.Text = "Not connected.";
-            Log2Label.Content = "Device";
-            Log2.Text = "Not connected.";
-            Log3Label.Content = "Device";
-            Log3.Text = "Not connected.";
-            Log4Label.Content = "Device";
-            Log4.Text = "Not connected.";
-
-            /*
-            CombinedBluetoothController.ConnectPaired(bluetoothDeviceSearchName);
-            int count = 0;
-            foreach (KeyValuePair<string, Lightsuit> kvp in CombinedBluetoothController.lightsuits)
-            {
-                string name = kvp.Key;
-                Lightsuit lightsuit = kvp.Value;
-                MainLog.Text += "+" + name + "\n";
-                switch (count)
-                {
-                    case 0: connectionSlots[0] = name; Log1Label.Content = name; break;
-                    case 1: connectionSlots[1] = name; Log2Label.Content = name; break;
-                    case 2: connectionSlots[2] = name; Log3Label.Content = name; break;
-                    case 3: connectionSlots[3] = name; Log4Label.Content = name; break;
-                }
-
-                count++;
-            }
-            */
-            activateConnection = false;
-        }
-
 
         private void PlayTrack(int seconds)
         {
@@ -183,14 +115,6 @@ namespace KataTracks
             DeviceManagerBLE.SendMessage("(");
         }
 
-        private void connectionTimer_Tick(object sender, EventArgs e)
-        {
-            if (activateConnection)
-            {
-                ConnectPaired();
-            }
-        }
-
         private void WriteLogSlot(int slot, string title, string message)
         {
             switch (slot)
@@ -220,7 +144,7 @@ namespace KataTracks
 
         private void btTextTimer_Tick(object sender, EventArgs e)
         {
-            DeviceManagerBLE.poll();
+            //DeviceManagerBLE.poll();
 
             int slot = 0;
             foreach (KeyValuePair<string,BleDevice> kvp in DeviceManagerBLE.bleDevices)
@@ -228,37 +152,44 @@ namespace KataTracks
                 WriteLogSlot(slot, kvp.Value.name, DeviceManagerBLE.bleDevices[kvp.Key].log);
                 slot++;
             }
+
             foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
             {
                 if (kvp.Value.Connected)
                 {
-                    WriteLogSlot(slot, kvp.Key, DeviceManagerBT.clientLogs[kvp.Key]);
+                    WriteLogSlot(slot, DeviceManagerBT.clientNames[kvp.Key], DeviceManagerBT.clientLogs[kvp.Key]);
                     slot++;
                 }
             }
 
-
             textTickCount++;
-            ScannerView.Text = "Update #" + textTickCount + "\n";
-            ScannerView.Text += "Actives:\n";
+            MainLog.Text = "Update #" + textTickCount + "\n";
+            MainLog.Text += "Actives:\n";
             foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
-                ScannerView.Text += " " + kvp.Value.log + "\n";
+                MainLog.Text += " " + kvp.Value.log + "\n";
 
             foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
             {
                 if (kvp.Value.Connected)
-                    ScannerView.Text += " (BT) " + kvp.Key + " ok\n";
+                    MainLog.Text += " (BT) " + kvp.Key + " ok\n";
                 else if (kvp.Value.Connected)
-                    ScannerView.Text += " (BT) " + kvp.Key + " NOT ok\n";
+                    MainLog.Text += " (BT) " + kvp.Key + " NOT ok\n";
             }
-            ScannerView.Text += "\n";
+            MainLog.Text += "\n";
+            MainLog.Text += DeviceManagerBLE.MonitorLog;
+            MainLog.ScrollToEnd();
 
-            ScannerView.Text += DeviceManagerBLE.MonitorLog;
-            ScannerView.Text += "\n";
+            //Upperview
+            BTScannerView.Text = DeviceWatcher.btMonitorLog;
+            foreach (KeyValuePair<string, string> kvp in DeviceManagerBT.discoveredBT)
+                BTScannerView.Text += kvp.Value + " d/c\n";
 
-            ScannerView.Text += DeviceManagerBT.MonitorLog;
-
-            ScannerView.ScrollToEnd();
+            if (foundDevices!= null)
+            {
+                BleScannerView.Text = "Found: " + foundDevices.Count + "\n";
+                foreach (KeyValuePair<string, string> kvp in foundDevices)
+                    BleScannerView.Text += kvp.Value + "\n";
+            }
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -279,7 +210,6 @@ namespace KataTracks
                 + timeCurrentInSong.Seconds + ":"
                 + timeCurrentInSong.Milliseconds / 100;
 
-
             double timeValue = (double)(timeCurrentInSong.TotalMilliseconds) / 100;
             Canvas.SetLeft(TrackIndexPlay, Math.Round(timeValue, 0));
             CommandManager.InvalidateRequerySuggested();
@@ -287,7 +217,7 @@ namespace KataTracks
 
         private void Exit(object sender, RoutedEventArgs e)
         {
-            DeviceManagerBLE.StopMonitoring();
+            //DeviceManagerBLE.StopMonitoring();
             DeviceManagerBLE.DisconnectAll();
             DeviceManagerBT.StopMonitoring();
             //DeviceManagerBT.DisconnectAll();
@@ -296,10 +226,21 @@ namespace KataTracks
             Environment.Exit(0);
         }
 
-
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
-            activateConnection = true;
+            DeviceWatcher.StartMonitoring();
+        }
+
+        private static void DiscoverBleThread(object in_name)
+        {
+            foundDevices = DeviceSearchBLE.DiscoverDevicesAsync().Result;
+        }
+
+        private void BleSearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            BleScannerView.Text = "Scanning..\n";
+            discoverBleThread = new Thread(DiscoverBleThread);
+            discoverBleThread.Start(BleScannerView);
         }
 
         private void PlayFromStartButton_Click(object sender, RoutedEventArgs e)
@@ -360,6 +301,7 @@ namespace KataTracks
             volume = (float)e.NewValue;
             outputDevice.Volume = volume;
         }
+
         void StopAndSendToBoth(string value)
         {
             DeviceManagerBLE.SendMessage(value);
