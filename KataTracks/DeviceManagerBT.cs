@@ -156,7 +156,7 @@ namespace KataTracks
             {
                 BluetoothClient client = clients[btAddress];
                 string deviceName = clientNames[btAddress];
-                string deviceLog = deviceName + " thread(" + clientThreads[btAddress].ManagedThreadId.ToString() + ")\n";
+                string deviceLog = deviceName + " BT thread(" + clientThreads[btAddress].ManagedThreadId.ToString() + ")\n";
                 if (!clients[btAddress].Connected)
                 {
                     deviceLog += " " + deviceName + " connecting.\n";

@@ -105,7 +105,9 @@ namespace KataTracks
                 }
                 device.serviceCache[service.uuid] = service;//.Add(service);
             }
-            device.log = bd.Name +" gatt= " + gattServices.Count + "\n";
+            device.log = bd.Name + " BLE thread(" + device.monitorThread.ManagedThreadId.ToString() + ")\n";
+            device.log += " " + bd.Name + " is connected.\n";
+            device.log += " Gatt= " + gattServices.Count + "\n";
             device.bluetoothDevice = bd;
             //bleDevices[device.id] = device;
             device.queryingGatt = false;
