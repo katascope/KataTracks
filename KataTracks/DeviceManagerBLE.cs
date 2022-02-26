@@ -35,6 +35,7 @@ namespace KataTracks
         public Thread monitorThread;
         public bool stayActive = true;
         public bool queryingGatt = false;
+        public ConcurrentQueue<string> sendQueue = new ConcurrentQueue<string>();
     }
 
     public class DeviceManagerBLE
@@ -129,16 +130,20 @@ namespace KataTracks
                     }
                     catch (Exception ex)
                     {
-                        int foo;
-                        foo = 1;
+                        bleDevices[id].log = ex.ToString();
                     }
                 }
                 else
                 {
-                    //Console.WriteLine("Monitoring : " + id);
+                    while (bleDevices[id].sendQueue.Count > 0)
+                    {
+                        string message = "";
+                        bleDevices[id].sendQueue.TryDequeue(out message);
+                        GattCharacteristic gattCharacteristicCommand = bleDevices[id].serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
+                        byte[] bytesCommand = Encoding.ASCII.GetBytes(message + "\r\n");
+                        gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);
+                    }
                 }
-
-                Thread.Sleep(250);
             }
           
         }
@@ -272,15 +277,13 @@ namespace KataTracks
             foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
             {
                 BleDevice bd = kvp.Value;
-                if (bd.bluetoothDevice.Gatt != null)
+                if (bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
                 {
                     try
                     {
                         if (bd.serviceCache.Count > 0)
                         {
-                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
-                            byte[] bytesCommand = Encoding.ASCII.GetBytes(message + "\r\n");
-                            gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);//for complex?                            
+                            kvp.Value.sendQueue.Enqueue(message);
                         }
                         else
                         {
