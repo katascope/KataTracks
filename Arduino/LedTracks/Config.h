@@ -1,7 +1,7 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define NUM_LEDS            60
+#define NUM_LEDS            70
 #define LED_PIN             3
 #define SERIAL_BAUD_RATE    9600
 static const char *DeviceName = "LightSuitB";

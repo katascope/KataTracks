@@ -40,7 +40,7 @@ namespace ConsoleBLE
         private static void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
         {
 
-            if (eventArgs.Advertisement.LocalName.Contains("LightSuitA") || eventArgs.Advertisement.LocalName.Contains("LightsuitA"))
+            //if (eventArgs.Advertisement.LocalName.Contains("LightSuitA") || eventArgs.Advertisement.LocalName.Contains("LightsuitA"))
             {
                 if (!searched.ContainsKey(eventArgs.BluetoothAddress))
                 {

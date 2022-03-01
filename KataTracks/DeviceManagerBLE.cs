@@ -250,7 +250,7 @@ namespace KataTracks
             foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
             {
                 BleDevice bd = kvp.Value;
-                if (bd.bluetoothDevice.Gatt != null)
+                if (bd != null && bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
                 {
                     try
                     {
