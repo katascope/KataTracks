@@ -49,6 +49,7 @@ namespace KataTracks
         static Thread discoverBleThread;
         static Dictionary<string, string> foundDevices = null;
         static int VolumeThreshold = 50;
+        static bool inhibitSoundPlay = true;
         
         public MainWindow()
         {
@@ -90,14 +91,22 @@ namespace KataTracks
             audioFile.Skip((int)(seconds));
             outputDevice.Init(audioFile);
 
+            timePick = seconds * 10;
+
             string code = "@" + (timePick * 100) + "\r\n";
             //CombinedBluetoothController.SendMessage(code);
             DeviceManagerBT.SendMessage(code);
             DeviceManagerBLE.Play((ulong)timePick * 100);
 
+            if (inhibitSoundPlay)
+                outputDevice.Volume = 0;
             outputDevice.Play();
-            outputDevice.Volume = volume;
+            if (inhibitSoundPlay)
+                outputDevice.Volume = 0;
+            else outputDevice.Volume = volume;
+
             literalTrackStartTime = DateTime.Now;
+
             playing = true;
         }
 
@@ -177,7 +186,8 @@ namespace KataTracks
                 TrackTime.Content = "0:0:0";
                 TrackTimeOffset.Content = "0:0:0";
 
-                PlayTrack(0);
+                inhibitSoundPlay = true;
+                PlayTrack(1);
             }
 
             InputVolume.Maximum = 100;
