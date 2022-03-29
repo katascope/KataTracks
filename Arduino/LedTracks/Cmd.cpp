@@ -55,7 +55,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
 #elif SYSTEM_UNO
   Serial.println(F("System: Arduino UNO"));
 #elif SYSTEM_NANO
-  Serial.println(F("System: Arduino Nano"));
+  Serial.println(F("System: Arduino Nano"));z
 #else
   Serial.println(F("System: UNKNOWN"));
 #endif
@@ -67,6 +67,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("* : Track StartFrom"));
       Serial.println(F("!code : Color code"));
       Serial.println(F("@code : Time code"));
+      Serial.println(F("[ b n m , ] : Brightness"));
       Serial.println(F("z:default mode x:test c:imu"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("q:lava w:cloud e:ocean r:forest t:rainbow y:rainbowstripe u:party i:heat"));

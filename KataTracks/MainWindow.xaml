@@ -10,18 +10,18 @@
         <Image x:Name="image" HorizontalAlignment="Left" Height="512" Margin="0,59,0,0" VerticalAlignment="Top" Width="1300" Source="/TronGameCroppedCyan.png" Stretch="Uniform"/>
         <Rectangle x:Name="TrackIndex" Height="510" Margin="0,0,0,0" Stroke="White" Width="1" Canvas.Left="0" Canvas.Top="60"/>
         <Rectangle x:Name="TrackIndexPlay" Height="510" Margin="0,0,0,0" Stroke="White" Width="1" Canvas.Left="0" Canvas.Top="60"/>
-        <Label x:Name="VolumeSliderLabel" Content="Vol" Canvas.Left="633" Background="Black" Foreground="#FF2151B8" FontSize="24" Canvas.Top="8"/>
+        <Label x:Name="VolumeSliderLabel" Content="Vol" Canvas.Left="894" Background="Black" Foreground="#FF2151B8" FontSize="24" Canvas.Top="9"/>
         <Button Click="Exit" Content="Exit" Canvas.Left="1492" Canvas.Top="824" Width="22" Height="18" Background="#FF012461" Foreground="White" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351"/>
         <Button Click="PlayButton_Click" Content="Play" Margin="0,0,0,0" Height="38" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Left="105" Canvas.Top="11"/>
         <Button Click="StopButton_Click"  Content="Stop" Margin="0,0,0,0" Height="38" Width="80" Background="#FF012461" Foreground="White" Canvas.Left="200" BorderBrush="#FF120351" Canvas.Top="11"/>
         <Label x:Name="TrackTime" Content="0:0:0" Margin="0,0
                ,0,0" Foreground="#FF2151B8" Width="134" FontSize="28" Canvas.Top="5" Canvas.Left="302"/>
-        <Slider x:Name="VolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="220" Maximum="1" Canvas.Left="681" Canvas.Top="21"/>
+        <Slider x:Name="VolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="220" Maximum="1" Canvas.Left="942" Canvas.Top="22"/>
         <Label x:Name="TrackTimeOffset" Content="0:0:0" Foreground="#FF2151B8" Width="134" FontSize="28" Canvas.Top="5" Canvas.Left="436"/>
         <TextBox x:Name="Log1" HorizontalScrollBarVisibility="Visible"
          VerticalScrollBarVisibility="Visible"
           Canvas.Top="617" Text="Not connected." TextWrapping="Wrap" Width="200" Height="247" Background="Black" Foreground="#FF59ABF0" Canvas.Left="200"/>
-        <Label x:Name="BluetoothStatus" Content="Status" Foreground="#FF2151B8" Width="532" FontSize="28" Canvas.Top="5" Canvas.Left="909"/>
+        <Label x:Name="BluetoothStatus" Content="Status" Foreground="#FF2151B8" Width="256" FontSize="28" Canvas.Top="5" Canvas.Left="1185"/>
         <TextBox x:Name="MainLog" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"
          Canvas.Top="617" TextWrapping="Wrap" Width="195" Height="247" Background="Black" Foreground="#FF59ABF0" Text="Initializing..."/>
         <TextBox x:Name="Log2" HorizontalScrollBarVisibility="Visible"
@@ -76,5 +76,7 @@
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="342" Text="" TextWrapping="Wrap" Width="236" Height="230" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1300"/>
         <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="BluetoothLE Search" Height="38" Width="130" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1290" BorderBrush="#FF120351" Canvas.Top="278"/>
+        <ProgressBar x:Name="InputVolume" Height="20" Canvas.Left="584" Canvas.Top="11" Width="254"/>
+        <Slider x:Name="InputVolumeSlider" Canvas.Left="584" Canvas.Top="36" Width="254" Maximum="100" Value="50" ValueChanged="InputVolumeSlider_ValueChanged"/>
     </Canvas>
 </Window>

@@ -48,6 +48,8 @@ namespace KataTracks
         static ulong textTickCount = 0;
         static Thread discoverBleThread;
         static Dictionary<string, string> foundDevices = null;
+        static int VolumeThreshold = 50;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -62,9 +64,8 @@ namespace KataTracks
             MainLog.Text = "KataTracks initializing\n";
             //CombinedBluetoothController.Initialize();
 
+            DeviceVolume.Use("Yeti Stereo Microphone");
             DeviceWatcher.StartMonitoring();
-
-            //ConnectPaired();
 
             MainLog.Text += "Ready to Connect\n";
 
@@ -163,7 +164,29 @@ namespace KataTracks
             }
 
             textTickCount++;
-            MainLog.Text = "Update #" + textTickCount + "\n";
+
+            MainLog.Text = "";
+            int volume = (int)(DeviceVolume.GetVolume() * 100);
+
+            if (volume >= VolumeThreshold && !playing)
+            {
+                Canvas.SetLeft(TrackIndex, 0);
+                timePick = 0;
+                Canvas.SetLeft(TrackIndexPlay, timePick);
+
+                TrackTime.Content = "0:0:0";
+                TrackTimeOffset.Content = "0:0:0";
+
+                PlayTrack(0);
+            }
+
+            InputVolume.Maximum = 100;
+            InputVolume.Value = volume;
+            if (DeviceVolume.IsActive())
+                MainLog.Text += "InputVolume: " + volume + "\n";
+            else MainLog.Text += "InputVolume: inactive\n";
+
+            MainLog.Text += "Update #" + textTickCount + "\n";
             MainLog.Text += "Actives:\n";
             foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
                 MainLog.Text += " " + kvp.Value.log + "\n";
@@ -316,6 +339,11 @@ namespace KataTracks
         {
             var button = sender as Button;
             StopAndSendToBoth("" + button.Tag + "\r\n");
+        }
+
+        private void InputVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            VolumeThreshold = (int)e.NewValue;
         }
     }
 }

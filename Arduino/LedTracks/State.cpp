@@ -7,7 +7,8 @@
 
 void State_Poll_TestPattern(FxController &fxc)
 {
-    FxEventProcess(fxc, fx_palette_drb);
+    FxEventProcess(fxc, fx_palette_rainbow);
+    //FxEventProcess(fxc, fx_palette_drb);
     fxc.paletteDirection = 1;
     fxc.paletteSpeed = 1;
     fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
