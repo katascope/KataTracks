@@ -13,6 +13,9 @@ namespace KataTracks
 
         private static IWaveIn captureDevice;
         private static float trackMax = 0;
+        private static float bias = 1;
+
+        public static void SetBias(float b) { bias = b; }
 
         //Between 0 and 1
         public static float GetVolume() { return trackMax; }
@@ -27,6 +30,9 @@ namespace KataTracks
                                         args.Buffer[index + 0]);
                 // to floating point
                 var sample32 = sample / 32768f;
+                
+                sample32 *= bias;//multiple by bias
+
                 // absolute value 
                 if (sample32 < 0) sample32 = -sample32;
                 // is this the max value?

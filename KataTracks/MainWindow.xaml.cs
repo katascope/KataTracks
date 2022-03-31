@@ -335,6 +335,7 @@ namespace KataTracks
             outputDevice.Volume = volume;
         }
 
+
         void StopAndSendToBoth(string value)
         {
             DeviceManagerBLE.SendMessage(value);
@@ -351,9 +352,14 @@ namespace KataTracks
             StopAndSendToBoth("" + button.Tag + "\r\n");
         }
 
-        private void InputVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void TriggerVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             VolumeThreshold = (int)e.NewValue;
+        }
+
+        private void InputVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            DeviceVolume.SetBias((float)e.NewValue);
         }
     }
 }
