@@ -48,6 +48,7 @@ namespace KataTracks
         static ulong textTickCount = 0;
         static Thread discoverBleThread;
         static Dictionary<string, string> foundDevices = null;
+        static bool useSoundTrigger = false;
         static int VolumeThreshold = 50;
         static bool inhibitSoundPlay = true;
         
@@ -177,7 +178,7 @@ namespace KataTracks
             MainLog.Text = "";
             int volume = (int)(DeviceVolume.GetVolume() * 100);
 
-            if (volume >= VolumeThreshold && !playing)
+            if (useSoundTrigger && volume >= VolumeThreshold && !playing)
             {
                 Canvas.SetLeft(TrackIndex, 0);
                 timePick = 0;
@@ -195,6 +196,10 @@ namespace KataTracks
             if (DeviceVolume.IsActive())
                 MainLog.Text += "InputVolume: " + volume + "\n";
             else MainLog.Text += "InputVolume: inactive\n";
+
+            if (useSoundTrigger)
+                MainLog.Text += "SoundTrigger: on\n";
+            else MainLog.Text += "SoundTrigger: inactive\n";
 
             MainLog.Text += "Update #" + textTickCount + "\n";
             MainLog.Text += "Actives:\n";
@@ -227,9 +232,6 @@ namespace KataTracks
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (!playing) BluetoothStatus.Content = "Stopped";
-            else BluetoothStatus.Content = "Playing";
-
             if (!playing) return;
 
             if (outputDevice.PlaybackState == PlaybackState.Stopped)
@@ -360,6 +362,16 @@ namespace KataTracks
         private void InputVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             DeviceVolume.SetBias((float)e.NewValue);
+        }
+
+        private void TriggerCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            useSoundTrigger = true;
+        }
+
+        private void TriggerCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            useSoundTrigger = false;
         }
     }
 }
