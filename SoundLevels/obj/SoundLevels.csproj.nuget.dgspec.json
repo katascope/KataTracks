@@ -1,25 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "G:\\github\\KataTracks\\SoundLevels\\SoundLevels.csproj": {}
+    "D:\\Github\\KataTracks\\SoundLevels\\SoundLevels.csproj": {}
   },
   "projects": {
-    "G:\\github\\KataTracks\\SoundLevels\\SoundLevels.csproj": {
+    "D:\\Github\\KataTracks\\SoundLevels\\SoundLevels.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\github\\KataTracks\\SoundLevels\\SoundLevels.csproj",
+        "projectUniqueName": "D:\\Github\\KataTracks\\SoundLevels\\SoundLevels.csproj",
         "projectName": "SoundLevels",
-        "projectPath": "G:\\github\\KataTracks\\SoundLevels\\SoundLevels.csproj",
-        "packagesPath": "C:\\Users\\Layne\\.nuget\\packages\\",
-        "outputPath": "G:\\github\\KataTracks\\SoundLevels\\obj\\",
+        "projectPath": "D:\\Github\\KataTracks\\SoundLevels\\SoundLevels.csproj",
+        "packagesPath": "C:\\Users\\Katascope\\.nuget\\packages\\",
+        "outputPath": "D:\\Github\\KataTracks\\SoundLevels\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Layne\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Katascope\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -60,18 +58,15 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[3.1.22, 3.1.22]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
         }
       }
     }
