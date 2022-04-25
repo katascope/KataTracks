@@ -88,6 +88,8 @@ void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
 }
 void FxDisplayStatus(FxController &fxc)
 {
+      Serial.print(DeviceName);
+      Serial.print(F(":"));
       Serial.print(GetTime());
       Serial.print(F(":"));
       Serial.print(getTimecodeSongOffset());

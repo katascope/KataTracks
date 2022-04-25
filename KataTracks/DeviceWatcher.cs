@@ -73,8 +73,8 @@ namespace KataTracks
         public static void StartMonitoring()
         {
             _isMonitoring = true;
-            bleListenerThread = new Thread(MonitorBLEDevices);
-            bleListenerThread.Start("BLEDeviceWatcher");
+            //bleListenerThread = new Thread(MonitorBLEDevices);
+            //bleListenerThread.Start("BLEDeviceWatcher");
 
             btListenerThread = new Thread(MonitorBluetoothDevices);
             btListenerThread.Start("BTDeviceWatcher");

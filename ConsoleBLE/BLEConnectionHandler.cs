@@ -5,9 +5,10 @@ namespace ConsoleBLE
 {
     class BLEConnectionHandler
     {
+
         static void Main(string[] args)
         {
-            //DeviceManagerBLE.DoSearch();
+            //DeviceManagerBLE.di
             UInt64 lightsuitA = 222712357359682;
             UInt64 lightsuitB = 275307978800333;
             

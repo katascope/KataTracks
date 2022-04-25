@@ -226,7 +226,9 @@ namespace KataTracks
             {
                 BleScannerView.Text = "Found: " + foundDevices.Count + "\n";
                 foreach (KeyValuePair<string, string> kvp in foundDevices)
-                    BleScannerView.Text += kvp.Value + "\n";
+                {
+                    BleScannerView.Text += kvp.Value + " : " + kvp.Key + "\n";
+                }
             }
         }
 
