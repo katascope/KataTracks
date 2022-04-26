@@ -49,7 +49,7 @@ namespace KataTracks
         static Thread discoverBleThread;
         static Dictionary<string, string> foundDevices = null;
         static bool useSoundTrigger = false;
-        static int InputVolumeBias = 10;
+        static float InputVolumeBias = 50;
         static int VolumeThreshold = 50;
         
         public MainWindow()
@@ -179,7 +179,7 @@ namespace KataTracks
             textTickCount++;
 
             MainLog.Text = "";
-            int volume = (int)(DeviceVolume.GetVolume() * 100);
+            float volume = DeviceVolume.GetVolume();
 
             if (useSoundTrigger && volume >= VolumeThreshold && !playing)
             {
@@ -319,7 +319,8 @@ namespace KataTracks
 
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (b1Down)
+            double Y = e.GetPosition(this).Y;
+            if (b1Down && Y > 150)
             {
                 double X = e.GetPosition(this).X;
                 timePick = (long)X;
@@ -366,7 +367,7 @@ namespace KataTracks
 
         private void InputVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            DeviceVolume.SetBias((float)e.NewValue);
+            DeviceVolume.SetBias((float)e.NewValue*2.0f);
         }
 
         private void TriggerCheckBox_Checked(object sender, RoutedEventArgs e)
