@@ -51,7 +51,6 @@ namespace KataTracks
         static bool useSoundTrigger = false;
         static int InputVolumeBias = 10;
         static int VolumeThreshold = 50;
-        static bool inhibitSoundPlay = true;
         
         public MainWindow()
         {
@@ -80,11 +79,11 @@ namespace KataTracks
             MainLog.Text += "Ready to Connect\n";
 
             animationTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            animationTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            animationTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             animationTimer.Start();
 
             btTextTimer.Tick += new EventHandler(btTextTimer_Tick);
-            btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             btTextTimer.Start();
         }
 
@@ -107,12 +106,8 @@ namespace KataTracks
             DeviceManagerBT.SendMessage(code);
             DeviceManagerBLE.Play((ulong)timePick * 100);
 
-            if (inhibitSoundPlay)
-                outputDevice.Volume = 0;
             outputDevice.Play();
-            if (inhibitSoundPlay)
-                outputDevice.Volume = 0;
-            else outputDevice.Volume = volume;
+            outputDevice.Volume = volume;
 
             literalTrackStartTime = DateTime.Now;
 
@@ -195,7 +190,6 @@ namespace KataTracks
                 TrackTime.Content = "0:0:0";
                 TrackTimeOffset.Content = "0:0:0";
 
-                inhibitSoundPlay = true;
                 PlayTrack(1);
             }
 
@@ -384,15 +378,5 @@ namespace KataTracks
         {
             useSoundTrigger = false;
         }
-
-        private void AudibleCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            inhibitSoundPlay = false;
-        }
-        private void AudibleCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            inhibitSoundPlay = true;
-        }
-
     }
 }
