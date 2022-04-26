@@ -34,7 +34,7 @@ const unsigned long SongTrack[] PROGMEM =
 //Lead CrossStep
   7300,fx_transition_timed_wipe_pos,
   7300,fx_palette_blue,
-//Follow CrossStep
+//Both CrossStep
   9700,fx_transition_timed_fade,
   9700,fx_palette_rb,
 
@@ -75,18 +75,44 @@ const unsigned long SongTrack[] PROGMEM =
   53300,fx_palette_magenta,
   
   //coasting orange 
-  54600,fx_speed_1,
+  54600,fx_speed_0,
+  54600,fx_speed_pos,
   54600,fx_transition_timed_fade,
   54600,fx_palette_blue,
 
-  60000,fx_speed_1,
+  60000,fx_transition_timed_fade,
+  60000,fx_palette_red,
+/*  60000,fx_speed_2,
   60000,fx_speed_neg,
-  60000,fx_palette_magenta,
+  60000,fx_transition_timed_fade,
+  60000,fx_palette_pulse_cyan,
+  61000,fx_transition_timed_fade,
+  61000,fx_palette_pulse_magenta,
+  62000,fx_transition_timed_fade,
+  62000,fx_palette_pulse_cyan,
+  63000,fx_transition_timed_fade,
+  63000,fx_palette_pulse_magenta,
+  64000,fx_transition_timed_fade,
+  64000,fx_palette_pulse_cyan,
+  65000,fx_transition_timed_fade,
+  65000,fx_palette_pulse_magenta,
+  66000,fx_transition_timed_fade,
+  66000,fx_palette_pulse_magenta,
+  67000,fx_transition_timed_fade,
+  67000,fx_palette_pulse_magenta,
+  68000,fx_transition_timed_fade,
+  68000,fx_palette_pulse_magenta,
+  69000,fx_transition_timed_fade,
+  69000,fx_palette_pulse_magenta,
+  70000,fx_transition_timed_fade,
+  70000,fx_palette_pulse_magenta,
+  71000,fx_transition_timed_fade,
+  71000,fx_palette_pulse_magenta,*/
   
   //CHAPTER 2
   72700,fx_speed_0,
   72700,fx_transition_timed_fade,
-  72700,fx_palette_dark,
+  72700,fx_palette_magenta,
 
 //descents
   73000,fx_transition_timed_wipe_pos,
@@ -106,26 +132,73 @@ const unsigned long SongTrack[] PROGMEM =
 
   80400,fx_transition_timed_fade,
   80400,fx_palette_cyan,
-  81800,fx_transition_timed_fade,
-  81800,fx_palette_red,
+  ///bwaaah
+  81800,fx_transition_timed_fade, 
+  81800,fx_palette_white,
+  82800,fx_transition_timed_fade,
+  82800,fx_palette_red,
+  //end of bwaah
 
   88000,fx_transition_timed_fade,
-  88000,fx_palette_red,
+  88000,fx_palette_magenta,
 
   95000,fx_transition_timed_fade,
   95000,fx_palette_red,
 
   98500,fx_transition_timed_fade,
-  98500,fx_palette_red,
+  98500,fx_palette_magenta,
 
   //99500,fx_transition_timed_fade,
   //99000,fx_palette_red,
+  100300,fx_speed_2,
+  100300,fx_speed_neg,
   100300,fx_transition_timed_fade,
-  100300,fx_palette_red,
+  100300,fx_palette_pulse_white,
   
 //CHAPTER 3
+  108900,fx_speed_0,
+  108900,fx_speed_pos,
   108900,fx_transition_timed_fade,
   108900,fx_palette_white,
+
+  110000,fx_transition_timed_fade,
+  110000,fx_palette_white,
+
+  111000,fx_transition_timed_fade,
+  111000,fx_palette_white,
+
+  111000,fx_speed_1,
+  111000,fx_speed_pos,
+  111000,fx_transition_timed_fade,
+  111000,fx_palette_cyan,
+  112000,fx_transition_timed_fade,
+  112000,fx_palette_magenta,
+  113000,fx_transition_timed_fade,
+  113000,fx_palette_cyan,
+  114000,fx_transition_timed_fade,
+  114000,fx_palette_magenta,
+  115000,fx_transition_timed_fade,
+  115000,fx_palette_cyan,
+  116000,fx_transition_timed_fade,
+  116000,fx_palette_magenta,
+  117000,fx_transition_timed_fade,
+  117000,fx_palette_cyan,
+  118000,fx_transition_timed_fade,
+  118000,fx_palette_magenta,
+  119000,fx_transition_timed_fade,
+  119000,fx_palette_cyan,
+  120000,fx_transition_timed_fade,
+  120000,fx_palette_magenta,
+  121000,fx_transition_timed_fade,
+  121000,fx_palette_cyan,
+  122000,fx_transition_timed_fade,
+  122000,fx_palette_white,
+  123000,fx_transition_timed_fade,
+  123000,fx_palette_white,
+  124000,fx_speed_0,
+  124000,fx_speed_pos,
+  124000,fx_transition_timed_fade,
+  124000,fx_palette_white,
   
   125000,fx_transition_timed_fade,
   125000,fx_palette_dark,

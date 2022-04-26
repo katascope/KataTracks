@@ -42,7 +42,7 @@ namespace KataTracks
         static DispatcherTimer btTextTimer;
         static bool playing = false;
         static DateTime literalTrackStartTime;
-        float volume = 0.15f;
+        float volume = 1;
         static long timePick = 0;
         static bool b1Down = false;
         static ulong textTickCount = 0;
@@ -56,7 +56,14 @@ namespace KataTracks
         public MainWindow()
         {
             InitializeComponent();
+            MainLog.Text = "KataTracks initializing\n";
+
             outputDevice = new WaveOutEvent();
+            if (outputDevice == null)
+            {
+                MainLog.Text += "No wave out\n";
+            }
+
             animationTimer = new DispatcherTimer();
             connectionTimer = new DispatcherTimer();
             btTextTimer = new DispatcherTimer();
@@ -65,7 +72,6 @@ namespace KataTracks
             OutputVolumeSlider.Value = volume;
             InputVolumeSlider.Value = InputVolumeBias;
 
-            MainLog.Text = "KataTracks initializing\n";
             //CombinedBluetoothController.Initialize();
 
             DeviceVolume.Use("Yeti Stereo Microphone");
@@ -338,7 +344,8 @@ namespace KataTracks
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             volume = (float)e.NewValue;
-            outputDevice.Volume = volume;
+            if (outputDevice != null)
+                outputDevice.Volume = volume;
         }
 
 

@@ -4,7 +4,7 @@
 #define NUM_LEDS            70
 #define LED_PIN             3
 #define SERIAL_BAUD_RATE    9600
-static const char *DeviceName = "LightSuitC";
+static const char *DeviceName = "LightSuitB";
 
 #ifdef ARDUINO_AVR_UNO
  #define SYSTEM_UNO          1
