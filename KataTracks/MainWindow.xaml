@@ -11,12 +11,16 @@
         <Rectangle x:Name="TrackIndex" Height="511" Margin="0,0,0,0" Stroke="White" Width="1" Canvas.Left="0" Canvas.Top="125"/>
         <Rectangle x:Name="TrackIndexPlay" Height="511" Margin="0,0,0,0" Stroke="White" Width="1" Canvas.Left="0" Canvas.Top="125"/>
         <Button Click="Exit" Content="Exit" Canvas.Left="1492" Canvas.Top="824" Width="22" Height="18" Background="#FF012461" Foreground="White" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351"/>
-        <Button Click="PlayButton_Click" Content="Play" Margin="0,0,0,0" Height="38" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Left="105" Canvas.Top="10"/>
-        <Button Click="StopButton_Click"  Content="Stop" Margin="0,0,0,0" Height="38" Width="80" Background="#FF012461" Foreground="White" Canvas.Left="200" BorderBrush="#FF120351" Canvas.Top="10"/>
+        <Button Click="PlayButton_Click" Content="Seek" Margin="0,0,0,0" Height="79" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Left="124" Canvas.Top="22" FontSize="24"/>
+        <Button Click="StopButton_Click"  Content="Stop" Margin="0,0,0,0" Height="79" Width="80" Background="#FF012461" Foreground="White" Canvas.Left="231" BorderBrush="#FF120351" Canvas.Top="21" FontSize="24"/>
         <Label x:Name="TrackTime" Content="0:0:0" Margin="0,0
-               ,0,0" Foreground="#FFACC0EC" Width="134" FontSize="28" Canvas.Top="48" Canvas.Left="12"/>
-        <Slider x:Name="OutputVolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="268" Maximum="1" Canvas.Left="12" Canvas.Top="95" LargeChange="0.2" Value="0.5"/>
-        <Label x:Name="TrackTimeOffset" Content="0:0:0" Foreground="#FFACC0EC" Width="134" FontSize="28" Canvas.Top="48" Canvas.Left="146"/>
+               ,0,0" Foreground="#FFACC0EC" Width="134" FontSize="28" Canvas.Top="21" Canvas.Left="337"/>
+        <Slider x:Name="OutputVolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="300 " Maximum="1" Canvas.Left="594" Canvas.Top="26" LargeChange="0.2" Value="0.5">
+            <Slider.LayoutTransform>
+                <ScaleTransform ScaleX="1" ScaleY="2"/>
+            </Slider.LayoutTransform>
+        </Slider>
+        <Label x:Name="TrackTimeOffset" Content="0:0:0" Foreground="#FFACC0EC" Width="134" FontSize="28" Canvas.Top="77" Canvas.Left="337"/>
         <TextBox x:Name="Log1" HorizontalScrollBarVisibility="Visible"
          VerticalScrollBarVisibility="Visible"
           Canvas.Top="677" Text="Not connected." TextWrapping="Wrap" Width="200" Height="74" Background="Black" Foreground="#FF59ABF0" Canvas.Left="200"/>
@@ -27,8 +31,8 @@
             Canvas.Top="677" Text="Not connected." TextWrapping="Wrap" Width="200" Height="74" Background="Black" Foreground="#FF59ABF0" Canvas.Left="405"/>
         <TextBox x:Name="BTScannerView" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
-            Canvas.Top="54" Text="" TextWrapping="Wrap" Width="276" Height="59" Background="Black" Foreground="#FF59ABF0" Canvas.Left="712"/>
-        <Button Click="PlayFromStartButton_Click" Content="Start" Height="38" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Top="1"/>
+            Canvas.Top="189" Text="" TextWrapping="Wrap" Width="210" Height="201" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1316"/>
+        <Button Click="PlayFromStartButton_Click" Content="Play" Height="79" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Top="12" FontSize="24" Canvas.Left="10"/>
         <Button Click="SendBoth" Tag="0" Content="Dark" Canvas.Left="205" Canvas.Top="764" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="65"/>
         <Button Click="SendBoth" Tag="1" Content="White" Canvas.Left="205" Canvas.Top="794" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="65"/>
         <Button Click="SendBoth" Tag="2" Content="Red" Canvas.Left="278" Canvas.Top="764" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="64"/>
@@ -69,16 +73,30 @@
         <Label x:Name="Log2Label" Content="Device 2" Canvas.Left="405" Canvas.Top="636" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Label x:Name="Log3Label" Content="Device 3" Canvas.Left="611" Canvas.Top="636" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Label x:Name="Log4Label" Content="Device 4" Canvas.Left="816" Canvas.Top="636" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
-        <Button x:Name="ConnectButton" Click="ConnectButton_Click"  Content="Bluetooth Connect" Height="38" Width="102" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="703" BorderBrush="#FF120351"/>
+        <Button x:Name="ConnectButton" Click="ConnectButton_Click"  Content="Bluetooth Connect" Height="38" Width="102" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1306" BorderBrush="#FF120351" Canvas.Top="125"/>
         <TextBox x:Name="BleScannerView" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
-            Canvas.Top="54" Text="" TextWrapping="Wrap" Width="298" Height="59" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1003"/>
-        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="BluetoothLE Search" Height="38" Width="130" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="993" BorderBrush="#FF120351"/>
-        <ProgressBar x:Name="InputVolume" Height="21" Canvas.Left="383" Canvas.Top="43" Width="300" Foreground="#FF388CBB"/>
-        <Slider x:Name="InputVolumeTriggerSlider" Canvas.Left="383" Canvas.Top="64" Width="300" Maximum="100" Value="50" ValueChanged="InputVolumeTriggerSlider_ValueChanged" Height="36" TickPlacement="TopLeft" TickFrequency="5"/>
-        <Slider x:Name="InputVolumeSlider" ValueChanged="InputVolumeSlider_ValueChanged" Width="300" Maximum="100" Value ="50" Canvas.Left="383" Canvas.Top="17"/>
-        <Label x:Name="InputVolumeSliderLabel_" Content="Input Vol" Canvas.Left="320" Background="Black" Foreground="#FFACC0EC" Height="28" Canvas.Top="12"/>
-        <Label x:Name="InputVolumeLevelLabel" Content="Live" Canvas.Left="347" Background="Black" Foreground="#FFACC0EC" Canvas.Top="40" Height="26"/>
-        <CheckBox x:Name="TriggerCheckBox" Content="Trigger" Foreground="#FFACC0EC" Canvas.Left="320" Canvas.Top="72" Checked="TriggerCheckBox_Checked" Unchecked="TriggerCheckBox_Unchecked"/>
+            Canvas.Top="447" Text="" TextWrapping="Wrap" Width="204" Height="189" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1320"/>
+        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="BluetoothLE Search" Height="38" Width="130" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1306" BorderBrush="#FF120351" Canvas.Top="394"/>
+        <ProgressBar x:Name="InputVolume" Height="50" Canvas.Left="987" Canvas.Top="22" Width="300" Foreground="#FF388CBB"/>
+        <Slider x:Name="InputVolumeTriggerSlider" Canvas.Left="987" Canvas.Top="72" Width="300" Maximum="100" Value="50" ValueChanged="InputVolumeTriggerSlider_ValueChanged" Height="36" TickPlacement="TopLeft" TickFrequency="5">
+            <Slider.LayoutTransform>
+                <ScaleTransform ScaleX="1" ScaleY="2"/>
+            </Slider.LayoutTransform>
+        </Slider>
+        <Slider x:Name="InputVolumeSlider" ValueChanged="InputVolumeSlider_ValueChanged" Width="300" Maximum="100" Value ="50" Canvas.Left="594" Canvas.Top="84">
+            <Slider.LayoutTransform>
+                <ScaleTransform ScaleX="1" ScaleY="2"/>
+            </Slider.LayoutTransform>
+        </Slider>
+        <Label x:Name="InputVolumeSliderLabel_" Content="Input Vol" Canvas.Left="489" Background="Black" Foreground="#FFACC0EC" Height="40" Canvas.Top="75" FontSize="22" Width="100"/>
+        <Label x:Name="InputVolumeLevelLabel" Content="Live" Canvas.Left="932" Background="Black" Foreground="#FFACC0EC" Canvas.Top="26" Height="36" FontSize="22" Width="50"/>
+        <CheckBox x:Name="TriggerCheckBox" Content="Autoplay" Foreground="#FFACC0EC" Canvas.Left="1367" Canvas.Top="47" Checked="TriggerCheckBox_Checked" Unchecked="TriggerCheckBox_Unchecked" Width="73">
+            <CheckBox.LayoutTransform>
+                <ScaleTransform ScaleX="2" ScaleY="2"/>
+            </CheckBox.LayoutTransform>
+        </CheckBox>
+        <Label x:Name="TriggerLevelSliderLabel" Content="Trigger" Canvas.Left="907" Background="Black" Foreground="#FFACC0EC" Height="41" Canvas.Top="77" FontSize="22" Width="80"/>
+        <Label x:Name="OutputVolumeSliderLabel" Content="Output Vol" Canvas.Left="470" Background="Black" Foreground="#FFACC0EC" Height="38" Canvas.Top="22" FontSize="22" Width="119"/>
     </Canvas>
 </Window>
