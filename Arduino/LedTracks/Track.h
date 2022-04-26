@@ -65,24 +65,25 @@ const unsigned long SongTrack[] PROGMEM =
   38700,fx_palette_red,
 
   43300,fx_transition_timed_fade,
-  43300,fx_palette_yellow,
+  43300,fx_palette_blue,
   47100,fx_transition_timed_fade,
-  47100,fx_palette_green,
+  47100,fx_palette_blue,
   
   50400,fx_transition_timed_fade,
-  50400,fx_palette_ocean,
+  50400,fx_palette_red,
   53300,fx_transition_timed_fade,
   53300,fx_palette_magenta,
   
   //coasting orange 
   54600,fx_speed_1,
   54600,fx_transition_timed_fade,
-  54600,fx_palette_orange,
+  54600,fx_palette_blue,
 
   60000,fx_speed_1,
   60000,fx_speed_neg,
-  60000,fx_palette_heat,
-//CHAPTER 2
+  60000,fx_palette_magenta,
+  
+  //CHAPTER 2
   72700,fx_speed_0,
   72700,fx_transition_timed_fade,
   72700,fx_palette_dark,
@@ -90,15 +91,15 @@ const unsigned long SongTrack[] PROGMEM =
 //descents
   73000,fx_transition_timed_wipe_pos,
   73000,fx_palette_magenta,
-  74000,fx_transition_timed_fade,
+  74000,fx_transition_timed_wipe_pos,
   74000,fx_palette_cyan,
   75000,fx_transition_timed_wipe_pos,
   75000,fx_palette_magenta,
-  76000,fx_transition_timed_fade,
+  76000,fx_transition_timed_wipe_pos,
   76000,fx_palette_cyan,
   77000,fx_transition_timed_wipe_pos,
   77000,fx_palette_magenta,
-  78000,fx_transition_timed_fade,
+  78000,fx_transition_timed_wipe_pos,
   78000,fx_palette_cyan,
   79000,fx_transition_timed_wipe_pos,
   79000,fx_palette_magenta,
@@ -106,13 +107,16 @@ const unsigned long SongTrack[] PROGMEM =
   80400,fx_transition_timed_fade,
   80400,fx_palette_cyan,
   81800,fx_transition_timed_fade,
-  81800,fx_palette_blue,
+  81800,fx_palette_red,
+
+  88000,fx_transition_timed_fade,
+  88000,fx_palette_red,
 
   95000,fx_transition_timed_fade,
-  95000,fx_palette_cyan,
+  95000,fx_palette_red,
 
   98500,fx_transition_timed_fade,
-  98500,fx_palette_dark,
+  98500,fx_palette_red,
 
   //99500,fx_transition_timed_fade,
   //99000,fx_palette_red,

@@ -49,6 +49,7 @@ namespace KataTracks
         static Thread discoverBleThread;
         static Dictionary<string, string> foundDevices = null;
         static bool useSoundTrigger = false;
+        static int InputVolumeBias = 10;
         static int VolumeThreshold = 50;
         static bool inhibitSoundPlay = true;
         
@@ -61,7 +62,8 @@ namespace KataTracks
             btTextTimer = new DispatcherTimer();
             Canvas.SetLeft(TrackIndex, 0);
             Canvas.SetLeft(TrackIndexPlay, 0);
-            VolumeSlider.Value = volume;
+            OutputVolumeSlider.Value = volume;
+            InputVolumeSlider.Value = InputVolumeBias;
 
             MainLog.Text = "KataTracks initializing\n";
             //CombinedBluetoothController.Initialize();
@@ -356,7 +358,7 @@ namespace KataTracks
             StopAndSendToBoth("" + button.Tag + "\r\n");
         }
 
-        private void TriggerVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void InputVolumeTriggerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             VolumeThreshold = (int)e.NewValue;
         }
@@ -375,5 +377,15 @@ namespace KataTracks
         {
             useSoundTrigger = false;
         }
+
+        private void AudibleCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            inhibitSoundPlay = false;
+        }
+        private void AudibleCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            inhibitSoundPlay = true;
+        }
+
     }
 }
