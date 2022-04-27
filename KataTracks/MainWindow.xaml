@@ -10,7 +10,7 @@
         <Image x:Name="image" Height="512" Margin="0,59,0,0" Width="1300" Source="/TronGameCroppedCyan.png" Stretch="Uniform" Canvas.Left="1" Canvas.Top="66"/>
         <Rectangle x:Name="TrackIndex" Height="511" Margin="0,0,0,0" Stroke="White" Width="1" Canvas.Left="0" Canvas.Top="125"/>
         <Rectangle x:Name="TrackIndexPlay" Height="511" Margin="0,0,0,0" Stroke="White" Width="1" Canvas.Left="0" Canvas.Top="125"/>
-        <Button Click="Exit" Content="Exit" Canvas.Left="1234" Canvas.Top="826" Width="22" Height="18" Background="#FF012461" Foreground="White" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351"/>
+        <Button Click="Exit" Content="Exit" Canvas.Left="976" Canvas.Top="639" Width="22" Height="18" Background="#FF012461" Foreground="White" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351"/>
         <Button Click="PlayButton_Click" Content="Seek" Margin="0,0,0,0" Height="79" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Left="124" Canvas.Top="22" FontSize="24"/>
         <Button Click="StopButton_Click"  Content="Stop" Margin="0,0,0,0" Height="79" Width="80" Background="#FF012461" Foreground="White" Canvas.Left="231" BorderBrush="#FF120351" Canvas.Top="21" FontSize="24"/>
         <Label x:Name="TrackTime" Content="0:0:0" Margin="0,0
@@ -44,18 +44,18 @@
         <Button Click="SendBoth" Tag="8" Content="Orange" Canvas.Left="736" Canvas.Top="746" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="64"/>
         <Button Click="SendBothCRLF" Tag="!rgb" Content="RGB" Canvas.Left="816" Canvas.Top="746" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="q" Content="Lava" Canvas.Left="921" Canvas.Top="746" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="w" Content="Cloud" Canvas.Left="816" Canvas.Top="806" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="w" Content="Cloud" Canvas.Left="606" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="e" Content="Ocean" Canvas.Left="816" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="r" Content="Forest" Canvas.Left="921" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="t" Content="Rainbow" Canvas.Left="921" Canvas.Top="806" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="y" Content="RainbowStripe" Canvas.Left="1125" Canvas.Top="749" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="u" Content="Party" Canvas.Left="1125" Canvas.Top="774" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="i" Content="Heat" Canvas.Left="1125" Canvas.Top="799" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="-" Content="Speed -" Canvas.Left="1034" Canvas.Top="662" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="=" Content="Speed +" Canvas.Left="1134" Canvas.Top="662" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="_" Content="Speed Neg" Canvas.Left="1034" Canvas.Top="692" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="+" Content="Speed Pos" Canvas.Left="1134" Canvas.Top="692" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="~" Content="Speed Stop" Canvas.Left="1034" Canvas.Top="721" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="t" Content="Rainbow" Canvas.Left="711" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="y" Content="RainbowStripe" Canvas.Left="300" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="u" Content="Party" Canvas.Left="400" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="i" Content="Heat" Canvas.Left="505" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="-" Content="Speed -" Canvas.Left="1037" Canvas.Top="717" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="=" Content="Speed +" Canvas.Left="1137" Canvas.Top="717" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="_" Content="Speed Neg" Canvas.Left="1037" Canvas.Top="747" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="+" Content="Speed Pos" Canvas.Left="1137" Canvas.Top="747" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="~" Content="Speed Stop" Canvas.Left="1037" Canvas.Top="776" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBothCRLF" Tag="!dbdddddddddddddd" Content="Blue Pulse" Canvas.Left="1290" Canvas.Top="671" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBothCRLF" Tag="!drdddddddddddddd" Content="Red Pulse" Canvas.Left="1290" Canvas.Top="701" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBothCRLF" Tag="!worddddddddddddd" Content="Hot Fire Pulse" Canvas.Left="1290" Canvas.Top="731" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
@@ -73,12 +73,12 @@
         <Label x:Name="Log2Label" Content="Device 2" Canvas.Left="405" Canvas.Top="636" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Label x:Name="Log3Label" Content="Device 3" Canvas.Left="611" Canvas.Top="636" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
         <Label x:Name="Log4Label" Content="Device 4" Canvas.Left="816" Canvas.Top="636" Foreground="#FF066693" FontSize="20" FontWeight="Bold"/>
-        <Button x:Name="ConnectButton" Click="ConnectButton_Click"  Content="Bluetooth Connect" Height="38" Width="102" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1306" BorderBrush="#FF120351" Canvas.Top="125"/>
+        <Button x:Name="ConnectButton" Click="ConnectButton_Click"  Content="Bluetooth Connect" Height="21" Width="104" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1040" BorderBrush="#FF120351" Canvas.Top="658" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="BleScannerView" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="447" Text="" TextWrapping="Wrap" Width="204" Height="189" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1320"/>
-        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="BluetoothLE Search" Height="38" Width="130" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1306" BorderBrush="#FF120351" Canvas.Top="394"/>
-        <ProgressBar x:Name="InputVolume" Height="50" Canvas.Left="987" Canvas.Top="22" Width="300" Foreground="#FF388CBB"/>
+        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="BluetoothLE Search" Height="19" Width="130" Background="#FF012461" Foreground="#FF0058C1" Canvas.Left="1037" BorderBrush="#FF120351" Canvas.Top="686" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ProgressBar x:Name="InputVolume" Height="31" Canvas.Left="987" Canvas.Top="41" Width="300" Foreground="#FF388CBB" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <Slider x:Name="InputVolumeTriggerSlider" Canvas.Left="987" Canvas.Top="72" Width="300" Maximum="100" Value="50" ValueChanged="InputVolumeTriggerSlider_ValueChanged" Height="36" TickPlacement="TopLeft" TickFrequency="5">
             <Slider.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="2"/>
@@ -90,8 +90,8 @@
             </Slider.LayoutTransform>
         </Slider>
         <Label x:Name="InputVolumeSliderLabel_" Content="Input Vol" Canvas.Left="489" Background="Black" Foreground="#FFACC0EC" Height="40" Canvas.Top="75" FontSize="22" Width="100"/>
-        <Label x:Name="InputVolumeLevelLabel" Content="Live" Canvas.Left="932" Background="Black" Foreground="#FFACC0EC" Canvas.Top="26" Height="36" FontSize="22" Width="50"/>
-        <CheckBox x:Name="TriggerCheckBox" Content="Autoplay" Foreground="#FFACC0EC" Canvas.Left="1367" Canvas.Top="47" Checked="TriggerCheckBox_Checked" Unchecked="TriggerCheckBox_Unchecked" Width="73">
+        <Label x:Name="InputVolumeLevelLabel" Content="Live" Canvas.Left="931" Background="Black" Foreground="#FFACC0EC" Canvas.Top="36" Height="36" FontSize="22" Width="50"/>
+        <CheckBox x:Name="TriggerCheckBox" Content="Autoplay" Foreground="#FFACC0EC" Canvas.Left="1045" Canvas.Top="2" Checked="TriggerCheckBox_Checked" Unchecked="TriggerCheckBox_Unchecked" Width="72" HorizontalAlignment="Left" Height="17" VerticalAlignment="Top">
             <CheckBox.LayoutTransform>
                 <ScaleTransform ScaleX="2" ScaleY="2"/>
             </CheckBox.LayoutTransform>
