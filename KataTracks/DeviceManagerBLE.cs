@@ -70,7 +70,7 @@ namespace KataTracks
                 bleDevices[str].monitorThread.Start(""+str);
 
             }
-            MonitorLog = "MonitorBLE started..\n";
+            MonitorLog = "";
         }
 
         public static async void QueryGATT(string bdid)
