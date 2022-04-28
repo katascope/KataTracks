@@ -63,11 +63,11 @@ namespace KataTracks
             MainLog.Text += "Ready to Connect\n";
 
             animationTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            animationTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
+            animationTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             animationTimer.Start();
 
             btTextTimer.Tick += new EventHandler(btTextTimer_Tick);
-            btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
+            btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             btTextTimer.Start();
         }
 
