@@ -182,6 +182,18 @@ void PrintFxEventName(int event)
     case fx_palette_pulse_orange:  Serial.print(F("pulse-orange"));break;
     case fx_palette_pulse_half:  Serial.print(F("pulse-half"));break;
     case fx_palette_pulse_lowhalf:  Serial.print(F("pulse-lowhalf"));break;
+
+    case fx_palette_pulse2_dark:    Serial.print(F("pulse2-dark"));break;
+    case fx_palette_pulse2_white:   Serial.print(F("pulse2-white"));break;
+    case fx_palette_pulse2_red:     Serial.print(F("pulse2-red"));break;
+    case fx_palette_pulse2_yellow:  Serial.print(F("pulse2-yellow"));break;
+    case fx_palette_pulse2_green:   Serial.print(F("pulse2-green"));break;
+    case fx_palette_pulse2_cyan:    Serial.print(F("pulse2-cyan"));break;
+    case fx_palette_pulse2_blue:    Serial.print(F("pulse2-blue"));break;
+    case fx_palette_pulse2_magenta: Serial.print(F("pulse2-magenta"));break;
+    case fx_palette_pulse2_orange:  Serial.print(F("pulse2-orange"));break;
+    case fx_palette_pulse2_half:  Serial.print(F("pulse2-half"));break;
+    case fx_palette_pulse2_lowhalf:  Serial.print(F("pulse2-lowhalf"));break;
    
     case fx_palette_dw: Serial.print(F("dark-white"));break;
     case fx_palette_dr: Serial.print(F("dark-red"));break;

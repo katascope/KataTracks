@@ -136,6 +136,18 @@ enum FxEvent
   fx_palette_pulse_half,
   fx_palette_pulse_lowhalf,
 
+  fx_palette_pulse2_dark,
+  fx_palette_pulse2_white,
+  fx_palette_pulse2_red,
+  fx_palette_pulse2_yellow,
+  fx_palette_pulse2_green,
+  fx_palette_pulse2_cyan,
+  fx_palette_pulse2_blue,
+  fx_palette_pulse2_magenta,
+  fx_palette_pulse2_orange,
+  fx_palette_pulse2_half,
+  fx_palette_pulse2_lowhalf,  
+
   fx_palette_dw,
   fx_palette_dr,
   fx_palette_dy,

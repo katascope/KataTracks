@@ -86,6 +86,14 @@ void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
 }
+
+void CreateDoublePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
+  SetMicroPalette16(fxc, LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
+                      LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
+}
+
 void FxDisplayStatus(FxController &fxc)
 {
       Serial.print(DeviceName);
@@ -278,6 +286,18 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_palette_pulse_orange:CreateSinglePulseBand(fxc, ORANGE);break;
     case fx_palette_pulse_half:CreateSinglePulseBand(fxc, HALF);break;
     case fx_palette_pulse_lowhalf:CreateSinglePulseBand(fxc, LOWHALF);break;
+
+    case fx_palette_pulse2_dark:CreateDoublePulseBand(fxc, DARK);break;
+    case fx_palette_pulse2_white:CreateDoublePulseBand(fxc, WHITE);break;
+    case fx_palette_pulse2_red:CreateDoublePulseBand(fxc, RED);break;
+    case fx_palette_pulse2_yellow:CreateDoublePulseBand(fxc, YELLOW);break;
+    case fx_palette_pulse2_green:CreateDoublePulseBand(fxc, GREEN);break;
+    case fx_palette_pulse2_cyan:CreateDoublePulseBand(fxc, CYAN);break;
+    case fx_palette_pulse2_blue:CreateDoublePulseBand(fxc, BLUE);break;
+    case fx_palette_pulse2_magenta:CreateDoublePulseBand(fxc, MAGENTA);break;
+    case fx_palette_pulse2_orange:CreateDoublePulseBand(fxc, ORANGE);break;
+    case fx_palette_pulse2_half:CreateDoublePulseBand(fxc, HALF);break;
+    case fx_palette_pulse2_lowhalf:CreateDoublePulseBand(fxc, LOWHALF);break;    
 
     case fx_palette_dr: SetMicroPalette2(fxc, DARK, RED); break;
     case fx_palette_dy: SetMicroPalette2(fxc, DARK, YELLOW); break;
