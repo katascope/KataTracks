@@ -38,6 +38,16 @@ enum UserCommand
   Cmd_ColorOrange,
   Cmd_ColorHalf,
 
+  Cmd_ColorPulseDark, 
+  Cmd_ColorPulseWhite,
+  Cmd_ColorPulseRed,
+  Cmd_ColorPulseYellow,
+  Cmd_ColorPulseGreen,
+  Cmd_ColorPulseCyan,
+  Cmd_ColorPulseBlue,
+  Cmd_ColorPulseMagenta,
+  Cmd_ColorPulseOrange,  
+
   Cmd_ColorLava,
   Cmd_ColorCloud,
   Cmd_ColorOcean,

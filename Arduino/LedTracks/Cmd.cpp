@@ -98,6 +98,16 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorOrange:   InstantEvent(fxc, fx_palette_orange,   FxPaletteUpdateType::Once); break;
     case Cmd_ColorHalf:     InstantEvent(fxc, fx_palette_half,     FxPaletteUpdateType::Once); break;
 
+    case Cmd_ColorPulseDark:     InstantEvent(fxc, fx_palette_pulse_dark,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseWhite:    InstantEvent(fxc, fx_palette_pulse_white,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseRed:      InstantEvent(fxc, fx_palette_pulse_red,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseYellow:   InstantEvent(fxc, fx_palette_pulse_yellow,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseGreen:    InstantEvent(fxc, fx_palette_pulse_green,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseCyan:     InstantEvent(fxc, fx_palette_pulse_cyan,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseBlue:     InstantEvent(fxc, fx_palette_pulse_blue,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseMagenta:  InstantEvent(fxc, fx_palette_pulse_magenta,  FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseOrange:   InstantEvent(fxc, fx_palette_pulse_orange,   FxPaletteUpdateType::Once); break;
+
     case Cmd_ColorLava:           InstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once); break;
     case Cmd_ColorCloud:          InstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once); break;
     case Cmd_ColorOcean:          InstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once); break;
@@ -230,7 +240,17 @@ void UserCommandInput(FxController &fxc, int data)
     case '7': UserCommandExecute(fxc, Cmd_ColorMagenta); break;
     case '8': UserCommandExecute(fxc, Cmd_ColorOrange); break;
     case '9': UserCommandExecute(fxc, Cmd_ColorHalf); break;
-    
+
+    case 'a': UserCommandExecute(fxc, Cmd_ColorPulseDark); break;
+    case 's': UserCommandExecute(fxc, Cmd_ColorPulseWhite); break;
+    case 'd': UserCommandExecute(fxc, Cmd_ColorPulseRed); break;
+    case 'f': UserCommandExecute(fxc, Cmd_ColorPulseYellow); break;
+    case 'g': UserCommandExecute(fxc, Cmd_ColorPulseGreen); break;
+    case 'h': UserCommandExecute(fxc, Cmd_ColorPulseCyan); break;
+    case 'j': UserCommandExecute(fxc, Cmd_ColorPulseBlue); break;
+    case 'k': UserCommandExecute(fxc, Cmd_ColorPulseMagenta); break;
+    case 'l': UserCommandExecute(fxc, Cmd_ColorPulseOrange); break;
+        
     case 'q': UserCommandExecute(fxc, Cmd_ColorLava);break;
     case 'w': UserCommandExecute(fxc, Cmd_ColorCloud);break;
     case 'e': UserCommandExecute(fxc, Cmd_ColorOcean);break;

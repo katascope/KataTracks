@@ -319,11 +319,47 @@ namespace KataTracks
             var button = sender as Button;            
             StopAndSendToBoth(""+button.Tag);
         }
-        private void SendBothCRLF(object sender, RoutedEventArgs e)
+
+        private void SendColor(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            StopAndSendToBoth("" + button.Tag + "\r\n");
+            string buttonTag = button.Tag.ToString();
+            char buttonTagChar = buttonTag[0];
+
+            if (RadioColorSolid.IsChecked == true)
+            {
+                switch (buttonTagChar)
+                {
+                    case '0': StopAndSendToBoth("0"); break;
+                    case '1': StopAndSendToBoth("1"); break;
+                    case '2': StopAndSendToBoth("2"); break;
+                    case '3': StopAndSendToBoth("3"); break;
+                    case '4': StopAndSendToBoth("4"); break;
+                    case '5': StopAndSendToBoth("5"); break;
+                    case '6': StopAndSendToBoth("6"); break;
+                    case '7': StopAndSendToBoth("7"); break;
+                    case '8': StopAndSendToBoth("8"); break;
+                }
+            }
+            else if (RadioColorPulse.IsChecked == true)
+            {
+                switch (buttonTagChar)
+                {
+                    case '0': StopAndSendToBoth("a"); break;
+                    case '1': StopAndSendToBoth("s"); break;
+                    case '2': StopAndSendToBoth("d"); break;
+                    case '3': StopAndSendToBoth("f"); break;
+                    case '4': StopAndSendToBoth("g"); break;
+                    case '5': StopAndSendToBoth("h"); break;
+                    case '6': StopAndSendToBoth("j"); break;
+                    case '7': StopAndSendToBoth("k"); break;
+                    case '8': StopAndSendToBoth("l"); break;
+                }
+            }
+
+
         }
+
 
         private void InputVolumeTriggerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
