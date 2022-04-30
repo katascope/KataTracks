@@ -86,8 +86,6 @@ namespace KataTracks
             timePick = seconds * 10;
 
             string code = "@" + (timePick * 100) + "\r\n";
-            //CombinedBluetoothController.SendMessage(code);
-            DeviceManagerBT.SendMessage(code);
             DeviceManagerBLE.Play((ulong)timePick * 100);
 
             outputDevice.Play();
@@ -109,7 +107,6 @@ namespace KataTracks
             {
                 Canvas.SetLeft(TrackIndexPlay, 0);
             }
-            DeviceManagerBT.SendMessage("(");
             DeviceManagerBLE.SendMessage("(");
         }
 
@@ -149,15 +146,6 @@ namespace KataTracks
             {
                 WriteLogSlot(slot, kvp.Value.name, DeviceManagerBLE.bleDevices[kvp.Key].log);
                 slot++;
-            }
-
-            foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
-            {
-                if (kvp.Value.Connected)
-                {
-                    WriteLogSlot(slot, DeviceManagerBT.clientNames[kvp.Key], DeviceManagerBT.clientLogs[kvp.Key]);
-                    slot++;
-                }
             }
 
             textTickCount++;
@@ -200,11 +188,6 @@ namespace KataTracks
                     MainLog.Text += " (BT) " + kvp.Key + " NOT ok\n";
             }*/
 
-            //Upperview
-            BTScannerView.Text = DeviceWatcher.btMonitorLog;
-            foreach (KeyValuePair<string, string> kvp in DeviceManagerBT.discoveredBT)
-                BTScannerView.Text += kvp.Value + " d/c\n";
-
             if (foundDevices!= null)
             {
                 BleScannerView.Text = "Found: " + foundDevices.Count + "\n";
@@ -242,10 +225,7 @@ namespace KataTracks
 
         private void Exit(object sender, RoutedEventArgs e)
         {
-            //DeviceManagerBLE.StopMonitoring();
             DeviceManagerBLE.DisconnectAll();
-            DeviceManagerBT.StopMonitoring();
-            //DeviceManagerBT.DisconnectAll();
             MainLog.Text += "Exiting\n";
             System.Windows.Application.Current.Shutdown();
             Environment.Exit(0);
@@ -333,7 +313,6 @@ namespace KataTracks
         void StopAndSendToBoth(string value)
         {
             DeviceManagerBLE.SendMessage(value);
-            DeviceManagerBT.SendMessage(value);
         }
         private void SendBoth(object sender, RoutedEventArgs e)
         {

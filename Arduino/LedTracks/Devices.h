@@ -38,19 +38,6 @@ float getGyroZ();
 #endif
 /////////////////// IMU Section ///////////////////
 
-
-//////////////// BlueTooth Section ////////////////
-#if ENABLE_BLUETOOTH
-#include <SoftwareSerial.h>
-const PROGMEM int RX_PIN = 5;
-const PROGMEM int TX_PIN = 6;
-const PROGMEM unsigned long BLUETOOTH_BAUD_RATE = 9600;
-#include "Fx.h"
-void bluetoothStatus();
-void bluetoothBegin(unsigned long baud);
-void bluetoothPoll(FxController &fxc);
-#endif
-
 #if ENABLE_BLE
 #include "Fx.h"
 // BLE UUIDs

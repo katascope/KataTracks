@@ -57,14 +57,6 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
-#if ENABLE_BLUETOOTH
-  Serial.print(F("BT init: "));
-  Serial.println(BLUETOOTH_BAUD_RATE);
-  bluetoothBegin(BLUETOOTH_BAUD_RATE);
-#else
-  Serial.println(F("No BT init"));
-#endif
-
 #if ENABLE_IMU
   Serial.println(F("IMU init"));
   imuSetup(); 
@@ -78,7 +70,7 @@ void setup() {
 #if ENABLE_TEST_PATTERN
   fxController.fxState = FxState_TestPattern;
 #endif  
-  fxController.fxState = FxState_Default;//FxState_TestPattern;//PlayingTrack;
+  fxController.fxState = FxState_TestPattern;//PlayingTrack;//FxState_Default;//
 
   if (fxController.fxState == FxState_TestPattern)
   { 
@@ -127,10 +119,6 @@ void loop()
   MicrophoneSampler::Poll();
 #endif
   
-#if ENABLE_BLUETOOTH
-  bluetoothPoll(fxController);
-#endif
-
 #if ENABLE_BLE
   blePoll(fxController);
 #endif
@@ -161,9 +149,6 @@ void loop()
     unsigned long t =  millis();
     if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
     {      
-#if ENABLE_BLUETOOTH
-      bluetoothStatus();
-#endif
       FxDisplayStatus(fxController);      
       lastTimeDisplay = t;
     }

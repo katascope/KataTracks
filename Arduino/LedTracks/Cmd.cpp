@@ -55,7 +55,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
 #elif SYSTEM_UNO
   Serial.println(F("System: Arduino UNO"));
 #elif SYSTEM_NANO
-  Serial.println(F("System: Arduino Nano"));z
+  Serial.println(F("System: Arduino Nano"));
 #else
   Serial.println(F("System: UNKNOWN"));
 #endif

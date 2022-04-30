@@ -29,28 +29,6 @@ namespace KataTracks
             }
         }
 
-        static private void MonitorBluetoothDevices(object in_name)
-        {
-            while (keepListening)
-            {
-                BluetoothClient client = new BluetoothClient();
-                var pds = client.PairedDevices;
-                string tempLog = "Monitoring BT\n";
-                foreach (var pd in pds)
-                {
-                    if (pd.DeviceName.Contains("Lightsuit") || pd.DeviceName.Contains("LightSuit"))
-                    {
-                        DeviceManagerBT.EnsureConnection(pd.DeviceAddress, pd.DeviceName);
-                        tempLog += "+" + pd.DeviceName + " " + pd.DeviceAddress + " " + (pd.Connected ? "online" : "offline") + "\n";
-                    }
-                    else tempLog += "-" + pd.DeviceName + " " + pd.DeviceAddress + "\n";
-                }
-                btMonitorLog = tempLog;
-
-                Thread.Sleep(5000);
-            }
-        }
-
         static private void MonitorBLEDevices(object in_name)
         {
             while (keepListening)
@@ -73,13 +51,6 @@ namespace KataTracks
         public static void StartMonitoring()
         {
             _isMonitoring = true;
-            //bleListenerThread = new Thread(MonitorBLEDevices);
-            //bleListenerThread.Start("BLEDeviceWatcher");
-
-            btListenerThread = new Thread(MonitorBluetoothDevices);
-            btListenerThread.Start("BTDeviceWatcher");
-
-
             DeviceManagerBLE.StartMonitoring(null);
         }
 
