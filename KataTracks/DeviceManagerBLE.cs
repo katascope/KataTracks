@@ -89,35 +89,42 @@ namespace KataTracks
             RemoteGattServer rgs = bd.Gatt;
             device.log = "BD " + bd.Name + " = " + bd.Id + "\nQuerying GATT\n";
 
-            List<GattService> gattServices = await rgs.GetPrimaryServicesAsync();
-            if (gattServices == null)
+            try
             {
-                device.log += "FAILED TO GET PRIMARY SERVICES\n";
-                return;
-            }
-            foreach (GattService gattService in gattServices)
-            {
-                BleCacheService service = new BleCacheService();
-                service.uuid = gattService.Uuid;
-                service.gattService = gattService;
-
-                //device.log += "Gatt Service : " + gattService.Uuid + "\n";
-                var characteristics = await gattService.GetCharacteristicsAsync();
-                foreach (GattCharacteristic gattCharacteristic in characteristics)
+                List<GattService> gattServices = await rgs.GetPrimaryServicesAsync();
+                if (gattServices == null)
                 {
-                    BleCacheCharacteristic characteristic = new BleCacheCharacteristic();
-                    //device.log += "GattCharacteristic: " + gattCharacteristic.Uuid + "\n";
-                    characteristic.uuid = gattCharacteristic.Uuid;
-                    characteristic.gattCharacteristic = gattCharacteristic;
-                    service.characteristics[characteristic.uuid] = characteristic;
+                    device.log += "FAILED TO GET PRIMARY SERVICES\n";
+                    return;
                 }
-                device.serviceCache[service.uuid] = service;//.Add(service);
+                foreach (GattService gattService in gattServices)
+                {
+                    BleCacheService service = new BleCacheService();
+                    service.uuid = gattService.Uuid;
+                    service.gattService = gattService;
+
+                    //device.log += "Gatt Service : " + gattService.Uuid + "\n";
+                    var characteristics = await gattService.GetCharacteristicsAsync();
+                    foreach (GattCharacteristic gattCharacteristic in characteristics)
+                    {
+                        BleCacheCharacteristic characteristic = new BleCacheCharacteristic();
+                        //device.log += "GattCharacteristic: " + gattCharacteristic.Uuid + "\n";
+                        characteristic.uuid = gattCharacteristic.Uuid;
+                        characteristic.gattCharacteristic = gattCharacteristic;
+                        service.characteristics[characteristic.uuid] = characteristic;
+                    }
+                    device.serviceCache[service.uuid] = service;//.Add(service);
+                }
+                //device.log = bd.Name + " BLE thread(" + device.monitorThread.ManagedThreadId.ToString() + ")\n";
+                device.log = " " + bd.Name + " t=" + device.monitorThread.ManagedThreadId.ToString() + ", gatt= " + gattServices.Count + "\n  ONLINE";
+                device.bluetoothDevice = bd;
+                //bleDevices[device.id] = device;
+                device.queryingGatt = false;
             }
-            //device.log = bd.Name + " BLE thread(" + device.monitorThread.ManagedThreadId.ToString() + ")\n";
-            device.log = " " + bd.Name + " t=" + device.monitorThread.ManagedThreadId.ToString() + ", gatt= " + gattServices.Count + "\n  ONLINE";
-            device.bluetoothDevice = bd;
-            //bleDevices[device.id] = device;
-            device.queryingGatt = false;
+            catch (Exception ex)
+            {
+                device.log = "GATT Exception\n";
+            }
         }
 
         static private void MonitorDevice(object in_name)
@@ -147,10 +154,13 @@ namespace KataTracks
                     while (bleDevices[id].sendQueue.Count > 0)
                     {
                         string message = "";
-                        bleDevices[id].sendQueue.TryDequeue(out message);
-                        GattCharacteristic gattCharacteristicCommand = bleDevices[id].serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
-                        byte[] bytesCommand = Encoding.ASCII.GetBytes(message + "\r\n");
-                        gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);
+                        if (bleDevices[id].serviceCache.ContainsKey(mainServiceUuid))
+                        {
+                            GattCharacteristic gattCharacteristicCommand = bleDevices[id].serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
+                            bleDevices[id].sendQueue.TryDequeue(out message);
+                            byte[] bytesCommand = Encoding.ASCII.GetBytes(message + "\r\n");
+                            gattCharacteristicCommand.WriteValueWithResponseAsync(bytesCommand);
+                        }
                     }
                 }
             }
