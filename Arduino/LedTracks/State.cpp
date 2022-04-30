@@ -21,23 +21,18 @@ void State_Poll_IMU(FxController &fxc)
       byte g = (float)((float)127.0f-(float)getAccelY()*120.0f);
       byte b = (float)((float)127.0f-(float)getAccelZ()*120.0f);
 
-      //byte r = (float)((float)127.0f-(float)getGyroX()*1.0f);
-      //byte g = (float)((float)127.0f-(float)getGyroY()*1.0f);
-      //byte b = (float)((float)127.0f-(float)getGyroZ()*1.0f);
-
       float roll = 0.98 * getGyroX() + 0.02 * getAccelX();
       float pitch = 0.98 * getGyroY() + 0.02 * getAccelY();
       Serial.print(F(" roll "));
       Serial.print(roll);
-      Serial.print(F(" "));
+      Serial.print(F("pitch "));
       Serial.print(pitch);
-      //r = (byte)( 0   );
-      //g = (byte)( roll * 255);
-      //b = (byte)( pitch * 255);
 
-      //for (int i=0;i<NUM_LEDS;i++)
+      r = (float)((float)127.0f-(float)getAccelX()*120.0f);
+      g = 0;
+      b = (float)((float)127.0f-(float)getAccelY()*120.0f);
+
       fxc.palette[fxc.paletteIndex] = LEDRGB(r,g,b);
-      //rotPalette(fxc.palette);
       fxc.paletteDirection = 1;
       fxc.paletteSpeed = 1;
       fxc.fxPaletteUpdateType = FxPaletteUpdateType::Once;
@@ -123,8 +118,13 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
         FxEventProcess(fxc, SongTrack_event(i));
 
     setTimecodeLastMatched(timecode);//timeController.lastMatchedTimecode = timecode;
+
   }
   
+    if (fxc.inImu)
+    {
+      State_Poll_IMU(fxc);
+    }
 
   unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
   fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;

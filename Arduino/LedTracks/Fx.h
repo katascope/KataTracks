@@ -21,6 +21,7 @@ struct FxController
   FxTrackEndAction fxTrackEndAction;
   unsigned char brightness = 50;
   unsigned long lastTimeLedUpdate = 0;  
+  bool inImu = false;
 };
 
 void FxEventProcess(FxController &fxc,int event);

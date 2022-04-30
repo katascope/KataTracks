@@ -132,6 +132,8 @@ void FxDisplayStatus(FxController &fxc)
 #endif
 
 #if ENABLE_IMU
+      if (fxc.inImu)
+           Serial.print(F("(IN IMU)"));
       Serial.print(F(" IMU:"));
       Serial.print(getAccelX());
       Serial.print(F(" "));
@@ -159,6 +161,8 @@ void FxDisplayStatus(FxController &fxc)
 void FxEventProcess(FxController &fxc,int event)
 {
   bool updatePal = false;
+
+  fxc.inImu = false;//this will only get set of the event is to go into imu
   
   switch (event)
   {
@@ -432,6 +436,20 @@ void FxEventProcess(FxController &fxc,int event)
       0xFF9900, 0xFFCC00, 0xFFFF00, 0xFFFF33, 
       0xFFFF66, 0xFFFF99, 0xFFFFCC, 0xFFFFFF);break;
 
+#if ENABLE_IMU
+    case fx_palette_accel: 
+    case fx_palette_gyro: 
+    {
+      /*byte r = (float)((float)127.0f-(float)getAccelX()*120.0f);
+      byte g = (float)((float)127.0f-(float)getAccelY()*120.0f);
+      byte b = (float)((float)127.0f-(float)getAccelZ()*120.0f);
+      fxc.palette[0] = LEDRGB(r,g,b);*/
+      fxc.inImu = true;
+    }
+    break;
+#endif
+
+    
     /*case fx_palette_accel: 
     {
       byte r = (float)((float)127.0f-(float)imuAccelX*120.0f);

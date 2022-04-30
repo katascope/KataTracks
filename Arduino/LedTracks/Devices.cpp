@@ -173,13 +173,13 @@ BLEUnsignedLongCharacteristic counterCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTE
 BLEBoolCharacteristic resetCounterCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COUNTER_RESET, BLEWriteWithoutResponse );
 void blePeripheralConnectHandler(BLEDevice central) {
   // central connected event handler
-  Serial.print(F("Connected event, central: "));
-  Serial.println(central.address());
+  //Serial.print(F("Connected event, central: "));
+  //Serial.println(central.address());
 }
 void blePeripheralDisconnectHandler(BLEDevice central) {
   // central disconnected event handler
-  Serial.print(F("Disconnected event, central: "));
-  Serial.println(central.address());
+  //Serial.print(F("Disconnected event, central: "));
+  //Serial.println(central.address());
 }
 bool bleSetup()
 {
@@ -252,8 +252,8 @@ void blePoll(FxController &fxc)
 
   if ( central )
   {
-    Serial.println( F("Connected to central: " ));
-    Serial.println( central.address() );
+//    Serial.println( F("Connected to central: " ));
+  //  Serial.println( central.address() );
 
     if ( central.connected() )
     {
@@ -323,8 +323,8 @@ void blePoll(FxController &fxc)
 
     } // while connected
 
-    Serial.print( F( "Disconnected from central: " ) );
-    Serial.println( central.address() );
+    //Serial.print( F( "Disconnected from central: " ) );
+    //Serial.println( central.address() );
   } // if central
 } // loop
 #endif

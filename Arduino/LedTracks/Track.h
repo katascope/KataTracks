@@ -70,7 +70,7 @@ const unsigned long SongTrack[] PROGMEM =
   47100,fx_palette_blue,
   
   50400,fx_transition_timed_fade,
-  50400,fx_palette_red,
+  50400,fx_palette_half,
   53300,fx_transition_timed_fade,
   53300,fx_palette_magenta,
   
@@ -81,44 +81,18 @@ const unsigned long SongTrack[] PROGMEM =
   54600,fx_palette_blue,
 
   57800,fx_transition_timed_fade,
-  57800,fx_palette_dark,
+  57800,fx_palette_half,
 
   60000,fx_speed_3,
-  60000,fx_speed_pos,
-  60000,fx_transition_timed_fade,
-  60000,fx_palette_pulse_magenta,
-/*  60000,fx_speed_2,
   60000,fx_speed_neg,
   60000,fx_transition_timed_fade,
-  60000,fx_palette_pulse_cyan,
-  61000,fx_transition_timed_fade,
-  61000,fx_palette_pulse_magenta,
-  62000,fx_transition_timed_fade,
-  62000,fx_palette_pulse_cyan,
-  63000,fx_transition_timed_fade,
-  63000,fx_palette_pulse_magenta,
-  64000,fx_transition_timed_fade,
-  64000,fx_palette_pulse_cyan,
-  65000,fx_transition_timed_fade,
-  65000,fx_palette_pulse_magenta,
-  66000,fx_transition_timed_fade,
-  66000,fx_palette_pulse_magenta,
-  67000,fx_transition_timed_fade,
-  67000,fx_palette_pulse_magenta,
-  68000,fx_transition_timed_fade,
-  68000,fx_palette_pulse_magenta,
-  69000,fx_transition_timed_fade,
-  69000,fx_palette_pulse_magenta,
-  70000,fx_transition_timed_fade,
-  70000,fx_palette_pulse_magenta,
-  71000,fx_transition_timed_fade,
-  71000,fx_palette_pulse_magenta,*/
+  60000,fx_palette_pulse_magenta,
   
   //CHAPTER 2
   72000,fx_speed_0,
   72000,fx_speed_pos,
   72000,fx_transition_timed_fade,
-  72000,fx_palette_pulse_cyan,
+  72000,fx_palette_magenta,
 
 //descents
   73000,fx_transition_timed_wipe_pos,
@@ -136,27 +110,40 @@ const unsigned long SongTrack[] PROGMEM =
   79000,fx_transition_timed_wipe_pos,
   79000,fx_palette_cyan,
 
-  80400,fx_transition_timed_fade,
-  80400,fx_palette_magenta,
+//  80400,fx_transition_timed_fade,
+//  80400,fx_palette_magenta,
   ///bwaaah
+  81800,fx_speed_2,
+  81800,fx_speed_neg,
   81800,fx_transition_timed_fade, 
-  81800,fx_palette_white,
-  82800,fx_transition_timed_fade,
-  82800,fx_palette_red,
+  81800,fx_palette_white,  
+  82800,fx_transition_timed_fade, 
+  82800,fx_palette_white,  
   //end of bwaah
 
   88000,fx_transition_timed_fade,
-  88000,fx_palette_magenta,
+  88000,fx_palette_rb,
 
   95000,fx_transition_timed_fade,
   95000,fx_palette_blue,
 
 //98 to 107 = the spin and recover
-  98500,fx_speed_3,
+
+//pulsy approach
+  /*98500,fx_speed_3,
   98500,fx_speed_pos,
   98500,fx_transition_timed_fade,
-  98500,fx_palette_pulse2_white,//for lead
+  98500,fx_palette_pulse_white,*/
+//imu approach
+  98500,fx_speed_2,
+  98500,fx_speed_neg,
+  98500,fx_transition_fast,
+  98500,fx_palette_accel,
 
+  104000,fx_speed_2,
+  104000,fx_speed_neg,
+  104000,fx_transition_timed_fade,
+  104000,fx_palette_pulse_white,
   
 //CHAPTER 3
 //big march around
@@ -172,7 +159,7 @@ const unsigned long SongTrack[] PROGMEM =
   111000,fx_palette_white,
 
   111000,fx_speed_1,
-  111000,fx_speed_pos,
+  111000,fx_speed_neg,
   111000,fx_transition_timed_fade,
   111000,fx_palette_cyan,
   118000,fx_transition_timed_fade,
