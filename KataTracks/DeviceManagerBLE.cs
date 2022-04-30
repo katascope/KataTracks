@@ -55,8 +55,10 @@ namespace KataTracks
         static List<string> connectionList = new List<string>() {
                 "FA642247BCCD",
                 "CA8E42F29042",
-                "90335422B697" //LightsuitC
-                //"FDB857FE7C3D",
+                "90335422B697", //LightsuitC
+                "757773C6C5F1", //LightSuitX
+                //"FDB857FE7C3D",//LightSuidD?
+
             };
     public static void StartMonitoring(List<string> bleDeviceConnectionList)
         {

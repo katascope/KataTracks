@@ -188,7 +188,7 @@ namespace KataTracks
             else MainLog.Text += "SoundTrigger: inactive\n";
 
             MainLog.Text += "Update #" + textTickCount + "\n";
-            MainLog.Text += "Actives:\n";
+           /* MainLog.Text += "Actives:\n";
             foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
                 MainLog.Text += " " + kvp.Value.log + "\n";
 
@@ -198,10 +198,7 @@ namespace KataTracks
                     MainLog.Text += " (BT) " + kvp.Key + " ok\n";
                 else if (kvp.Value.Connected)
                     MainLog.Text += " (BT) " + kvp.Key + " NOT ok\n";
-            }
-            MainLog.Text += "\n";
-            MainLog.Text += DeviceManagerBLE.MonitorLog;
-            MainLog.ScrollToEnd();
+            }*/
 
             //Upperview
             BTScannerView.Text = DeviceWatcher.btMonitorLog;
@@ -216,6 +213,11 @@ namespace KataTracks
                     BleScannerView.Text += kvp.Value + " : " + kvp.Key + "\n";
                 }
             }
+            MainLog.Text += BleScannerView.Text;
+            
+            MainLog.Text += "\n";
+            MainLog.Text += DeviceManagerBLE.MonitorLog;
+            MainLog.ScrollToEnd();
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
