@@ -43,17 +43,17 @@
         <Button Click="SendColor" Tag="7" Content="Magenta" Canvas.Left="853" Canvas.Top="714" Background="#FF012461" Foreground="Magenta" BorderBrush="Black" Width="71" Height="30"/>
         <Button Click="SendColor" Tag="8" Content="Orange" Canvas.Left="931" Canvas.Top="714" Background="#FF012461" Foreground="#FFFF7F00" BorderBrush="Black" Width="70" Height="30"/>
 
-        <Button Click="SendBoth" Tag="t" Content="Rainbow" Canvas.Left="1022" Canvas.Top="732" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="56"/>
-        <Button Click="SendBoth" Tag="q" Content="Lava" Canvas.Left="1085" Canvas.Top="732" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="61"/>
-        <Button Click="SendBoth" Tag="w" Content="Cloud" Canvas.Left="1156" Canvas.Top="757" Background="#FF012461" Foreground="White" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="71"/>
-        <Button Click="SendBoth" Tag="y" Content="Rainbow2" Canvas.Left="1155" Canvas.Top="732" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="72"/>
-        <Button Click="SendBoth" Tag="u" Content="Party" Canvas.Left="1024" Canvas.Top="757" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="53" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button Click="SendBoth" Tag="i" Content="Heat" Canvas.Left="1087" Canvas.Top="757" Background="#FF012461" Foreground="White" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="59"/>
+        <Button Click="SendBoth" Tag="T" Content="Rainbow" Canvas.Left="587" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="56"/>
+        <Button Click="SendBoth" Tag="Q" Content="Lava" Canvas.Left="649" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="62"/>
+        <Button Click="SendBoth" Tag="W" Content="Cloud" Canvas.Left="928" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="71"/>
+        <Button Click="SendBoth" Tag="Y" Content="Rainbow2" Canvas.Left="719" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="72"/>
+        <Button Click="SendBoth" Tag="U" Content="Party" Canvas.Left="796" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="53" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="I" Content="Heat" Canvas.Left="859" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="59"/>
         <Button Click="SendBoth" Tag="-" Content="Speed -" Canvas.Left="1027" Canvas.Top="646" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="=" Content="Speed +" Canvas.Left="1127" Canvas.Top="646" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="_" Content="Speed Neg" Canvas.Left="1027" Canvas.Top="676" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
         <Button Click="SendBoth" Tag="+" Content="Speed Pos" Canvas.Left="1127" Canvas.Top="676" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
-        <Button Click="SendBoth" Tag="~" Content="Speed Stop" Canvas.Left="1027" Canvas.Top="705" Background="#FF012461" Foreground="White" BorderBrush="Black"/>
+        <Button Click="SendBoth" Tag="~" Content="Speed Stop" Canvas.Left="1027" Canvas.Top="706" Background="#FF012461" Foreground="White" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="190" RenderTransformOrigin="0.488,0.676"/>
         <TextBox x:Name="Log3" HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="663" Text="Not connected." TextWrapping="Wrap" Width="200" Height="47" Background="Black" Foreground="#FF59ABF0" Canvas.Left="611" HorizontalAlignment="Center" VerticalAlignment="Top"/>
@@ -68,8 +68,8 @@
             VerticalScrollBarVisibility="Visible"
             Canvas.Top="447" Text="" TextWrapping="Wrap" Width="204" Height="189" Background="Black" Foreground="#FF59ABF0" Canvas.Left="1320"/>
         <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="BLE Search" Height="20 " Width="90" Background="#FF012461" Foreground="#FF00807D" Canvas.Left="33" BorderBrush="#FF120351" Canvas.Top="630"/>
-        <ProgressBar x:Name="InputVolume" Height="31" Canvas.Left="987" Canvas.Top="41" Width="300" Foreground="#FF01457E" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FF151515"/>
-        <Slider x:Name="InputVolumeTriggerSlider" Canvas.Left="987" Canvas.Top="72" Width="300" Maximum="100" Value="50" ValueChanged="InputVolumeTriggerSlider_ValueChanged" Height="36" TickPlacement="TopLeft" TickFrequency="5">
+        <ProgressBar x:Name="InputVolume" Height="31" Canvas.Left="987" Canvas.Top="41" Width="289" Foreground="#FF01457E" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FF151515"/>
+        <Slider x:Name="InputVolumeTriggerSlider" Canvas.Left="987" Canvas.Top="71" Width="289" Maximum="100" Value="50" ValueChanged="InputVolumeTriggerSlider_ValueChanged" Height="36" TickPlacement="TopLeft" TickFrequency="5" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.104">
             <Slider.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="2"/>
             </Slider.LayoutTransform>
@@ -118,5 +118,8 @@
                 </TransformGroup>
             </RadioButton.RenderTransform>
         </RadioButton>
+        <Button Click="SendBoth" Tag=";" Content="GyroIMU" Canvas.Left="1030" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="87" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Button Click="SendBoth" Tag="q" Content="RedBlue" Canvas.Left="419" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="78" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="w" Content="CyanMagenta" Canvas.Left="505" Canvas.Top="761" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="78" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Canvas>
 </Window>

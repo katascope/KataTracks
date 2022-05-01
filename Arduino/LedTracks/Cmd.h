@@ -38,6 +38,9 @@ enum UserCommand
   Cmd_ColorOrange,
   Cmd_ColorHalf,
 
+  Cmd_ColorRedBlue,
+  Cmd_ColorCyanMagenta,
+
   Cmd_ColorPulseDark, 
   Cmd_ColorPulseWhite,
   Cmd_ColorPulseRed,
@@ -47,6 +50,15 @@ enum UserCommand
   Cmd_ColorPulseBlue,
   Cmd_ColorPulseMagenta,
   Cmd_ColorPulseOrange,  
+  Cmd_ColorPulse2Dark, 
+  Cmd_ColorPulse2White,
+  Cmd_ColorPulse2Red,
+  Cmd_ColorPulse2Yellow,
+  Cmd_ColorPulse2Green,
+  Cmd_ColorPulse2Cyan,
+  Cmd_ColorPulse2Blue,
+  Cmd_ColorPulse2Magenta,
+  Cmd_ColorPulse2Orange,  
 
   Cmd_ColorLava,
   Cmd_ColorCloud,
@@ -57,6 +69,8 @@ enum UserCommand
   Cmd_ColorParty,
   Cmd_ColorHeat,
 
+  Cmd_ColorImu,
+  
   Cmd_SpeedNeg,
   Cmd_SpeedPos,
   Cmd_SpeedDec,

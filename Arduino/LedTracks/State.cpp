@@ -120,14 +120,14 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
     setTimecodeLastMatched(timecode);//timeController.lastMatchedTimecode = timecode;
 
   }
-
+/*
 #if ENABLE_IMU  
   if (fxc.inImu)
   {
     State_Poll_IMU(fxc);
   }
 #endif
-
+*/
   unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
   fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
 
@@ -168,7 +168,7 @@ void State_Poll(FxController &fxc)
 #endif
   
 #if ENABLE_IMU
-  if (fxc.fxState == FxState_IMU)
+  if (fxc.fxState == FxState_IMU||fxc.inImu)
     State_Poll_IMU(fxc);
 #endif
 

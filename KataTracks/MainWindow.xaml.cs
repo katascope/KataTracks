@@ -356,7 +356,21 @@ namespace KataTracks
                     case '8': StopAndSendToBoth("l"); break;
                 }
             }
-
+            else if (RadioColorPulse2.IsChecked == true)
+            {
+                switch (buttonTagChar)
+                {
+                    case '0': StopAndSendToBoth("A"); break;
+                    case '1': StopAndSendToBoth("S"); break;
+                    case '2': StopAndSendToBoth("D"); break;
+                    case '3': StopAndSendToBoth("F"); break;
+                    case '4': StopAndSendToBoth("G"); break;
+                    case '5': StopAndSendToBoth("H"); break;
+                    case '6': StopAndSendToBoth("J"); break;
+                    case '7': StopAndSendToBoth("K"); break;
+                    case '8': StopAndSendToBoth("l"); break;
+                }
+            }
 
         }
 
