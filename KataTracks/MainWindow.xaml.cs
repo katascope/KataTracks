@@ -312,7 +312,7 @@ namespace KataTracks
         {
             volume = (float)e.NewValue;
             if (outputDevice != null)
-                outputDevice.Volume = (int)(volume/100.0f);
+                outputDevice.Volume = (volume/100.0f);
         }
 
 

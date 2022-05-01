@@ -263,3 +263,5 @@ packages/Microsoft.Windows.SDK.Contracts.10.0.19041.1/ref/netstandard2.0/Windows
 packages/Microsoft.Windows.SDK.Contracts.10.0.19041.1/ref/netstandard2.0/Windows.UI.Xaml.Hosting.HostingContract.winmd
 packages/Microsoft.Windows.SDK.Contracts.10.0.19041.1/ref/netstandard2.0/Windows.Web.Http.Diagnostics.HttpDiagnosticsContract.winmd
 packages/Microsoft.Windows.SDK.Contracts.10.0.19041.1/ref/netstandard2.0/Windows.WinMD
+.vs/KataTracks/v17/.futdcache.v1
+.vs/KataTracks/v17/.suo
