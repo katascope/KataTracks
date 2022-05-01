@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using NAudio.Wave;
 using NAudio.CoreAudioApi;
-using NAudio.Wave;
-//using NAudioDemo.Utils;
 
 namespace SoundLevels
 {
     class VolumeMonitor
     {
-        private static IWaveIn captureDevice;
+//        private static IWaveIn captureDevice;
         private static float trackMax = 0;
 
         //Between 0 and 1

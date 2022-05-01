@@ -2,12 +2,6 @@
 using System;
 using System.Text;
 using System.Threading;
-using System;
-using System.IO;
-using System.Threading;
-using System.Collections.Generic;
-using InTheHand.Net.Bluetooth;
-using InTheHand.Net.Sockets;
 
 namespace KataTracks
 {

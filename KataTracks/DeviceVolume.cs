@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NAudio.Wave;
 using NAudio.CoreAudioApi;
-using NAudio.Wave;
 
 namespace KataTracks
 {
@@ -11,7 +10,7 @@ namespace KataTracks
         private static bool _isActive = false;
         public static bool IsActive() { return _isActive;  }
 
-        private static IWaveIn captureDevice;
+//        private static IWaveIn captureDevice;
         private static float trackMax = 0;
         private static float bias = 1;
 
@@ -81,8 +80,9 @@ namespace KataTracks
                 newWaveIn.StartRecording();
                 _isActive = true;
             }
-            catch (Exception ex)
+            catch 
             {
+                return;
             }
         }
     };

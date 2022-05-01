@@ -123,7 +123,7 @@ namespace KataTracks
             }
             catch (Exception ex)
             {
-                device.log = "GATT Exception\n";
+                device.log = "GATT Exception\n" + ex.ToString();
             }
         }
 
@@ -256,7 +256,7 @@ namespace KataTracks
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return;
             }

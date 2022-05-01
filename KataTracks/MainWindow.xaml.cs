@@ -19,7 +19,6 @@ namespace KataTracks
     public partial class MainWindow : Window
     {
         static string filename = "..\\..\\..\\TronGame.m4a";
-        static string bluetoothDeviceSearchName = "Lightsuit";
         static WaveOutEvent outputDevice = null;
         static DispatcherTimer animationTimer;
         static DispatcherTimer connectionTimer;
@@ -176,28 +175,30 @@ namespace KataTracks
             else MainLog.Text += "SoundTrigger: inactive\n";
 
             MainLog.Text += "Update #" + textTickCount + "\n";
-           /* MainLog.Text += "Actives:\n";
-            foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
-                MainLog.Text += " " + kvp.Value.log + "\n";
+            /* MainLog.Text += "Actives:\n";
+             foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
+                 MainLog.Text += " " + kvp.Value.log + "\n";
 
-            foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
-            {
-                if (kvp.Value.Connected)
-                    MainLog.Text += " (BT) " + kvp.Key + " ok\n";
-                else if (kvp.Value.Connected)
-                    MainLog.Text += " (BT) " + kvp.Key + " NOT ok\n";
-            }*/
+             foreach (KeyValuePair<string, BluetoothClient> kvp in DeviceManagerBT.clients)
+             {
+                 if (kvp.Value.Connected)
+                     MainLog.Text += " (BT) " + kvp.Key + " ok\n";
+                 else if (kvp.Value.Connected)
+                     MainLog.Text += " (BT) " + kvp.Key + " NOT ok\n";
+             }*/
 
+            string bleScanned = "";
             if (foundDevices!= null)
             {
-                BleScannerView.Text = "Found: " + foundDevices.Count + "\n";
+                bleScanned = "Found: " + foundDevices.Count + "\n";
                 foreach (KeyValuePair<string, string> kvp in foundDevices)
                 {
-                    BleScannerView.Text += kvp.Value + " : " + kvp.Key + "\n";
+                    bleScanned += kvp.Value + " : " + kvp.Key + "\n";
                 }
             }
-            MainLog.Text += BleScannerView.Text;
-            
+            MainLog.Text += bleScanned;
+
+
             MainLog.Text += "\n";
             MainLog.Text += DeviceManagerBLE.MonitorLog;
             MainLog.ScrollToEnd();
@@ -243,9 +244,8 @@ namespace KataTracks
 
         private void BleSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            BleScannerView.Text = "Scanning..\n";
             discoverBleThread = new Thread(DiscoverBleThread);
-            discoverBleThread.Start(BleScannerView);
+            discoverBleThread.Start();
         }
 
         private void PlayFromStartButton_Click(object sender, RoutedEventArgs e)
