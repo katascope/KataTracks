@@ -15,6 +15,7 @@ namespace KataTracks
         private static float bias = 1;
 
         public static void SetBias(float b) { bias = b; }
+        public static float GetBias() { return bias; }
 
         //Between 0 and 1
         public static float GetVolume() { return trackMax; }
@@ -30,7 +31,7 @@ namespace KataTracks
                 // to floating point
                 var sample32 = sample / 32768f;
                 
-                sample32 *= bias;//multiple by bias
+                sample32 *= bias*100.0f;//multiple by bias
 
                 // absolute value 
                 if (sample32 < 0) sample32 = -sample32;

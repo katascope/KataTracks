@@ -25,7 +25,7 @@ namespace KataTracks
         static DispatcherTimer btTextTimer;
         static bool playing = false;
         static DateTime literalTrackStartTime;
-        float volume = 1;
+        float volume = 50;
         static long timePick = 0;
         static bool b1Down = false;
         static ulong textTickCount = 0;
@@ -88,7 +88,7 @@ namespace KataTracks
             DeviceManagerBLE.Play((ulong)timePick * 100);
 
             outputDevice.Play();
-            outputDevice.Volume = volume;
+            outputDevice.Volume = volume/100.0f;
 
             literalTrackStartTime = DateTime.Now;
 
@@ -150,9 +150,10 @@ namespace KataTracks
             textTickCount++;
 
             MainLog.Text = "";
-            float volume = DeviceVolume.GetVolume();
+            float inputVolume = DeviceVolume.GetVolume();
+            InputVolume.Value = inputVolume;
 
-            if (useSoundTrigger && volume >= VolumeThreshold && !playing)
+            if (useSoundTrigger && inputVolume >= VolumeThreshold && !playing)
             {
                 Canvas.SetLeft(TrackIndex, 0);
                 timePick = 0;
@@ -164,17 +165,27 @@ namespace KataTracks
                 PlayTrack(1);
             }
 
-            InputVolume.Maximum = 100;
-            InputVolume.Value = volume;
+            //MainLog.Text += "Update #" + textTickCount + " ";
+
+            if (playing)
+                MainLog.Text += "Playing,";
+            else MainLog.Text += "Stopped,";
+            MainLog.Text += " Seek " + (timePick*100.0f)+ " ms\n";
+
+            MainLog.Text += "SoundTrigger " + (useSoundTrigger ? "ON" : "off") + "\n";
+
             if (DeviceVolume.IsActive())
-                MainLog.Text += "InputVolume: " + volume + "\n";
-            else MainLog.Text += "InputVolume: inactive\n";
+                MainLog.Text += "Input (" + (int)(DeviceVolume.GetBias()*100.0f) + "%) "+ (int)inputVolume + " of " + (int)VolumeThreshold + "\n";
+            else MainLog.Text += "Input inactive\n";
 
-            if (useSoundTrigger)
-                MainLog.Text += "SoundTrigger: on\n";
-            else MainLog.Text += "SoundTrigger: inactive\n";
+/*            if (outputDevice != null)
+                MainLog.Text += "Output (" + (int)volume + "%)\n";
+            else
+                MainLog.Text += "Output inactive\n";*/
 
-            MainLog.Text += "Update #" + textTickCount + "\n";
+            if (foundDevices != null)
+                MainLog.Text += "Devices " + foundDevices.Count + "\n";
+
             /* MainLog.Text += "Actives:\n";
              foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
                  MainLog.Text += " " + kvp.Value.log + "\n";
@@ -199,7 +210,7 @@ namespace KataTracks
             MainLog.Text += bleScanned;
 
 
-            MainLog.Text += "\n";
+            //MainLog.Text += "\n";
             MainLog.Text += DeviceManagerBLE.MonitorLog;
             MainLog.ScrollToEnd();
         }
@@ -230,11 +241,6 @@ namespace KataTracks
             MainLog.Text += "Exiting\n";
             System.Windows.Application.Current.Shutdown();
             Environment.Exit(0);
-        }
-
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
-        {
-            DeviceWatcher.StartMonitoring();
         }
 
         private static void DiscoverBleThread(object in_name)
@@ -306,7 +312,7 @@ namespace KataTracks
         {
             volume = (float)e.NewValue;
             if (outputDevice != null)
-                outputDevice.Volume = volume;
+                outputDevice.Volume = (int)(volume/100.0f);
         }
 
 
@@ -382,7 +388,7 @@ namespace KataTracks
 
         private void InputVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            DeviceVolume.SetBias((float)e.NewValue*2.0f);
+            DeviceVolume.SetBias((float)e.NewValue/50.0f);//100 * 2
         }
 
         private void TriggerCheckBox_Checked(object sender, RoutedEventArgs e)

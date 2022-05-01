@@ -140,7 +140,7 @@ namespace KataTracks
                     {
                         if (!bleDevices[id].queryingGatt)
                         {
-                            bleDevices[id].log = "GattQuery : " + id + " " + bleDevices[id].queryingGatt;
+                            bleDevices[id].log = "GattQuery : " + id + "\n Query " + bleDevices[id].queryingGatt;
                             Task.Run(() => QueryGATT(id)).Wait();
                         }
                     }
