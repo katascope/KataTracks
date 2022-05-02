@@ -4,6 +4,7 @@ using InTheHand.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Threading;
 using NAudio;
 using NAudio.Wave;
@@ -109,27 +110,43 @@ namespace KataTracks
             DeviceManagerBLE.SendMessage("(");
         }
 
-        private void WriteLogSlot(int slot, string title, string message)
+        private void WriteLogSlot(int slot, string title, string message, int color)
         {
+            var brush = new SolidColorBrush(Color.FromRgb(127, 127, 127));
+            if (color == 1)
+                brush = new SolidColorBrush(Color.FromRgb(192,192, 63));
+            if (color == 2)
+                brush = new SolidColorBrush(Color.FromRgb(63, 192, 63));
+            if (color == 3)
+                brush = new SolidColorBrush(Color.FromRgb(192, 63, 63));
+
             switch (slot)
             {
                 case 0:
                     Log1Label.Content = title;
+                    Log1Label.Foreground = brush;
                     Log1.Text = message;
+                    Log1.Foreground = brush;
                     Log1.ScrollToEnd();
                     break;
                 case 1:
                     Log2Label.Content = title;
+                    Log2Label.Foreground = brush;
                     Log2.Text = message;
+                    Log2.Foreground = brush;
                     Log2.ScrollToEnd();
                     break;
                 case 2:
                     Log3Label.Content = title;
+                    Log3Label.Foreground = brush;
                     Log3.Text = message;
+                    Log3.Foreground = brush;
                     Log3.ScrollToEnd();
                     break;
                 case 3:
                     Log4Label.Content = title;
+                    Log4Label.Foreground = brush;
+                    Log4.Foreground = brush;
                     Log4.Text = message;
                     Log4.ScrollToEnd();
                     break;
@@ -143,7 +160,14 @@ namespace KataTracks
             int slot = 0;
             foreach (KeyValuePair<string,BleDevice> kvp in DeviceManagerBLE.bleDevices)
             {
-                WriteLogSlot(slot, kvp.Value.name, DeviceManagerBLE.bleDevices[kvp.Key].log);
+                int color = 0;
+                if (DeviceManagerBLE.bleDevices[kvp.Key].log.Contains("Waiting"))
+                    color = 1;
+                if (DeviceManagerBLE.bleDevices[kvp.Key].log.Contains("ONLINE"))
+                    color = 2;
+                if (DeviceManagerBLE.bleDevices[kvp.Key].log.Contains(" DC"))
+                    color = 3;
+                WriteLogSlot(slot, kvp.Value.name, DeviceManagerBLE.bleDevices[kvp.Key].log, color);
                 slot++;
             }
 

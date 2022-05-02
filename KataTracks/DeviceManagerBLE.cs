@@ -116,7 +116,7 @@ namespace KataTracks
                     device.serviceCache[service.uuid] = service;//.Add(service);
                 }
                 //device.log = bd.Name + " BLE thread(" + device.monitorThread.ManagedThreadId.ToString() + ")\n";
-                device.log = " " + bd.Name + " t=" + device.monitorThread.ManagedThreadId.ToString() + ", gatt= " + gattServices.Count + "\n  ONLINE";
+                device.log = bd.Name + "(t" + device.monitorThread.ManagedThreadId.ToString() + "), gatt=" + gattServices.Count + "\n " + device.id + " ONLINE";
                 device.bluetoothDevice = bd;
                 //bleDevices[device.id] = device;
                 device.queryingGatt = false;
@@ -135,12 +135,13 @@ namespace KataTracks
             {
                 if (bleDevices.ContainsKey(id) && bleDevices[id].serviceCache.Count == 0)
                 {
+
                     bleDevices[id].log = "Waiting : " + id;
                     try
                     {
                         if (!bleDevices[id].queryingGatt)
                         {
-                            bleDevices[id].log = "GattQuery : " + id + "\n Query " + bleDevices[id].queryingGatt;
+                            bleDevices[id].log = id + " offline" + (bleDevices[id].queryingGatt ? "*" : "");
                             Task.Run(() => QueryGATT(id)).Wait();
                         }
                     }
@@ -151,6 +152,21 @@ namespace KataTracks
                 }
                 else
                 {
+                    if (bleDevices.ContainsKey(id)
+                        && bleDevices[id].bluetoothDevice != null
+                        && !bleDevices[id].bluetoothDevice.Gatt.IsConnected
+                        && bleDevices[id].serviceCache.Count > 0)
+                    {
+                        bleDevices[id].log = id + " DC";
+                        bleDevices[id].serviceCache = new ConcurrentDictionary<BluetoothUuid, BleCacheService>();
+                    }
+                    else
+                    {
+                        BleDevice device = bleDevices[id];
+                        device.log = device.name + "(t" + device.monitorThread.ManagedThreadId.ToString() + "), gatt=" + bleDevices[id].serviceCache.Count + "\n " + device.id + " ONLINE";
+                    }
+
+
                     while (bleDevices[id].sendQueue.Count > 0)
                     {
                         string message = "";
@@ -163,6 +179,12 @@ namespace KataTracks
                         }
                     }
                 }
+                    
+/*               }
+                else
+                {
+                    bleDevices[id].log = id + " DC";
+                }*/
             }
           
         }
