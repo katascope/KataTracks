@@ -26,12 +26,18 @@ const unsigned long SongTrack[] PROGMEM =
   1,fx_speed_pos,
   
 //Lead CrossStep
+  2500,fx_transition_fast,
+  2500,fx_palette_white,
   2500,fx_transition_timed_wipe_pos,
   2500,fx_palette_blue,
 //Follow CrossStep
+  4800,fx_transition_fast,
+  4800,fx_palette_white,
   4800,fx_transition_timed_wipe_neg,
-  4800,fx_palette_red,  
+  4800,fx_palette_pulse2_red,  
 //Lead CrossStep
+  7300,fx_transition_fast,
+  7300,fx_palette_white,
   7300,fx_transition_timed_wipe_pos,
   7300,fx_palette_blue,
 //Both CrossStep
@@ -109,6 +115,8 @@ const unsigned long SongTrack[] PROGMEM =
   78000,fx_palette_magenta,
   79000,fx_transition_timed_wipe_pos,
   79000,fx_palette_cyan,
+  80000,fx_transition_timed_wipe_pos,
+  80000,fx_palette_magenta,
 
 //  80400,fx_transition_timed_fade,
 //  80400,fx_palette_magenta,
@@ -116,9 +124,9 @@ const unsigned long SongTrack[] PROGMEM =
   81800,fx_speed_2,
   81800,fx_speed_neg,
   81800,fx_transition_timed_fade, 
-  81800,fx_palette_white,  
+  81800,fx_palette_red,  
   82800,fx_transition_timed_fade, 
-  82800,fx_palette_white,  
+  82800,fx_palette_red,  
   //end of bwaah
 
   88000,fx_transition_timed_fade,
@@ -172,17 +180,22 @@ const unsigned long SongTrack[] PROGMEM =
   120000,fx_palette_red,
   120500,fx_transition_timed_fade,
   120500,fx_palette_blue,
+  121000,fx_speed_neg,
+  121000,fx_speed_4,
   121000,fx_transition_timed_fade,
-  121000,fx_palette_cyan,
+  121000,fx_palette_pulse2_cyan,
   121500,fx_transition_timed_fade,
-  121500,fx_palette_magenta,
+  121500,fx_palette_pulse2_magenta,
   
-  122000,fx_transition_timed_fade,
-  122000,fx_palette_white,
-  123000,fx_transition_timed_fade,
-  123000,fx_palette_white,
-  124000,fx_speed_0,
-  124000,fx_speed_pos,
+//  122000,fx_palette_pulse2_white,
+//  122000,fx_speed_neg,
+//  122000,fx_speed_4,
+//  122050,fx_transition_fast,
+//  122050,fx_palette_pulse2_white,
+
+  123000,fx_palette_pulse2_white,
+  123000,fx_speed_8,
+  124000,fx_speed_16,
   124000,fx_transition_timed_fade,
   124000,fx_palette_white,
   
