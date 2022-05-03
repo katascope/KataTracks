@@ -103,6 +103,7 @@ void PrintFxEventName(int event)
     case fx_speed_neg: Serial.print(F("speed neg"));break;
     case fx_speed_inc: Serial.print(F("speed inc"));break;
     case fx_speed_dec: Serial.print(F("speed dec"));break;
+    case fx_speed_rst: Serial.print(F("speed rst"));break;
     
     case fx_transition_fast: Serial.print(F("t-fast"));break;
     case fx_transition_timed_fade:Serial.print(F("t-timed-fade"));break;

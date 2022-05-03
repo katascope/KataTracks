@@ -108,6 +108,7 @@ namespace KataTracks
                 Canvas.SetLeft(TrackIndexPlay, 0);
             }
             DeviceManagerBLE.SendMessage("(");
+            DeviceManagerBLE.SendMessage("0");
         }
 
         private void WriteLogSlot(int slot, string title, string message, int color)

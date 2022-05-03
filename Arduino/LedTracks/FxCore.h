@@ -89,6 +89,7 @@ enum FxEvent
   fx_speed_neg = 21,
   fx_speed_inc = 22,
   fx_speed_dec = 23,
+  fx_speed_rst = 24,
 
   fx_transition_fast,
   fx_transition_timed_fade,

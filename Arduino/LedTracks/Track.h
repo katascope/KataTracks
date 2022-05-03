@@ -30,35 +30,54 @@ const unsigned long SongTrack[] PROGMEM =
   2500,fx_palette_white,
   2500,fx_transition_timed_wipe_pos,
   2500,fx_palette_blue,
+
+  3650,fx_transition_timed_fade,
+  3650,fx_palette_dark,
+
 //Follow CrossStep
   4800,fx_transition_fast,
   4800,fx_palette_white,
-  4800,fx_transition_timed_wipe_neg,
-  4800,fx_palette_pulse2_red,  
+  4800,fx_transition_timed_wipe_pos,
+  4800,fx_palette_red,  
+
+  5950,fx_transition_timed_fade,
+  5950,fx_palette_dark,
+  
 //Lead CrossStep
   7300,fx_transition_fast,
   7300,fx_palette_white,
   7300,fx_transition_timed_wipe_pos,
   7300,fx_palette_blue,
+
+  8450,fx_transition_timed_fade,
+  8450,fx_palette_dark,
+  
 //Both CrossStep
   9700,fx_transition_timed_fade,
   9700,fx_palette_rb,
+  9700,fx_speed_1,  
+  9700,fx_speed_neg,
 
 //March together
 //Arms up
   
 //Circles around each other
-  14400,fx_transition_timed_fade, 
-  14400,fx_palette_magenta,
+  14600,fx_transition_fast,//timed_fade, 
+  14600,fx_palette_magenta,
+  14600,fx_speed_0,  
 
 //Build2
-  16800,fx_transition_timed_fade, 
+  16800,fx_transition_fast,//_timed_fade, 
   16800,fx_palette_rb,
+  16800,fx_speed_1,  
+  16800,fx_speed_neg,
 
 //Coast2
+  //19200,fx_speed_0,  
+  //19200,fx_speed_neg,
   19200,fx_transition_timed_fade,
-  19200,fx_palette_cyan,
-  
+  19200,fx_palette_pulse2_cyan,
+ 
   24200,fx_transition_timed_wipe_pos,
   24200,fx_palette_white,    
   26500,fx_transition_timed_fade,    
@@ -132,8 +151,12 @@ const unsigned long SongTrack[] PROGMEM =
   88000,fx_transition_timed_fade,
   88000,fx_palette_rb,
 
-  95000,fx_transition_timed_fade,
-  95000,fx_palette_blue,
+  94000,fx_transition_timed_fade,
+  94000,fx_palette_blue,
+  94000,fx_transition_fast,
+  94000,fx_palette_white,
+  94000,fx_transition_timed_fade,
+  94000,fx_palette_dark,
 
 //98 to 107 = the spin and recover
 
@@ -183,21 +206,25 @@ const unsigned long SongTrack[] PROGMEM =
   121000,fx_speed_neg,
   121000,fx_speed_4,
   121000,fx_transition_timed_fade,
-  121000,fx_palette_pulse2_cyan,
+  121000,fx_palette_pulse2_white,
   121500,fx_transition_timed_fade,
-  121500,fx_palette_pulse2_magenta,
-  
-//  122000,fx_palette_pulse2_white,
-//  122000,fx_speed_neg,
-//  122000,fx_speed_4,
-//  122050,fx_transition_fast,
-//  122050,fx_palette_pulse2_white,
+  121500,fx_palette_pulse2_white,
 
-  123000,fx_palette_pulse2_white,
-  123000,fx_speed_8,
-  124000,fx_speed_16,
-  124000,fx_transition_timed_fade,
-  124000,fx_palette_white,
+  122100,fx_speed_8,
+  122100,fx_transition_fast,
+  122100,fx_palette_pulse2_red,
+  122200,fx_palette_pulse2_yellow,
+  122300,fx_palette_pulse2_green,
+  122400,fx_palette_pulse2_cyan,
+  122500,fx_palette_pulse2_blue,
+  122600,fx_palette_pulse2_magenta,
+  122700,fx_palette_pulse2_white,
+  122800,fx_transition_timed_fade,
+  122800,fx_palette_rainbow,
+  
+  123500,fx_speed_16,
+  123500,fx_transition_timed_fade,
+  123500,fx_palette_white,
   
   125000,fx_transition_timed_fade,
   125000,fx_palette_dark,

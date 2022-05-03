@@ -204,6 +204,11 @@ void FxEventProcess(FxController &fxc,int event)
       if (fxc.paletteSpeed < 0)
         fxc.paletteSpeed = 0;
       break;
+
+    case fx_speed_rst:
+      fxc.paletteIndex = 0;
+      break;
+      
     case fx_transition_fast:            fxc.transitionType = Transition_Instant;break;
     case fx_transition_timed_fade:      fxc.transitionType = Transition_TimedFade;break;
     case fx_transition_timed_wipe_pos:  fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
