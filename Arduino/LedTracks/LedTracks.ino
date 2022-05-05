@@ -16,6 +16,8 @@ void setup() {
   Serial.println(SERIAL_BAUD_RATE);
 #if SYSTEM_NANO_33_BLE
   Serial.println(F("System: Arduino Nano 33 BLE"));
+#elif SYSTEM_NANO_33_IOT
+  Serial.println(F("System: Arduino Nano 33 IOT"));
 #elif SYSTEM_UNO
   Serial.println(F("System: Arduino UNO"));
 #elif SYSTEM_NANO

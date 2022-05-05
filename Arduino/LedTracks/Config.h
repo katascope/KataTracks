@@ -4,17 +4,18 @@
 #define NUM_LEDS            70
 #define LED_PIN             3
 #define SERIAL_BAUD_RATE    9600
-static const char *DeviceName = "LightSuitC";
+static const char *DeviceName = "LightSuitI";
 
 #ifdef ARDUINO_AVR_UNO
  #define SYSTEM_UNO          1
 #elif ARDUINO_AVR_NANO
  #define SYSTEM_NANO         1
 #else
- #define SYSTEM_NANO_33_BLE  1
+ #define SYSTEM_NANO_33_IOT  1
+// #define SYSTEM_NANO_33_BLE  1
 #endif
 
- #define SYSTEM_NANO         1
+//#define SYSTEM_NANO         1
 
 #ifdef SYSTEM_UNO
 #define ENABLE_TEST_PATTERN 0 //Show a simple test pattern
@@ -52,6 +53,17 @@ static const char *DeviceName = "LightSuitC";
 #define ENABLE_MIC          0
 #endif
 
+#ifdef SYSTEM_NANO_33_IOT
+#define ENABLE_TEST_PATTERN 0
+#define ENABLE_TEST_TRACK   0
+#define ENABLE_MEMORYUSAGE  0
+#define ENABLE_BRIGHTNESS   0
+#define ENABLE_STATUS       1
+#define ENABLE_NEOPIXEL     1
+#define ENABLE_BLE          1
+#define ENABLE_IMU          0
+#define ENABLE_MIC          0
+#endif
 #if ENABLE_MEMORYUSAGE
 #include <MemoryUsage.h>
 #endif

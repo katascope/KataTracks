@@ -75,7 +75,7 @@ void imuSetup()
 #include "Cmd.h"
 #include "Track.h"
 const int BLE_LED_PIN = LED_BUILTIN;
-const int RSSI_LED_PIN = LED_PWR;
+const int RSSI_LED_PIN = 25;//LED_PWR;
 BLEService lightsuitService( BLE_UUID_LIGHTSUIT_SERVICE );
 BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
 BLEUnsignedLongCharacteristic testCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TEST, BLERead | BLENotify);
@@ -215,7 +215,7 @@ void blePoll(FxController &fxc)
             digitalWrite( RSSI_LED_PIN, LOW );
 
             
-            
+#if ENABLE_IMU            
             accelerationCharacteristicX.writeValue( getAccelX() );
             accelerationCharacteristicY.writeValue( getAccelY() );
             accelerationCharacteristicZ.writeValue( getAccelZ() );
@@ -223,7 +223,7 @@ void blePoll(FxController &fxc)
             gyroCharacteristicZ.writeValue( getGyroX() );
             gyroCharacteristicZ.writeValue( getGyroY() );
             gyroCharacteristicZ.writeValue( getGyroZ() );
-  
+#endif  
             counter++;
             counterCharacteristic.writeValue( counter );
 

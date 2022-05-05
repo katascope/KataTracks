@@ -219,16 +219,17 @@ const unsigned long SongTrack[] PROGMEM =
   122500,fx_palette_pulse2_blue,
   122600,fx_palette_pulse2_magenta,
   122700,fx_palette_pulse2_white,
-  122800,fx_transition_timed_fade,
+  122800,fx_transition_fast,
   122800,fx_palette_rainbow,
   
-  123500,fx_speed_16,
-  123500,fx_transition_timed_fade,
-  123500,fx_palette_white,
+  124500,fx_speed_16,
+  124500,fx_transition_fast,
+  124500,fx_palette_rainbow,
   
-  125000,fx_transition_timed_fade,
-  125000,fx_palette_dark,
+  125000,fx_transition_fast,
+  125000,fx_palette_white,
   //the end
+  127000,fx_transition_timed_fade,
   127000,fx_palette_dark
 };
 #endif
