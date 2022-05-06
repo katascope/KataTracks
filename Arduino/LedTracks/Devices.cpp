@@ -7,15 +7,20 @@
 #if ENABLE_NEOPIXEL
 #include <Adafruit_NeoPixel.h>
 static Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+8, NEO_GRB + NEO_KHZ800);
 void neopixelSetup()
 {
   strip.begin();
-  strip.setBrightness(50);
+  strip.setBrightness(25);
+  strip2.begin();
+  strip2.setBrightness(25);
 }
 void neopixelSetBrightness(unsigned char brightness)
 {
   strip.setBrightness(brightness);
   strip.show();
+  strip2.setBrightness(brightness);
+  strip2.show();
 }
 void neopixelSetPalette(uint32_t *palette, int paletteIndex)
 {  
@@ -28,6 +33,16 @@ void neopixelSetPalette(uint32_t *palette, int paletteIndex)
     offset++;    
   }
   strip.show();
+
+  offset = paletteIndex;
+  for(uint16_t i=0; i<strip2.numPixels(); i++)
+  {
+    if (offset >= strip2.numPixels())
+     offset=0;    
+    strip2.setPixelColor(offset, palette[i]);
+    offset++;    
+  }  
+  strip2.show();
 }
 #endif
 
