@@ -12,6 +12,9 @@ using NAudio.MediaFoundation;
 using NAudio.FileFormats;
 using System.Windows.Threading;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
 namespace KataTracks
 {
     /// <summary>
@@ -35,7 +38,7 @@ namespace KataTracks
         static bool useSoundTrigger = false;
         static float InputVolumeBias = 50;
         static int VolumeThreshold = 50;
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -69,6 +72,37 @@ namespace KataTracks
             btTextTimer.Tick += new EventHandler(btTextTimer_Tick);
             btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             btTextTimer.Start();
+
+
+
+            WriteableBitmap writeableBitmap = new WriteableBitmap(
+                            (int)1300,
+                            (int)512,
+                            96,
+                            96,
+                            PixelFormats.Bgr32,
+                            null);
+
+            byte[] pixels = new byte[1300*8*4];
+
+            for (int y=0;y<8;y++)
+            {
+                for (int x=0;x<1300;x++)
+                {
+                    pixels[y * 1300 * 4 + x * 4 + 0] = 0;
+                    pixels[y * 1300 * 4 + x * 4 + 1] = 255;
+                    pixels[y * 1300 * 4 + x * 4 + 2] = 0;
+                    pixels[y * 1300 * 4 + x * 4 + 3] = 255;
+                }
+            }
+            TrackDecoder.Decode(pixels);
+            Int32Rect rect = new Int32Rect(0, 0, 1300, 8);
+            writeableBitmap.WritePixels(rect, pixels, 1300*4, 0);
+
+            image.Source = writeableBitmap;
+            image.Stretch = Stretch.None;
+            image.HorizontalAlignment = HorizontalAlignment.Left;
+            image.VerticalAlignment = VerticalAlignment.Top;
         }
 
         private void PlayTrack(int seconds)
