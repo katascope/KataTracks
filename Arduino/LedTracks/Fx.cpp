@@ -105,6 +105,8 @@ void FxDisplayStatus(FxController &fxc)
       Serial.print(getTimecodeTimeOffset());
       Serial.print(F("["));
       PrintFxStateName(fxc.fxState);
+      Serial.print(F("-L="));
+      Serial.print(fxc.brightness);
       Serial.print(F("-"));
       PrintFxTransitionName(fxc.transitionType);
       Serial.print(F("]Pal="));

@@ -370,6 +370,7 @@ namespace KataTracks
                     case '6': StopAndSendToBoth("6"); break;
                     case '7': StopAndSendToBoth("7"); break;
                     case '8': StopAndSendToBoth("8"); break;
+                    case '9': StopAndSendToBoth("9"); break;
                 }
             }
             else if (RadioColorPulse.IsChecked == true)
@@ -385,6 +386,7 @@ namespace KataTracks
                     case '6': StopAndSendToBoth("j"); break;
                     case '7': StopAndSendToBoth("k"); break;
                     case '8': StopAndSendToBoth("l"); break;
+                    case '9': StopAndSendToBoth("m"); break;
                 }
             }
             else if (RadioColorPulse2.IsChecked == true)
@@ -399,7 +401,8 @@ namespace KataTracks
                     case '5': StopAndSendToBoth("H"); break;
                     case '6': StopAndSendToBoth("J"); break;
                     case '7': StopAndSendToBoth("K"); break;
-                    case '8': StopAndSendToBoth("l"); break;
+                    case '8': StopAndSendToBoth("L"); break;
+                    case '9': StopAndSendToBoth("M"); break;
                 }
             }
 

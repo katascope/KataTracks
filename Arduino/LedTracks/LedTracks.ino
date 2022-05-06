@@ -94,6 +94,12 @@ void setup() {
   }
   else Serial.println(F("Ready"));
 
+  Serial.print(F("Brightness "));
+  fxController.brightness = 25;
+  neopixelSetBrightness(fxController.brightness);
+  Serial.print(fxController.brightness);
+  Serial.println();
+
   Serial.println("Setup complete.");
 }
 

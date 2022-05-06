@@ -19,7 +19,7 @@ struct FxController
   int paletteIndex = 0;
   float transitionMux = 0;
   FxTrackEndAction fxTrackEndAction;
-  unsigned char brightness = 50;
+  unsigned char brightness = 25;
   unsigned long lastTimeLedUpdate = 0;  
   bool inImu = false;
 };

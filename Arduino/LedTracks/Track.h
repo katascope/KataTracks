@@ -27,7 +27,7 @@ const unsigned long SongTrack[] PROGMEM =
   
 //Lead CrossStep
   2500,fx_transition_fast,
-  2500,fx_palette_white,
+  2500,fx_palette_half,
   2500,fx_transition_timed_wipe_pos,
   2500,fx_palette_blue,
 
@@ -36,7 +36,7 @@ const unsigned long SongTrack[] PROGMEM =
 
 //Follow CrossStep
   4800,fx_transition_fast,
-  4800,fx_palette_white,
+  4800,fx_palette_half,
   4800,fx_transition_timed_wipe_pos,
   4800,fx_palette_red,  
 
@@ -45,7 +45,7 @@ const unsigned long SongTrack[] PROGMEM =
   
 //Lead CrossStep
   7300,fx_transition_fast,
-  7300,fx_palette_white,
+  7300,fx_palette_half,
   7300,fx_transition_timed_wipe_pos,
   7300,fx_palette_blue,
 
@@ -79,7 +79,7 @@ const unsigned long SongTrack[] PROGMEM =
   19200,fx_palette_pulse2_cyan,
  
   24200,fx_transition_timed_wipe_pos,
-  24200,fx_palette_white,    
+  24200,fx_palette_half,    
   26500,fx_transition_timed_fade,    
   26500,fx_palette_db,
   28900,fx_transition_timed_fade,    
@@ -154,7 +154,7 @@ const unsigned long SongTrack[] PROGMEM =
   94000,fx_transition_timed_fade,
   94000,fx_palette_blue,
   94000,fx_transition_fast,
-  94000,fx_palette_white,
+  94000,fx_palette_half,
   94000,fx_transition_timed_fade,
   94000,fx_palette_dark,
 
@@ -168,8 +168,8 @@ const unsigned long SongTrack[] PROGMEM =
 //imu approach
   98500,fx_speed_2,
   98500,fx_speed_neg,
-  98500,fx_transition_fast,
-  98500,fx_palette_accel,
+  98500,fx_transition_timed_fade,
+  98500,fx_palette_pulse_magenta,
 
   104000,fx_speed_2,
   104000,fx_speed_neg,
@@ -181,13 +181,13 @@ const unsigned long SongTrack[] PROGMEM =
   107900,fx_speed_0,
   107900,fx_speed_pos,
   107900,fx_transition_timed_fade,
-  107900,fx_palette_white,
+  107900,fx_palette_half,
 
   110000,fx_transition_timed_fade,
-  110000,fx_palette_white,
+  110000,fx_palette_half,
 
   111000,fx_transition_timed_fade,
-  111000,fx_palette_white,
+  111000,fx_palette_half,
 
   111000,fx_speed_1,
   111000,fx_speed_neg,
@@ -226,7 +226,7 @@ const unsigned long SongTrack[] PROGMEM =
   124500,fx_transition_fast,
   124500,fx_palette_rainbow,
   
-  125000,fx_transition_fast,
+  125000,fx_transition_timed_fade,
   125000,fx_palette_white,
   //the end
   127000,fx_transition_timed_fade,

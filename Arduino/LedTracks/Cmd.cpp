@@ -110,6 +110,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorPulseBlue:     InstantEvent(fxc, fx_palette_pulse_blue,     FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulseMagenta:  InstantEvent(fxc, fx_palette_pulse_magenta,  FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulseOrange:   InstantEvent(fxc, fx_palette_pulse_orange,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseHalf:     InstantEvent(fxc, fx_palette_pulse_half,     FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulse2Dark:     InstantEvent(fxc, fx_palette_pulse2_dark,     FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulse2White:    InstantEvent(fxc, fx_palette_pulse2_white,    FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulse2Red:      InstantEvent(fxc, fx_palette_pulse2_red,      FxPaletteUpdateType::Once); break;
@@ -119,7 +120,8 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorPulse2Blue:     InstantEvent(fxc, fx_palette_pulse2_blue,     FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulse2Magenta:  InstantEvent(fxc, fx_palette_pulse2_magenta,  FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulse2Orange:   InstantEvent(fxc, fx_palette_pulse2_orange,   FxPaletteUpdateType::Once); break;
-    
+    case Cmd_ColorPulse2Half:     InstantEvent(fxc, fx_palette_pulse2_half,   FxPaletteUpdateType::Once); break;
+       
     case Cmd_ColorLava:           InstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once); break;
     case Cmd_ColorCloud:          InstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once); break;
     case Cmd_ColorOcean:          InstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once); break;
@@ -264,6 +266,8 @@ void UserCommandInput(FxController &fxc, int data)
     case 'j': UserCommandExecute(fxc, Cmd_ColorPulseBlue); break;
     case 'k': UserCommandExecute(fxc, Cmd_ColorPulseMagenta); break;
     case 'l': UserCommandExecute(fxc, Cmd_ColorPulseOrange); break;
+    case 'm': UserCommandExecute(fxc, Cmd_ColorPulseHalf); break;
+    
     case ';': UserCommandExecute(fxc, Cmd_ColorImu);break;
     
     case 'A': UserCommandExecute(fxc, Cmd_ColorPulse2Dark); break;
@@ -274,7 +278,8 @@ void UserCommandInput(FxController &fxc, int data)
     case 'H': UserCommandExecute(fxc, Cmd_ColorPulse2Cyan); break;
     case 'J': UserCommandExecute(fxc, Cmd_ColorPulse2Blue); break;    
     case 'K': UserCommandExecute(fxc, Cmd_ColorPulse2Magenta); break;
-    case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Orange); break;        
+    case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Orange); break;
+    case 'M': UserCommandExecute(fxc, Cmd_ColorPulse2Half); break;
     
     case 'q': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
     case 'w': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
@@ -296,7 +301,7 @@ void UserCommandInput(FxController &fxc, int data)
 
     case 'b': UserCommandExecute(fxc, Cmd_Brightness_High);break;
     case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
-    case 'm': UserCommandExecute(fxc, Cmd_Brightness_Low);break;
+    //case 'm': UserCommandExecute(fxc, Cmd_Brightness_Low);break;
     case ',': UserCommandExecute(fxc, Cmd_Brightness_VeryHigh);break;
 
     

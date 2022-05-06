@@ -50,6 +50,7 @@ enum UserCommand
   Cmd_ColorPulseBlue,
   Cmd_ColorPulseMagenta,
   Cmd_ColorPulseOrange,  
+  Cmd_ColorPulseHalf, 
   Cmd_ColorPulse2Dark, 
   Cmd_ColorPulse2White,
   Cmd_ColorPulse2Red,
@@ -59,6 +60,7 @@ enum UserCommand
   Cmd_ColorPulse2Blue,
   Cmd_ColorPulse2Magenta,
   Cmd_ColorPulse2Orange,  
+  Cmd_ColorPulse2Half,  
 
   Cmd_ColorLava,
   Cmd_ColorCloud,
