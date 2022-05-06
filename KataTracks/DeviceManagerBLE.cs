@@ -53,13 +53,13 @@ namespace KataTracks
         static BluetoothUuid mainCounterResetUuid = BluetoothUuid.FromGuid(new Guid("EA7CE01E-808B-4EF3-8735-2A05F1C48DFF"));
 
         static List<string> connectionList = new List<string>() {
-                "CA8E42F29042", //LightSuitA
-                "FA642247BCCD", //LightSuitB
+                //"CA8E42F29042", //LightSuitA
+                //"FA642247BCCD", //LightSuitB
 
                 "90335422B697", //LightsuitC
                 "757773C6C5F1", //LightSuitE?
                 
-                //"FDB857FE7C3D", //HighPower                
+                "FDB857FE7C3D", //HighPower                
                 //"4CEBD64CA98E", //LightSuitI - IOT
 
             };
