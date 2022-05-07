@@ -61,6 +61,19 @@ enum FxState
      One-Off effect
      Brightness change
 */
+
+enum FxStrip
+{
+  LEDS_0 = 1,
+  LEDS_1 = 2,
+  LEDS_2 = 4,
+  LEDS_3 = 8,
+  LEDS_4 = 16,
+  LEDS_5 = 32,
+  LEDS_6 = 64,
+  LEDS_7 = 128
+};
+
 //List of possible Fx events
 enum FxEvent
 {
@@ -267,7 +280,54 @@ enum FxEvent
   fx_colors15,
   fx_colors16,
 
-  fx_nothing = 255
+  fx_strips_all,  //Target all strips
+  fx_strips_none, //Target no strips, why?
+  fx_strips_evens, //Target even strips
+  fx_strips_odds, //Target odd strips
+  fx_strip0,    
+  fx_strip1,
+  fx_strip2,
+  fx_strip3,
+  fx_strip4,
+  fx_strip5,
+  fx_strip6,
+  fx_strip7,  
+  
+  fx_stripmask_0, //Same as fx_strips_all
+  fx_stripmask_1,fx_stripmask_2,fx_stripmask_3,fx_stripmask_4,fx_stripmask_5,fx_stripmask_6,fx_stripmask_7,fx_stripmask_8,  
+  fx_stripmask_9,fx_stripmask_10,fx_stripmask_11,fx_stripmask_12,fx_stripmask_13,fx_stripmask_14,fx_stripmask_15,fx_stripmask_16,
+  fx_stripmask_17,fx_stripmask_18,fx_stripmask_19,fx_stripmask_20,fx_stripmask_21,fx_stripmask_22,fx_stripmask_23,fx_stripmask_24,
+  fx_stripmask_25,fx_stripmask_26,fx_stripmask_27,fx_stripmask_28,fx_stripmask_29,fx_stripmask_30,fx_stripmask_31,fx_stripmask_32,
+  fx_stripmask_33,fx_stripmask_34,fx_stripmask_35,fx_stripmask_36,fx_stripmask_37,fx_stripmask_38,fx_stripmask_39,fx_stripmask_40,
+  fx_stripmask_41,fx_stripmask_42,fx_stripmask_43,fx_stripmask_44,fx_stripmask_45,fx_stripmask_46,fx_stripmask_47,fx_stripmask_48,
+  fx_stripmask_49,fx_stripmask_50,fx_stripmask_51,fx_stripmask_52,fx_stripmask_53,fx_stripmask_54,fx_stripmask_55,fx_stripmask_56,
+  fx_stripmask_57,fx_stripmask_58,fx_stripmask_59,fx_stripmask_60,fx_stripmask_61,fx_stripmask_62,fx_stripmask_63,fx_stripmask_64,
+  fx_stripmask_65,fx_stripmask_66,fx_stripmask_67,fx_stripmask_68,fx_stripmask_69,fx_stripmask_70,fx_stripmask_71,fx_stripmask_72,
+  fx_stripmask_73,fx_stripmask_74,fx_stripmask_75,fx_stripmask_76,fx_stripmask_77,fx_stripmask_78,fx_stripmask_79,fx_stripmask_80,
+  fx_stripmask_81,fx_stripmask_82,fx_stripmask_83,fx_stripmask_84,fx_stripmask_85,fx_stripmask_86,fx_stripmask_87,fx_stripmask_88,
+  fx_stripmask_89,fx_stripmask_90,fx_stripmask_91,fx_stripmask_92,fx_stripmask_93,fx_stripmask_94,fx_stripmask_95,fx_stripmask_96,
+  fx_stripmask_97,fx_stripmask_98,fx_stripmask_99,fx_stripmask_100,fx_stripmask_101,fx_stripmask_102,fx_stripmask_103,fx_stripmask_104,
+  fx_stripmask_105,fx_stripmask_106,fx_stripmask_107,fx_stripmask_108,fx_stripmask_109,fx_stripmask_110,fx_stripmask_111,fx_stripmask_112,
+  fx_stripmask_113,fx_stripmask_114,fx_stripmask_115,fx_stripmask_116,fx_stripmask_117,fx_stripmask_118,fx_stripmask_119,fx_stripmask_120,
+  fx_stripmask_121,fx_stripmask_122,fx_stripmask_123,fx_stripmask_124,fx_stripmask_125,fx_stripmask_126,fx_stripmask_127,fx_stripmask_128,
+  fx_stripmask_129,fx_stripmask_130,fx_stripmask_131,fx_stripmask_132,fx_stripmask_133,fx_stripmask_134,fx_stripmask_135,fx_stripmask_136,
+  fx_stripmask_137,fx_stripmask_138,fx_stripmask_139,fx_stripmask_140,fx_stripmask_141,fx_stripmask_142,fx_stripmask_143,fx_stripmask_144,
+  fx_stripmask_145,fx_stripmask_146,fx_stripmask_147,fx_stripmask_148,fx_stripmask_149,fx_stripmask_150,fx_stripmask_151,fx_stripmask_152,
+  fx_stripmask_153,fx_stripmask_154,fx_stripmask_155,fx_stripmask_156,fx_stripmask_157,fx_stripmask_158,fx_stripmask_159,fx_stripmask_160,
+  fx_stripmask_161,fx_stripmask_162,fx_stripmask_163,fx_stripmask_164,fx_stripmask_165,fx_stripmask_166,fx_stripmask_167,fx_stripmask_168,
+  fx_stripmask_169,fx_stripmask_170,fx_stripmask_171,fx_stripmask_172,fx_stripmask_173,fx_stripmask_174,fx_stripmask_175,fx_stripmask_176,
+  fx_stripmask_177,fx_stripmask_178,fx_stripmask_179,fx_stripmask_180,fx_stripmask_181,fx_stripmask_182,fx_stripmask_183,fx_stripmask_184,
+  fx_stripmask_185,fx_stripmask_186,fx_stripmask_187,fx_stripmask_188,fx_stripmask_189,fx_stripmask_190,fx_stripmask_191,fx_stripmask_192,
+  fx_stripmask_193,fx_stripmask_194,fx_stripmask_195,fx_stripmask_196,fx_stripmask_197,fx_stripmask_198,fx_stripmask_199,fx_stripmask_200,
+  fx_stripmask_201,fx_stripmask_202,fx_stripmask_203,fx_stripmask_204,fx_stripmask_205,fx_stripmask_206,fx_stripmask_207,fx_stripmask_208,
+  fx_stripmask_209,fx_stripmask_210,fx_stripmask_211,fx_stripmask_212,fx_stripmask_213,fx_stripmask_214,fx_stripmask_215,fx_stripmask_216,
+  fx_stripmask_217,fx_stripmask_218,fx_stripmask_219,fx_stripmask_220,fx_stripmask_221,fx_stripmask_222,fx_stripmask_223,fx_stripmask_224,
+  fx_stripmask_225,fx_stripmask_226,fx_stripmask_227,fx_stripmask_228,fx_stripmask_229,fx_stripmask_230,fx_stripmask_231,fx_stripmask_232,
+  fx_stripmask_233,fx_stripmask_234,fx_stripmask_235,fx_stripmask_236,fx_stripmask_237,fx_stripmask_238,fx_stripmask_239,fx_stripmask_240,
+  fx_stripmask_241,fx_stripmask_242,fx_stripmask_243,fx_stripmask_244,fx_stripmask_245,fx_stripmask_246,fx_stripmask_247,fx_stripmask_248,
+  fx_stripmask_249,fx_stripmask_250,fx_stripmask_251,fx_stripmask_252,fx_stripmask_253,fx_stripmask_254,fx_stripmask_255,
+  
+  fx_nothing = 0xFFFF
 };
 
 struct Fx {

@@ -6,21 +6,23 @@
 /////////////////////////////////////////////////////////////////////////
 #if ENABLE_NEOPIXEL
 #include <Adafruit_NeoPixel.h>
-static Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+0, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip0 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+0, NEO_GRB + NEO_KHZ800);
 #if ENABLE_MULTISTRIP
-static Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+1, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+2, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+3, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+4, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip6 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+5, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip7 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+6, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip8 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+7, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+1, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+2, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+3, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+4, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+5, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip6 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+6, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip7 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+7, NEO_GRB + NEO_KHZ800);
 #endif
 void neopixelSetup()
 {
+  strip0.begin();
+  strip0.setBrightness(25);
+#if ENABLE_MULTISTRIP  
   strip1.begin();
   strip1.setBrightness(25);
-#if ENABLE_MULTISTRIP  
   strip2.begin();
   strip2.setBrightness(25);
   strip3.begin();
@@ -33,15 +35,15 @@ void neopixelSetup()
   strip6.setBrightness(25);
   strip7.begin();
   strip7.setBrightness(25);
-  strip8.begin();
-  strip8.setBrightness(25);
 #endif  
 }
 void neopixelSetBrightness(unsigned char brightness)
 {
+  strip0.setBrightness(brightness);
+  strip0.show();
+#if ENABLE_MULTISTRIP  
   strip1.setBrightness(brightness);
   strip1.show();
-#if ENABLE_MULTISTRIP  
   strip2.setBrightness(brightness);
   strip2.show();
   strip3.setBrightness(brightness);
@@ -54,38 +56,36 @@ void neopixelSetBrightness(unsigned char brightness)
   strip6.show();
   strip7.setBrightness(brightness);
   strip7.show();
-  strip8.setBrightness(brightness);
-  strip8.show();
 #endif  
 }
 void neopixelSetPalette(uint32_t *palette, int paletteIndex)
 {  
   uint32_t offset = paletteIndex;
-  for(uint16_t i=0; i<strip1.numPixels(); i++)
+  for(uint16_t i=0; i<strip0.numPixels(); i++)
   {
-    if (offset >= strip1.numPixels())
+    if (offset >= strip0.numPixels())
      offset=0;    
-    strip1.setPixelColor(offset, 0xFF7F7F7F);
+    strip0.setPixelColor(offset, 0xFF7F7F7F);
 #if ENABLE_MULTISTRIP    
-    strip2.setPixelColor(offset, 0xFFFF7F00);
-    strip3.setPixelColor(offset, 0xFFFF0000);
-    strip4.setPixelColor(offset, 0xFFFFFF00);
-    strip5.setPixelColor(offset, 0xFF00FF00);
-    strip6.setPixelColor(offset, 0xFF00FFFF);
-    strip7.setPixelColor(offset, 0xFF0000FF);
-    strip8.setPixelColor(offset, 0xFFFFFF00);
+    strip1.setPixelColor(offset, 0xFFFF7F00);
+    strip2.setPixelColor(offset, 0xFFFF0000);
+    strip3.setPixelColor(offset, 0xFFFFFF00);
+    strip4.setPixelColor(offset, 0xFF00FF00);
+    strip5.setPixelColor(offset, 0xFF00FFFF);
+    strip6.setPixelColor(offset, 0xFF0000FF);
+    strip7.setPixelColor(offset, 0xFFFFFF00);
 #endif    
     offset++;    
   }
-  strip1.show();
+  strip0.show();
 #if ENABLE_MULTISTRIP  
+  strip1.show();
   strip2.show();
   strip3.show();
   strip4.show();
   strip5.show();
   strip6.show();
   strip7.show();
-  strip8.show();
 #endif  
 }
 #endif
