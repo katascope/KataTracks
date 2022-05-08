@@ -4,7 +4,7 @@
 #define NUM_LEDS            70
 #define LED_PIN             3
 #define SERIAL_BAUD_RATE    9600
-static const char *DeviceName = "LightSuitDbl";
+static const char *DeviceName = "LightSuitOcto";
 
 
 #ifdef ARDUINO_AVR_UNO
@@ -28,6 +28,7 @@ static const char *DeviceName = "LightSuitDbl";
 #define ENABLE_BLE          0 //Enable Bluetooth Low-Energy
 #define ENABLE_IMU          0 //Enable Inertial Motion Unit
 #define ENABLE_MIC          0 //Enable Microphone
+#define ENABLE_MULTISTRIP   0 //Enable multiple LED strips
 #endif
 
 #ifdef SYSTEM_NANO
@@ -40,6 +41,7 @@ static const char *DeviceName = "LightSuitDbl";
 #define ENABLE_BLE          0 //Enable Bluetooth Low-Energy
 #define ENABLE_IMU          0 //Enable Inertial Motion Unit
 #define ENABLE_MIC          0 //Enable Microphone
+#define ENABLE_MULTISTRIP   0 //Enable multiple LED strips
 #endif
 
 #ifdef SYSTEM_NANO_33_BLE
@@ -52,6 +54,7 @@ static const char *DeviceName = "LightSuitDbl";
 #define ENABLE_BLE          1
 #define ENABLE_IMU          1
 #define ENABLE_MIC          0
+#define ENABLE_MULTISTRIP   0 //Enable multiple LED strips
 #endif
 
 #ifdef SYSTEM_NANO_33_IOT
@@ -64,7 +67,9 @@ static const char *DeviceName = "LightSuitDbl";
 #define ENABLE_BLE          1
 #define ENABLE_IMU          0
 #define ENABLE_MIC          0
+#define ENABLE_MULTISTRIP   1 //Enable multiple LED strips
 #endif
+
 #if ENABLE_MEMORYUSAGE
 #include <MemoryUsage.h>
 #endif

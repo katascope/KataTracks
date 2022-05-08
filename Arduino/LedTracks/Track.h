@@ -24,6 +24,8 @@ const unsigned long SongTrack[] PROGMEM =
   1, fx_palette_dark,
   1, fx_speed_0,
   1, fx_speed_pos,
+  1, fx_strips_all,
+  1, fx_stripmask_0 + (LEDS_0|LEDS_2|LEDS_3|LEDS_4),
 
   //Lead CrossStep
   2500, fx_transition_fast,
