@@ -146,31 +146,53 @@ void neopixelSetPalette(int slot, uint32_t *palette, int paletteIndex)
   {
     if (offset >= strip0.numPixels())
      offset=0;    
+     uint32_t rgb = palette[i];
+     byte r = (rgb >> 24)&0xFF;
+     byte g = (rgb >> 16)&0xFF;
+     byte b = (rgb >> 8)&0xFF;
+     byte h,s,v;
+
+#if ENABLE_MULTISTRIP  
     switch (slot)
     {
-      case 0: strip0.setPixelColor(offset, palette[i]); break;
+      case 0: rgb = LEDRGB(255,255,255);break;
+      case 1: rgb = LEDRGB(255,0,0);break;
+      case 2: rgb = LEDRGB(255,255,0);break;
+      case 3: rgb = LEDRGB(0,255,0);break;
+      case 4: rgb = LEDRGB(0,255,255);break;
+      case 5: rgb = LEDRGB(0,0,255);break;
+      case 6: rgb = LEDRGB(255,0,255);break;
+      case 7: rgb = LEDRGB(255,127,0);break;
+    }
+#endif      
+    switch (slot)
+    {
+      case 0: strip0.setPixelColor(offset, rgb); break;
 #if ENABLE_MULTISTRIP  
-      case 1: strip1.setPixelColor(offset, palette[i]); break;
-      case 2: strip2.setPixelColor(offset, palette[i]); break;
-      case 3: strip3.setPixelColor(offset, palette[i]); break;
-      case 4: strip4.setPixelColor(offset, palette[i]); break;
-      case 5: strip5.setPixelColor(offset, palette[i]); break;
-      case 6: strip6.setPixelColor(offset, palette[i]); break;
-      case 7: strip7.setPixelColor(offset, palette[i]); break;
+      case 1: strip1.setPixelColor(offset, rgb); break;
+      case 2: strip2.setPixelColor(offset, rgb); break;
+      case 3: strip3.setPixelColor(offset, rgb); break;
+      case 4: strip4.setPixelColor(offset, rgb); break;
+      case 5: strip5.setPixelColor(offset, rgb); break;
+      case 6: strip6.setPixelColor(offset, rgb); break;
+      case 7: strip7.setPixelColor(offset, rgb); break;
 #endif      
     }
     offset++;    
   }
-  strip0.show();
+    switch (slot)
+    {
+      case 0: strip0.show();break;
 #if ENABLE_MULTISTRIP  
-  strip1.show();
-  strip2.show();
-  strip3.show();
-  strip4.show();
-  strip5.show();
-  strip6.show();
-  strip7.show();
+      case 1: strip1.show();break;
+      case 2: strip2.show();break;
+      case 3: strip3.show();break;
+      case 4: strip4.show();break;
+      case 5: strip5.show();break;
+      case 6: strip6.show();break;
+      case 7: strip7.show();break;
 #endif  
+    }
 }
 #endif
 
