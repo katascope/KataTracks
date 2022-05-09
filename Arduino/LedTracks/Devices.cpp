@@ -1,6 +1,79 @@
 #include "Config.h"
 #include "Fx.h"
 #include "Devices.h"
+#define min_f(a, b, c)  (fminf(a, fminf(b, c)))
+#define max_f(a, b, c)  (fmaxf(a, fmaxf(b, c)))
+
+void rgb2hsv(const unsigned char &src_r, const unsigned char &src_g, const unsigned char &src_b, unsigned char &dst_h, unsigned char &dst_s, unsigned char &dst_v)
+{
+    float r = src_r / 255.0f;
+    float g = src_g / 255.0f;
+    float b = src_b / 255.0f;
+
+    float h, s, v; // h:0-360.0, s:0.0-1.0, v:0.0-1.0
+
+    float max = max_f(r, g, b);
+    float min = min_f(r, g, b);
+
+    v = max;
+
+    if (max == 0.0f) {
+        s = 0;
+        h = 0;
+    }
+    else if (max - min == 0.0f) {
+        s = 0;
+        h = 0;
+    }
+    else {
+        s = (max - min) / max;
+
+        if (max == r) {
+            h = 60 * ((g - b) / (max - min)) + 0;
+        }
+        else if (max == g) {
+            h = 60 * ((b - r) / (max - min)) + 120;
+        }
+        else {
+            h = 60 * ((r - g) / (max - min)) + 240;
+        }
+    }
+
+    if (h < 0) h += 360.0f;
+
+    dst_h = (unsigned char)(h / 2);   // dst_h : 0-180
+    dst_s = (unsigned char)(s * 255); // dst_s : 0-255
+    dst_v = (unsigned char)(v * 255); // dst_v : 0-255
+}
+
+void hsv2rgb(const unsigned char &src_h, const unsigned char &src_s, const unsigned char &src_v, unsigned char &dst_r, unsigned char &dst_g, unsigned char &dst_b)
+{
+    float h = src_h *   2.0f; // 0-360
+    float s = src_s / 255.0f; // 0.0-1.0
+    float v = src_v / 255.0f; // 0.0-1.0
+
+    float r, g, b; // 0.0-1.0
+
+    int   hi = (int)(h / 60.0f) % 6;
+    float f  = (h / 60.0f) - hi;
+    float p  = v * (1.0f - s);
+    float q  = v * (1.0f - s * f);
+    float t  = v * (1.0f - s * (1.0f - f));
+
+    switch(hi) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+
+    dst_r = (unsigned char)(r * 255); // dst_r : 0-255
+    dst_g = (unsigned char)(g * 255); // dst_r : 0-255
+    dst_b = (unsigned char)(b * 255); // dst_r : 0-255
+}
+
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -61,19 +134,53 @@ void neopixelSetBrightness(unsigned char brightness)
 void neopixelSetPalette(uint32_t *palette, int paletteIndex)
 {  
   uint32_t offset = paletteIndex;
+  unsigned char r,g,b;
+  unsigned char h,s,v;
   for(uint16_t i=0; i<strip0.numPixels(); i++)
   {
     if (offset >= strip0.numPixels())
      offset=0;    
-    strip0.setPixelColor(offset, 0xFF7F7F7F);
-#if ENABLE_MULTISTRIP    
-    strip1.setPixelColor(offset, 0xFFFF7F00);
-    strip2.setPixelColor(offset, 0xFFFF0000);
-    strip3.setPixelColor(offset, 0xFFFFFF00);
-    strip4.setPixelColor(offset, 0xFF00FF00);
-    strip5.setPixelColor(offset, 0xFF00FFFF);
-    strip6.setPixelColor(offset, 0xFF0000FF);
-    strip7.setPixelColor(offset, 0xFFFFFF00);
+    strip0.setPixelColor(offset, palette[i]);
+#if ENABLE_MULTISTRIP  
+    r = (palette[i] >> 16) & 0xFF;
+    g = (palette[i] >> 8) & 0xFF;
+    b = (palette[i] >> 0) & 0xFF;    
+    rgb2hsv(r,g,b,h,s,v);
+
+    int mod = 16;
+    h+=mod;
+    hsv2rgb(h,s,v,r,g,b);
+    strip1.setPixelColor(offset, LEDRGB(r,g,b));
+    h+=mod;hsv2rgb(h,s,v,r,g,b);
+    strip2.setPixelColor(offset, LEDRGB(r,g,b));
+    h+=mod;hsv2rgb(h,s,v,r,g,b);
+    strip3.setPixelColor(offset, LEDRGB(r,g,b));
+    h+=mod;hsv2rgb(h,s,v,r,g,b);
+    strip4.setPixelColor(offset, LEDRGB(r,g,b));
+    h+=mod;hsv2rgb(h,s,v,r,g,b);
+    strip5.setPixelColor(offset, LEDRGB(r,g,b));
+    h+=mod;hsv2rgb(h,s,v,r,g,b);
+    strip6.setPixelColor(offset, LEDRGB(r,g,b));
+    h+=mod;hsv2rgb(h,s,v,r,g,b);
+    strip7.setPixelColor(offset, LEDRGB(r,g,b));
+/*    
+    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
+    strip2.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
+    
+    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
+    strip3.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
+    
+    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
+    strip4.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
+    
+    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
+    strip5.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
+    
+    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
+    strip6.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
+    
+    hsv[0]+=mod ;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
+    strip7.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));*/
 #endif    
     offset++;    
   }
