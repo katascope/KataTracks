@@ -74,6 +74,12 @@ void hsv2rgb(const unsigned char &src_h, const unsigned char &src_s, const unsig
     dst_b = (unsigned char)(b * 255); // dst_r : 0-255
 }
 
+unsigned long BitRotateColor(unsigned long v)
+  {
+  unsigned long carry = ((v << 4) & 0x0F000000) >> 24;
+  unsigned long value = ((v << 4) & 0x00FFFFFF) | carry;
+  return value;
+}
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -131,7 +137,7 @@ void neopixelSetBrightness(unsigned char brightness)
   strip7.show();
 #endif  
 }
-void neopixelSetPalette(uint32_t *palette, int paletteIndex)
+void neopixelSetPalette(int slot, uint32_t *palette, int paletteIndex)
 {  
   uint32_t offset = paletteIndex;
   unsigned char r,g,b;
@@ -140,48 +146,19 @@ void neopixelSetPalette(uint32_t *palette, int paletteIndex)
   {
     if (offset >= strip0.numPixels())
      offset=0;    
-    strip0.setPixelColor(offset, palette[i]);
+    switch (slot)
+    {
+      case 0: strip0.setPixelColor(offset, palette[i]); break;
 #if ENABLE_MULTISTRIP  
-    r = (palette[i] >> 16) & 0xFF;
-    g = (palette[i] >> 8) & 0xFF;
-    b = (palette[i] >> 0) & 0xFF;    
-    rgb2hsv(r,g,b,h,s,v);
-
-    int mod = 16;
-    h+=mod;
-    hsv2rgb(h,s,v,r,g,b);
-    strip1.setPixelColor(offset, LEDRGB(r,g,b));
-    h+=mod;hsv2rgb(h,s,v,r,g,b);
-    strip2.setPixelColor(offset, LEDRGB(r,g,b));
-    h+=mod;hsv2rgb(h,s,v,r,g,b);
-    strip3.setPixelColor(offset, LEDRGB(r,g,b));
-    h+=mod;hsv2rgb(h,s,v,r,g,b);
-    strip4.setPixelColor(offset, LEDRGB(r,g,b));
-    h+=mod;hsv2rgb(h,s,v,r,g,b);
-    strip5.setPixelColor(offset, LEDRGB(r,g,b));
-    h+=mod;hsv2rgb(h,s,v,r,g,b);
-    strip6.setPixelColor(offset, LEDRGB(r,g,b));
-    h+=mod;hsv2rgb(h,s,v,r,g,b);
-    strip7.setPixelColor(offset, LEDRGB(r,g,b));
-/*    
-    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
-    strip2.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
-    
-    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
-    strip3.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
-    
-    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
-    strip4.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
-    
-    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
-    strip5.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
-    
-    hsv[0]+=mod;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
-    strip6.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));
-    
-    hsv[0]+=mod ;if (hsv[0] > 360) hsv[0]-=360;hsv2rgb(hsv[0],hsv[1],hsv[2],&rgb[0]);
-    strip7.setPixelColor(offset, LEDRGB(rgb[0],rgb[1],rgb[2]));*/
-#endif    
+      case 1: strip1.setPixelColor(offset, palette[i]); break;
+      case 2: strip2.setPixelColor(offset, palette[i]); break;
+      case 3: strip3.setPixelColor(offset, palette[i]); break;
+      case 4: strip4.setPixelColor(offset, palette[i]); break;
+      case 5: strip5.setPixelColor(offset, palette[i]); break;
+      case 6: strip6.setPixelColor(offset, palette[i]); break;
+      case 7: strip7.setPixelColor(offset, palette[i]); break;
+#endif      
+    }
     offset++;    
   }
   strip0.show();

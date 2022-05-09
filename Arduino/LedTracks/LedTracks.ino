@@ -114,7 +114,16 @@ void UpdatePalette()
       fxController.paletteIndex = NUM_LEDS - 1;
   }
 #if ENABLE_NEOPIXEL
-  neopixelSetPalette(fxController.palette, fxController.paletteIndex);
+  neopixelSetPalette(0,fxController.palette, fxController.paletteIndex);
+#endif
+#if ENABLE_MULTISTRIP
+  neopixelSetPalette(1,fxController.palette, fxController.paletteIndex);
+  neopixelSetPalette(2,fxController.palette, fxController.paletteIndex);
+  neopixelSetPalette(3,fxController.palette, fxController.paletteIndex);
+  neopixelSetPalette(4,fxController.palette, fxController.paletteIndex);
+  neopixelSetPalette(5,fxController.palette, fxController.paletteIndex);
+  neopixelSetPalette(6,fxController.palette, fxController.paletteIndex);
+  neopixelSetPalette(7,fxController.palette, fxController.paletteIndex);
 #endif
 }
 
