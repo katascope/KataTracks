@@ -17,24 +17,18 @@ static const char *DeviceName = "LightSuitPwr";
 #endif
 
 #ifdef SYSTEM_NANO
-#define ENABLE_MEMORYUSAGE  0 //Do AVR-based memory check in beginning
-#define ENABLE_STATUS       1 //Periodically output heartbeat status to log
 #define ENABLE_NEOPIXEL     1 //Enable Neopixel led library
 #define ENABLE_BLE          0 //Enable Bluetooth Low-Energy
 #define ENABLE_MULTISTRIP   0 //Enable multiple LED strips
 #endif
 
 #ifdef SYSTEM_NANO_33_BLE
-#define ENABLE_MEMORYUSAGE  0
-#define ENABLE_STATUS       1
 #define ENABLE_NEOPIXEL     1
 #define ENABLE_BLE          1
 #define ENABLE_MULTISTRIP   1 //Enable multiple LED strips
 #endif
 
 #ifdef SYSTEM_NANO_33_IOT
-#define ENABLE_MEMORYUSAGE  0
-#define ENABLE_STATUS       1
 #define ENABLE_NEOPIXEL     1
 #define ENABLE_BLE          1
 #define ENABLE_MULTISTRIP   1 //Enable multiple LED strips

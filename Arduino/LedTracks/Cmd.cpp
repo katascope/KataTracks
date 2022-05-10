@@ -105,7 +105,16 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorParty:          InstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once); break;
     case Cmd_ColorHeat:           InstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once); break;
 
-
+    case Cmd_StripAll: fxc.stripMask = (LEDS_0|LEDS_1||LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7); break;
+    case Cmd_Strip0: fxc.stripMask = LEDS_0; break;
+    case Cmd_Strip1: fxc.stripMask = LEDS_1; break;
+    case Cmd_Strip2: fxc.stripMask = LEDS_2; break;
+    case Cmd_Strip3: fxc.stripMask = LEDS_3; break;
+    case Cmd_Strip4: fxc.stripMask = LEDS_4; break;
+    case Cmd_Strip5: fxc.stripMask = LEDS_5; break;
+    case Cmd_Strip6: fxc.stripMask = LEDS_6; break;
+    case Cmd_Strip7: fxc.stripMask = LEDS_7; break;
+    
 #if ENABLE_NEOPIXEL && ENABLE_BRIGHTNESS
     case Cmd_Brightness_VeryHigh: neopixelSetBrightness(250);break;
     case Cmd_Brightness_High: neopixelSetBrightness(150);break;
@@ -221,8 +230,17 @@ void UserCommandInput(FxController &fxc, int data)
     case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Orange); break;
     case 'M': UserCommandExecute(fxc, Cmd_ColorPulse2Half); break;
     
-    case 'q': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
-    case 'w': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
+    //case 'q': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
+//    case 'w': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
+    case 'q': UserCommandExecute(fxc, Cmd_Strip0);break;
+    case 'w': UserCommandExecute(fxc, Cmd_Strip1);break;
+    case 'e': UserCommandExecute(fxc, Cmd_Strip2);break;
+    case 'r': UserCommandExecute(fxc, Cmd_Strip3);break;
+    case 't': UserCommandExecute(fxc, Cmd_Strip4);break;
+    case 'y': UserCommandExecute(fxc, Cmd_Strip5);break;
+    case 'u': UserCommandExecute(fxc, Cmd_Strip6);break;
+    case 'i': UserCommandExecute(fxc, Cmd_Strip7);break;
+    case 'p': UserCommandExecute(fxc, Cmd_StripAll);break;
 
     case 'Q': UserCommandExecute(fxc, Cmd_ColorLava);break;
     case 'W': UserCommandExecute(fxc, Cmd_ColorCloud);break;
@@ -243,6 +261,7 @@ void UserCommandInput(FxController &fxc, int data)
     case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
     //case 'm': UserCommandExecute(fxc, Cmd_Brightness_Low);break;
     case ',': UserCommandExecute(fxc, Cmd_Brightness_VeryHigh);break;
+
 
     
     case 10:

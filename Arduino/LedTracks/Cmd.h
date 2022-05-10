@@ -73,7 +73,17 @@ enum UserCommand
   Cmd_SpeedPos,
   Cmd_SpeedDec,
   Cmd_SpeedInc,
-  Cmd_SpeedRst  
+  Cmd_SpeedRst,
+
+  Cmd_StripAll,
+  Cmd_Strip0,
+  Cmd_Strip1,
+  Cmd_Strip2,
+  Cmd_Strip3,
+  Cmd_Strip4,
+  Cmd_Strip5,
+  Cmd_Strip6,
+  Cmd_Strip7,
 };
 
 void UserCommandExecute(FxController &fxc, int cmd);

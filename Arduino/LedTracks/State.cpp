@@ -63,7 +63,6 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
     }
     //fxc.transitionType = Transition_Instant;
     fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
-    FxTrackSay(timecode, matchedTimecode, nextMatchedTimecode);
     /*Serial.print(((float)matchedTimecode / (float)1000.0f);
       Serial.print(F(" : next @ "));
       Serial.println((float)nextMatchedTimecode / (float)1000.0f);*/

@@ -102,7 +102,7 @@ void UpdatePalette()
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
     //fix or remove this check later
-    /if (fxController.stripMask & (1<<strip))
+    if (fxController.stripMask & (1<<strip))
       neopixelSetPalette(strip, fxController.palette, fxController.paletteIndex);
   }
 }
@@ -134,12 +134,11 @@ void loop()
       fxController.fxPaletteUpdateType == FxPaletteUpdateType::Done;
   }
 
-#if ENABLE_STATUS
-    unsigned long t =  millis();
-    if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
-    {      
-      FxDisplayStatus(fxController);      
-      lastTimeDisplay = t;
-    }
-#endif
+//Display status once a second
+  unsigned long t =  millis();
+  if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
+  {      
+    FxDisplayStatus(fxController);      
+    lastTimeDisplay = t;
+  }
 }
