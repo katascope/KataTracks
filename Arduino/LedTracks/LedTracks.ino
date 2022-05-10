@@ -46,12 +46,6 @@ void setup() {
   Serial.println(F("No NeoPixel init"));
 #endif
 
-#if ENABLE_MIC
-  Serial.println(F("Mic init"));
-#else  
-  Serial.println(F("No Mic init"));
-#endif
-
 #if ENABLE_BLE
   Serial.println(F("BLE init"));
   bleSetup();
@@ -59,19 +53,6 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
-#if ENABLE_IMU
-  Serial.println(F("IMU init"));
-  imuSetup(); 
-#else
-  Serial.println(F("No IMU init"));
-#endif
-
-#if ENABLE_TEST_TRACK
-  fxController.fxState = FxState_PlayingTrack;
-#endif  
-#if ENABLE_TEST_PATTERN
-  fxController.fxState = FxState_TestPattern;
-#endif  
   fxController.fxState = FxState_Default;//FxState_Default;//FxState_TestPattern;//PlayingTrack;//
 
   if (fxController.fxState == FxState_TestPattern)
@@ -94,11 +75,16 @@ void setup() {
   }
   else Serial.println(F("Ready"));
 
-  Serial.print(F("Brightness "));
-  fxController.brightness = 25;
-  neopixelSetBrightness(fxController.brightness);
-  Serial.print(fxController.brightness);
-  Serial.println();
+  for (int i=0;i<NUM_STRIPS;i++)
+  {
+    Serial.print(F("Brightness "));
+    Serial.print(i);
+    Serial.print(F(" "));
+    fxController.strip[i].brightness = 25;
+    neopixelSetBrightness(i,fxController.strip[i].brightness);
+    Serial.print(fxController.strip[i].brightness);
+    Serial.println();
+  }
 
   Serial.println("Setup complete.");
 }
@@ -113,35 +99,21 @@ void UpdatePalette()
     if (fxController.paletteIndex < 0)
       fxController.paletteIndex = NUM_LEDS - 1;
   }
-#if ENABLE_NEOPIXEL
-  neopixelSetPalette(0,fxController.palette, fxController.paletteIndex);
-#endif
-#if ENABLE_MULTISTRIP
-  neopixelSetPalette(1,fxController.palette, fxController.paletteIndex);
-  neopixelSetPalette(2,fxController.palette, fxController.paletteIndex);
-  neopixelSetPalette(3,fxController.palette, fxController.paletteIndex);
-  neopixelSetPalette(4,fxController.palette, fxController.paletteIndex);
-  neopixelSetPalette(5,fxController.palette, fxController.paletteIndex);
-  neopixelSetPalette(6,fxController.palette, fxController.paletteIndex);
-  neopixelSetPalette(7,fxController.palette, fxController.paletteIndex);
-#endif
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    //fix or remove this check later
+    /if (fxController.stripMask & (1<<strip))
+      neopixelSetPalette(strip, fxController.palette, fxController.paletteIndex);
+  }
 }
 
 void loop()
 {
   while (Serial.available())  
     UserCommandInput(fxController, Serial.read());
-
-#if ENABLE_MIC
-  MicrophoneSampler::Poll();
-#endif
-  
+ 
 #if ENABLE_BLE
   blePoll(fxController);
-#endif
-
-#if ENABLE_IMU
-  imuPoll();  
 #endif
 
   State_Poll(fxController);

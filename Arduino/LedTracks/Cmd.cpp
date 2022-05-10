@@ -21,30 +21,6 @@ void InstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdat
   UpdatePalette();
 }
 
-void magicColors(FxController &fxc, int count)
-{
-  int index = 0;
-  if (count > 16) count = 16;
-  for (int i=0;i<count;i++)
-  {
-    char c = captureBuffer[i];
-    uint32_t crgb = ShortnameToCRGB(c);
-    fxc.microPalette[i] = crgb;
-    Serial.print(F("Colors["));
-    Serial.print(i);
-    Serial.print(F("] "));
-    Serial.print(c);
-    Serial.print(F(" = "));
-    Serial.println(crgb,HEX);
-  }
-  fxc.microPaletteSize = count;
-  fxc.fxPaletteUpdateType = FxPaletteUpdateType::Once;
-
-  FxCreatePalette(fxc, fxc.microPalette, fxc.microPaletteSize);
-  //fxc.updatePalette = true;
-  //UpdatePalette(); 
-}
-
 void UserCommandExecute(FxController &fxc, int cmd)
 {
   switch (cmd)
@@ -65,7 +41,6 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("( : Track Start"));
       Serial.println(F(") : Track Stop"));
       Serial.println(F("* : Track StartFrom"));
-      Serial.println(F("!code : Color code"));
       Serial.println(F("@code : Time code"));
       Serial.println(F("[ b n m , ] : Brightness"));
       Serial.println(F("z:default mode x:test c:imu"));
@@ -75,7 +50,6 @@ void UserCommandExecute(FxController &fxc, int cmd)
       break;
     case Cmd_State_Default: fxc.fxState = FxState_Default;break;
     case Cmd_State_Test:    fxc.fxState = FxState_TestPattern;break;
-    case Cmd_State_IMU:     fxc.fxState = FxState_IMU;break;
       
     case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd); break;
     case Cmd_PlayFrom:      fxc.fxState = FxState_PlayingTrack;break;
@@ -131,7 +105,6 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorParty:          InstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once); break;
     case Cmd_ColorHeat:           InstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once); break;
 
-    case Cmd_ColorImu:            InstantEvent(fxc, fx_palette_gyro,          FxPaletteUpdateType::Once); break;
 
 #if ENABLE_NEOPIXEL && ENABLE_BRIGHTNESS
     case Cmd_Brightness_VeryHigh: neopixelSetBrightness(250);break;
@@ -146,22 +119,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
 
 void processCapturedText(FxController &fxc)
 {
-  if (captureMode == CaptureColorCode)
-  {  
-    Serial.print(F("ColorDef("));
-    Serial.print(captureCount);
-    Serial.print(F(")=("));
-    for (int i = 0; i < captureCount; i++)
-      Serial.print((char)captureBuffer[i]);
-    Serial.print(F(")"));
-    Serial.println();
-
-    //Magic colors is currently broken as it breaks serial print for some unknown reason
-    magicColors(fxc,captureCount);
-    captureCount = 0;
-    captureMode = CaptureNone;
-  }
-  else if (captureMode == CaptureTimeCode)
+  if (captureMode == CaptureTimeCode)
   { 
     captureMode = CaptureNone;
     Serial.print(F("TimeCodeBuf( "));
@@ -200,16 +158,6 @@ void processCapturedText(FxController &fxc)
 
 void UserCommandInput(FxController &fxc, int data)
 {
-  if (captureMode == CaptureColorCode && data != 10 && data != 13)
-  {
-    if (captureCount < 16)
-    {
-      captureBuffer[captureCount] = (char)data;
-      captureCount++;
-    }
-    return;
-  }   
-
   if (captureMode == CaptureTimeCode && data != 10 && data != 13)
   {
     if (captureCount < 15)
@@ -225,11 +173,6 @@ void UserCommandInput(FxController &fxc, int data)
 
   switch (data)
   {
-    case '!':
-      Serial.print(F("Capturing ColorCode"));
-      captureCount = 0;
-      captureMode = CaptureColorCode;
-      break;
     case '@':
       Serial.print(F("Capturing TimeCode"));
       captureCount = 0;
@@ -240,7 +183,6 @@ void UserCommandInput(FxController &fxc, int data)
       
     case 'z': UserCommandExecute(fxc, Cmd_State_Default);break;
     case 'x': UserCommandExecute(fxc, Cmd_State_Test);break;
-    case 'c': UserCommandExecute(fxc, Cmd_State_IMU);break;      
     
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
     case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;
@@ -267,8 +209,6 @@ void UserCommandInput(FxController &fxc, int data)
     case 'k': UserCommandExecute(fxc, Cmd_ColorPulseMagenta); break;
     case 'l': UserCommandExecute(fxc, Cmd_ColorPulseOrange); break;
     case 'm': UserCommandExecute(fxc, Cmd_ColorPulseHalf); break;
-    
-    case ';': UserCommandExecute(fxc, Cmd_ColorImu);break;
     
     case 'A': UserCommandExecute(fxc, Cmd_ColorPulse2Dark); break;
     case 'S': UserCommandExecute(fxc, Cmd_ColorPulse2White); break;

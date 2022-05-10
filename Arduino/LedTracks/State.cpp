@@ -8,55 +8,10 @@
 void State_Poll_TestPattern(FxController &fxc)
 {
     FxEventProcess(fxc, fx_palette_rainbow);
-    //FxEventProcess(fxc, fx_palette_drb);
     fxc.paletteDirection = 1;
     fxc.paletteSpeed = 1;
     fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
 }
-
-#if ENABLE_IMU
-void State_Poll_IMU(FxController &fxc)
-{
-      byte r = (float)((float)127.0f-(float)getAccelX()*120.0f);
-      byte g = (float)((float)127.0f-(float)getAccelY()*120.0f);
-      byte b = (float)((float)127.0f-(float)getAccelZ()*120.0f);
-
-      float roll = 0.98 * getGyroX() + 0.02 * getAccelX();
-      float pitch = 0.98 * getGyroY() + 0.02 * getAccelY();
-      Serial.print(F(" roll "));
-      Serial.print(roll);
-      Serial.print(F("pitch "));
-      Serial.print(pitch);
-
-      r = (float)((float)127.0f-(float)getAccelX()*120.0f);
-      g = 0;
-      b = (float)((float)127.0f-(float)getAccelY()*120.0f);
-
-      fxc.palette[fxc.paletteIndex] = LEDRGB(r,g,b);
-      fxc.paletteDirection = 1;
-      fxc.paletteSpeed = 1;
-      fxc.fxPaletteUpdateType = FxPaletteUpdateType::Once;
-}
-#endif
-
-#if ENABLE_MIC
-void State_Poll_MIC(FxController &fxc)
-{
-    int numleds = 10;
-  for (int i=0;i<NUM_LEDS;i++)
-    fxc.palette[i] = 0;
-      
-  int scalar = (int)((float)MicrophoneSampler::GetLevel()*(float)numleds);
-
-  uint8_t lum = (uint8_t)( MicrophoneSampler::GetLevel() * 255.0f);
-  for (int i=0;i<scalar;i++)
-    fxc.palette[i] = LEDRGB(lum,lum,lum);
-        
-  fxc.paletteDirection = 1;
-  fxc.paletteSpeed = 0;
-  fxc.fxPaletteUpdateType = FxPaletteUpdateType::Once;
-}
-#endif
 
 void CopyRange(FxController &fxc,int first, int last)
 {
@@ -120,58 +75,44 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
     setTimecodeLastMatched(timecode);//timeController.lastMatchedTimecode = timecode;
 
   }
-/*
-#if ENABLE_IMU  
-  if (fxc.inImu)
-  {
-    State_Poll_IMU(fxc);
-  }
-#endif
-*/
-  unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
-  fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
 
-  if (fxc.transitionType == Transition_TimedFade)
-  {
-    for (int i = 0; i < NUM_LEDS; i++)
-      fxc.palette[i] = LerpRGB(fxc.transitionMux,fxc.initialPalette[i],fxc.nextPalette[i]);
-  }
-  if (fxc.transitionType == Transition_TimedWipePos)
-  {
-    int limit = fxc.transitionMux * (NUM_LEDS -1);
-    CopyRange(fxc, NUM_LEDS - 1, NUM_LEDS -1 - limit);      
-  }
-  if (fxc.transitionType == Transition_TimedWipeNeg)
-  {
-    int limit = fxc.transitionMux * (NUM_LEDS -1);
-    CopyRange(fxc,0,limit);
-  }
-  if (fxc.transitionType == Transition_TimedWipeOutIn)
-  {
-    int limit = fxc.transitionMux * (NUM_LEDS/2);
-    CopyRange(fxc,0,limit);
-    CopyRange(fxc,NUM_LEDS-1,NUM_LEDS-limit);
-  }
-  if (fxc.transitionType == Transition_TimedWipeInOut)
-  {
-    int limit = fxc.transitionMux * (NUM_LEDS/2);
-    CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2-limit);
-    CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2+limit);
-  }
+  //for (int strip=0;strip<NUM_STRIPS;strip++)
+  //{
+    unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
+    fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
+  
+    if (fxc.transitionType == Transition_TimedFade)
+    {
+      for (int i = 0; i < NUM_LEDS; i++)
+        fxc.palette[i] = LerpRGB(fxc.transitionMux,fxc.initialPalette[i],fxc.nextPalette[i]);
+    }
+    if (fxc.transitionType == Transition_TimedWipePos)
+    {
+      int limit = fxc.transitionMux * (NUM_LEDS -1);
+      CopyRange(fxc, NUM_LEDS - 1, NUM_LEDS -1 - limit);      
+    }
+    if (fxc.transitionType == Transition_TimedWipeNeg)
+    {
+      int limit = fxc.transitionMux * (NUM_LEDS -1);
+      CopyRange(fxc,0,limit);
+    }
+    if (fxc.transitionType == Transition_TimedWipeOutIn)
+    {
+      int limit = fxc.transitionMux * (NUM_LEDS/2);
+      CopyRange(fxc,0,limit);
+      CopyRange(fxc,NUM_LEDS-1,NUM_LEDS-limit);
+    }
+    if (fxc.transitionType == Transition_TimedWipeInOut)
+    {
+      int limit = fxc.transitionMux * (NUM_LEDS/2);
+      CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2-limit);
+      CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2+limit);
+    }
+  //}
 }
 
 void State_Poll(FxController &fxc)
 {
-#if ENABLE_MIC
-  if (fxc.fxState == FxState_MIC)
-    State_Poll_MIC(fxc);
-#endif
-  
-#if ENABLE_IMU
-  if (fxc.fxState == FxState_IMU||fxc.inImu)
-    State_Poll_IMU(fxc);
-#endif
-
   if (fxc.fxState == FxState_TestPattern)
     State_Poll_TestPattern(fxc);
 

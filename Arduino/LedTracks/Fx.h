@@ -4,9 +4,19 @@
 #include "Config.h"
 #include "FxCore.h"
 
+struct FxStripController
+{
+  unsigned char brightness = 25;
+};
 struct FxController
 {
+ //Universal
   FxState fxState = FxState_Default;
+  FxTrackEndAction fxTrackEndAction;
+
+  unsigned char stripMask = 255;
+  FxStripController strip[8];
+ //Multistrip-specific  
   FxTransitionType transitionType = Transition_Instant;  
   FxPaletteUpdateType fxPaletteUpdateType = FxPaletteUpdateType::None;
   uint32_t microPalette[16] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
@@ -18,10 +28,7 @@ struct FxController
   int paletteDirection = 1;
   int paletteIndex = 0;
   float transitionMux = 0;
-  FxTrackEndAction fxTrackEndAction;
-  unsigned char brightness = 25;
   unsigned long lastTimeLedUpdate = 0;  
-  bool inImu = false;
 };
 
 void FxEventProcess(FxController &fxc,int event);

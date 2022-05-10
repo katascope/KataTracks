@@ -43,35 +43,16 @@ enum FxState
   FxState_MIC           = 4,
 };
 
-/*
-   Event types:
-    Adjust speed/dir
-    Track play/stop
-    Transition
-     Fast
-     Timed
-     WipePos
-     WipeNeg
-    Drive off value
-     Test
-     IMU
-    Effects
-     Sparkle "until next"? or on/off
-      Single: fx_sparkles_on and fx_sparkles_off
-     One-Off effect
-     Brightness change
-*/
-
-enum FxStrip
+enum FxStripMask
 {
-  LEDS_0 = 1,
-  LEDS_1 = 2,
-  LEDS_2 = 4,
-  LEDS_3 = 8,
-  LEDS_4 = 16,
-  LEDS_5 = 32,
-  LEDS_6 = 64,
-  LEDS_7 = 128
+  LEDS_0 = 1,  RIGHT_CHEST_A = LEDS_0,
+  LEDS_1 = 2,  RIGHT_CHEST_B = LEDS_1,
+  LEDS_2 = 4,  RIGHT_CHEST_C = LEDS_2,
+  LEDS_3 = 8,  RIGHT_CHEST_D = LEDS_3,
+  LEDS_4 = 16, RIGHT_ARM = LEDS_4,
+  LEDS_5 = 32, LEFT_ARM = LEDS_5,
+  LEDS_6 = 64, RIGHT_LEG = LEDS_6,
+  LEDS_7 = 128,LEFT_LEG = LEDS_7
 };
 
 //List of possible Fx events
@@ -293,7 +274,7 @@ enum FxEvent
   fx_strip6,
   fx_strip7,  
   
-  fx_stripmask_0, //Same as fx_strips_all
+  fx_stripmask_0, fx_strip = fx_stripmask_0,//make a syntactic sugar for it
   fx_stripmask_1,fx_stripmask_2,fx_stripmask_3,fx_stripmask_4,fx_stripmask_5,fx_stripmask_6,fx_stripmask_7,fx_stripmask_8,  
   fx_stripmask_9,fx_stripmask_10,fx_stripmask_11,fx_stripmask_12,fx_stripmask_13,fx_stripmask_14,fx_stripmask_15,fx_stripmask_16,
   fx_stripmask_17,fx_stripmask_18,fx_stripmask_19,fx_stripmask_20,fx_stripmask_21,fx_stripmask_22,fx_stripmask_23,fx_stripmask_24,
@@ -325,7 +306,7 @@ enum FxEvent
   fx_stripmask_225,fx_stripmask_226,fx_stripmask_227,fx_stripmask_228,fx_stripmask_229,fx_stripmask_230,fx_stripmask_231,fx_stripmask_232,
   fx_stripmask_233,fx_stripmask_234,fx_stripmask_235,fx_stripmask_236,fx_stripmask_237,fx_stripmask_238,fx_stripmask_239,fx_stripmask_240,
   fx_stripmask_241,fx_stripmask_242,fx_stripmask_243,fx_stripmask_244,fx_stripmask_245,fx_stripmask_246,fx_stripmask_247,fx_stripmask_248,
-  fx_stripmask_249,fx_stripmask_250,fx_stripmask_251,fx_stripmask_252,fx_stripmask_253,fx_stripmask_254,fx_stripmask_255,
+  fx_stripmask_249,fx_stripmask_250,fx_stripmask_251,fx_stripmask_252,fx_stripmask_253,fx_stripmask_254,fx_stripmask_255,//Same as fx_strips_all
   
   fx_nothing = 0xFFFF
 };

@@ -4,7 +4,6 @@
 #include "Fx.h"
 #include "Track.h"
 
-//extern unsigned long millis();
 unsigned long SongTrack_timecode(int i) { return pgm_read_dword(&(SongTrack[i*2+0])); } 
 unsigned long SongTrack_event(int i) {  return pgm_read_dword(&(SongTrack[i*2+1])); }
 

@@ -5,7 +5,6 @@ struct FxController;
 enum CaptureTextMode
 {
   CaptureNone,
-  CaptureColorCode,
   CaptureTimeCode
 };
 
@@ -21,7 +20,6 @@ enum UserCommand
 
   Cmd_State_Default,
   Cmd_State_Test,
-  Cmd_State_IMU,
   
   Cmd_PlayFromStart,
   Cmd_PlayFrom,
@@ -71,8 +69,6 @@ enum UserCommand
   Cmd_ColorParty,
   Cmd_ColorHeat,
 
-  Cmd_ColorImu,
-  
   Cmd_SpeedNeg,
   Cmd_SpeedPos,
   Cmd_SpeedDec,

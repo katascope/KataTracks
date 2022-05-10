@@ -105,8 +105,15 @@ void FxDisplayStatus(FxController &fxc)
       Serial.print(getTimecodeTimeOffset());
       Serial.print(F("["));
       PrintFxStateName(fxc.fxState);
-      Serial.print(F("-L="));
-      Serial.print(fxc.brightness);
+      Serial.print(F(" smask="));
+      Serial.print(fxc.stripMask);
+      Serial.print(F(" L="));
+      for (int i=0;i<NUM_STRIPS;i++)
+      {
+        Serial.print(fxc.strip[i].brightness);
+        Serial.print(" ");
+      }
+      
       Serial.print(F("-"));
       PrintFxTransitionName(fxc.transitionType);
       Serial.print(F("]Pal="));
@@ -127,28 +134,7 @@ void FxDisplayStatus(FxController &fxc)
         Serial.print(F(" "));
         Serial.print(SongTrack_timecode(match));
       }*/
-
-#if ENABLE_MIC
-      Serial.print(F(" MIC:"));
-      Serial.print(MicrophoneSampler::GetLevel());
-#endif
-
-#if ENABLE_IMU
-      if (fxc.inImu)
-           Serial.print(F("(IN IMU)"));
-      Serial.print(F(" IMU:"));
-      Serial.print(getAccelX());
-      Serial.print(F(" "));
-      Serial.print(getAccelY());
-      Serial.print(F(" "));
-      Serial.print(getAccelZ());
-      Serial.print(F(" "));
-      Serial.print(getGyroX());
-      Serial.print(F(" "));
-      Serial.print(getGyroY());
-      Serial.print(F(" "));
-      Serial.print(getGyroZ());
-#endif            
+     
 
      /* Serial.print(F(" pal("));
       Serial.print(fxc.microPaletteSize);
@@ -164,7 +150,10 @@ void FxEventProcess(FxController &fxc,int event)
 {
   bool updatePal = false;
 
-  fxc.inImu = false;//this will only get set of the event is to go into imu
+  if (event >= fx_stripmask_0 && event <= fx_stripmask_255)
+  {
+    fxc.stripMask = (unsigned int)event-(unsigned int)fx_stripmask_0;
+  }
   
   switch (event)
   {
@@ -443,35 +432,5 @@ void FxEventProcess(FxController &fxc,int event)
       0xFF9900, 0xFFCC00, 0xFFFF00, 0xFFFF33, 
       0xFFFF66, 0xFFFF99, 0xFFFFCC, 0xFFFFFF);break;
 
-#if ENABLE_IMU
-    case fx_palette_accel: 
-    case fx_palette_gyro: 
-    {
-      /*byte r = (float)((float)127.0f-(float)getAccelX()*120.0f);
-      byte g = (float)((float)127.0f-(float)getAccelY()*120.0f);
-      byte b = (float)((float)127.0f-(float)getAccelZ()*120.0f);
-      fxc.palette[0] = LEDRGB(r,g,b);*/
-      fxc.inImu = true;
-    }
-    break;
-#endif
-
-    
-    /*case fx_palette_accel: 
-    {
-      byte r = (float)((float)127.0f-(float)imuAccelX*120.0f);
-      byte g = (float)((float)127.0f-(float)imuAccelY*120.0f);
-      byte b = (float)((float)127.0f-(float)imuAccelZ*120.0f);
-      CreateSingleBand(r,g,b);
-      break;
-    }
-    case fx_palette_gyro: 
-    {
-      byte r = (float)((float)127.0f-(float)imuGyroX*120.0f);
-      byte g = (float)((float)127.0f-(float)imuGyroY*120.0f);
-      byte b = (float)((float)127.0f-(float)imuGyroZ*120.0f);
-      CreateSingleBand(r,g,b);
-      break;
-    }*/
  }
 }
