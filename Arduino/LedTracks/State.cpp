@@ -54,7 +54,10 @@ void State_Poll_TestPattern(FxController &fxc)
 
 void CopyRange(FxController &fxc, int strip, int first, int last)
 {
-  if (first > 16 || last > 16) return;
+  if (last >= NUM_LEDS)
+   last = NUM_LEDS;
+  if (first < 0)
+   first = 0;
   
       if (first < last)
         for (int i = first;i<last; i++)
@@ -62,6 +65,33 @@ void CopyRange(FxController &fxc, int strip, int first, int last)
       else
         for (int i = first;i>=last;i--)
           fxc.strip[strip].palette[i] = fxc.strip[strip].nextPalette[i];
+}
+
+
+void PrintPalette(FxController &fxc)
+{
+  int limit = 4;
+  Serial.print(F(" ini("));     
+  for (int i=0;i<limit;i++)
+  {
+    Serial.print(fxc.strip[0].initialPalette[i], HEX);
+    Serial.print(F(" "));
+  }
+  Serial.print(F("), ")); 
+  Serial.print(F(" pal("));
+  for (int i=0;i<limit;i++)
+  {
+    Serial.print(fxc.strip[0].palette[i], HEX);
+    Serial.print(F(" "));
+  }
+  Serial.print(F(")")); 
+  Serial.print(F(" next("));
+  for (int i=0;i<limit;i++)
+  {
+    Serial.print(fxc.strip[0].nextPalette[i], HEX);
+    Serial.print(F(" "));
+  }
+  Serial.print(F(")"));   
 }
 
 void State_Poll_Play(FxController &fxc, unsigned long timecode)
@@ -129,6 +159,8 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
           PrintFxTransitionName(fxc.strip[strip].transitionType);
           Serial.print(F(", "));
         }
+
+       
         Serial.print(F(" => "));
       }
       
@@ -137,9 +169,15 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
 
   unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
   fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
-  //Serial.print(F("Mux="));
-  //Serial.println(fxc.transitionMux);
 
+//For debugging palette/transitions
+/*
+  Serial.print(F("Mux="));
+  Serial.print(fxc.transitionMux);
+  Serial.print(F(" .. "));
+  PrintPalette(fxc);
+  Serial.println();
+*/  
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
     if (fxc.stripMask & (1<<strip))

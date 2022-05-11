@@ -10,8 +10,25 @@
 // Main Track set to 'The Game Has Changed'
 #define TRACK_START_DELAY    0  // Delay time from start until track should truly 'start'
 
+const unsigned long SongTrackTest2[] PROGMEM =
+{
+  //Basic setup, fade in to blue
+  1, fx_strip_all,
+  1, fx_palette_dark,
+  1, fx_speed_0,
+  1, fx_speed_pos,
 
-const unsigned long SongTrack[] PROGMEM =
+  1000, fx_transition_timed_wipe_pos,
+  1000, fx_palette_red,
+  
+  3000, fx_strip_all,
+  3000, fx_transition_fast,
+  3000, fx_palette_dark,
+  3100, fx_palette_dark
+};
+
+
+const unsigned long SongTrackTest[] PROGMEM =
 {
   //Basic setup, fade in to blue
   1, fx_strip_all,
@@ -63,15 +80,13 @@ const unsigned long SongTrack[] PROGMEM =
   10500, fx_palette_dark
 };
 
-const unsigned long SongTrackGood[] PROGMEM =
+const unsigned long SongTrack[] PROGMEM =
 {
   //Basic setup, fade in to blue
+  1, fx_strip_all,
   1, fx_palette_dark,
   1, fx_speed_0,
   1, fx_speed_pos,
-  1, fx_strip_all,
-  1, fx_strip + (LEDS_0|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7),
-  //1, fx_strip + (RIGHT_ARM|LEFT_ARM),//just arms
 
   //Lead CrossStep
   2500, fx_transition_fast,
@@ -95,7 +110,7 @@ const unsigned long SongTrackGood[] PROGMEM =
   7300, fx_transition_fast,
   7300, fx_palette_half,
   7300, fx_transition_timed_wipe_pos,
-  7300, fx_palette_magenta,
+  7300, fx_palette_rb,
 
   8450, fx_transition_timed_fade,
   8450, fx_palette_dark,
@@ -108,17 +123,17 @@ const unsigned long SongTrackGood[] PROGMEM =
 
   //March together
   //Arms up
-  /*10800,fx_transition_timed_fade,
-    10800,fx_palette_blue,
-    11200,fx_palette_red,
-    11600,fx_palette_blue,
-    12000,fx_palette_red,
-    12400,fx_palette_blue,
-    12800,fx_palette_red,
-    13200,fx_palette_blue,
-    13600,fx_palette_red,
-    14000,fx_palette_blue,
-    14400,fx_palette_red,*/
+  10800,fx_transition_timed_fade,
+  10800,fx_palette_blue,
+  11200,fx_palette_red,
+  11600,fx_palette_blue,
+  12000,fx_palette_red,
+  12400,fx_palette_blue,
+  12800,fx_palette_red,
+  13200,fx_palette_blue,
+  13600,fx_palette_red,
+  14000,fx_palette_blue,
+  14400,fx_palette_red,
 
   //Circles around each other
   14600, fx_transition_fast, //timed_fade,

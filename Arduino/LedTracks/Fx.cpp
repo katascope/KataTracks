@@ -163,17 +163,8 @@ void FxDisplayStatus(FxController &fxc)
         Serial.print(F(" "));
         Serial.print(SongTrack_timecode(match));
       }*/
-     
 
-     /* Serial.print(F(" pal("));
-      Serial.print(fxc.microPaletteSize);
-      Serial.print(F(")="));
-      for (int i=0;i<fxc.microPaletteSize;i++)
-      {
-        Serial.print(fxc.microPalette[i], HEX);
-        Serial.print(F(" "));
-      }*/
-      Serial.println(F(")"));
+      Serial.println();
 }
 
 void SetTransitionType(FxController &fxc, FxTransitionType t)
