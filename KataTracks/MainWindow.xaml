@@ -51,9 +51,9 @@
         <Button Click="SendBoth" Tag="I" Content="Heat" Canvas.Left="837" Canvas.Top="749" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="68" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top"/>
         <Button Click="SendBoth" Tag="-" Content="- Speed" Canvas.Left="1016" Canvas.Top="709" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110"/>
         <Button Click="SendBoth" Tag="=" Content="Speed +" Canvas.Left="1138" Canvas.Top="709" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="112"/>
-        <Button Click="SendBoth" Tag="_" Content="Speed Neg" Canvas.Left="1016" Canvas.Top="734" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111"/>
-        <Button Click="SendBoth" Tag="+" Content="Speed Pos" Canvas.Left="1139" Canvas.Top="734" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111"/>
-        <Button Click="SendBoth" Tag="~" Content="Speed Stop" Canvas.Left="1016" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="234" RenderTransformOrigin="0.488,0.676"/>
+        <Button Click="SendBoth" Tag="_" Content="Speed Neg" Canvas.Left="1018" Canvas.Top="734" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="64"/>
+        <Button Click="SendBoth" Tag="+" Content="Speed Pos" Canvas.Left="1185" Canvas.Top="734" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="64"/>
+        <Button Click="SendBoth" Tag="~" Content="Speed Stop" Canvas.Left="1097" Canvas.Top="734" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" RenderTransformOrigin="0.488,0.676"/>
         <TextBox x:Name="Log3" 
             Canvas.Top="663" Text="Not connected." TextWrapping="Wrap" Width="200" Height="47" Background="Black" Foreground="#FF59ABF0" Canvas.Left="611" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="#FF1668A7" FontSize="14"/>
         <TextBox x:Name="Log4" 
@@ -141,5 +141,14 @@
         <Label Content="Arm" Canvas.Left="639" Canvas.Top="125" Foreground="#FFACC0EC" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Label Content="Approach" Canvas.Left="671" Canvas.Top="125" Foreground="#FFACC0EC" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Label Content="Spin" Canvas.Left="778" Canvas.Top="125" Foreground="#FFACC0EC" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Button Click="SendBoth" Tag="p" Content="All" Canvas.Left="1019" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="q" Content="0" Canvas.Left="1055" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="w" Content="1" Canvas.Left="1079" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="e" Content="2" Canvas.Left="1103" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="r" Content="3" Canvas.Left="1127" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="t" Content="4" Canvas.Left="1151" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="y" Content="5" Canvas.Left="1175" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="u" Content="6" Canvas.Left="1199" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="i" Content="7" Canvas.Left="1223" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Canvas>
 </Window>

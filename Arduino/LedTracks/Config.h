@@ -1,7 +1,7 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-static const char *DeviceName = "LightSuitPwr";
+static const char *DeviceName = "LightSuitSquid";
 
 #define NUM_LEDS            70
 #define NUM_STRIPS          8
@@ -33,6 +33,8 @@ static const char *DeviceName = "LightSuitPwr";
 #define ENABLE_BLE          1
 #define ENABLE_MULTISTRIP   1 //Enable multiple LED strips
 #endif
+
+#define DEBUG_BLE           1
 
 #if ENABLE_MEMORYUSAGE
 #include <MemoryUsage.h>

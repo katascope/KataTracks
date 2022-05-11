@@ -121,7 +121,6 @@ void loop()
     || fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Always)
       needsUpdate = true;
   }
-  needsUpdate = true;
   
   if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
   {
@@ -135,7 +134,7 @@ void loop()
       for (int strip=0;strip<NUM_STRIPS;strip++)
       {
         if (fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Once)
-          fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Done;
+          fxController.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::Done;
       }
     }
 

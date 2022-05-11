@@ -46,21 +46,19 @@ namespace KataTracks
         static BluetoothUuid mainServiceUuid = BluetoothUuid.FromGuid(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
         static BluetoothUuid mainCommandUuid = BluetoothUuid.FromGuid(new Guid("220154BF-1DCE-4F03-85F0-7BA905D2D6B0"));
         static BluetoothUuid mainAuthenticateUuid = BluetoothUuid.FromGuid(new Guid("4C75BB42-5365-458D-A3EA-2B91339646B7"));
-        static BluetoothUuid mainTimecodeUuid = BluetoothUuid.FromGuid(new Guid("10365297-362D-44FB-8807-A6AA13B1BD83"));
         static BluetoothUuid mainPlayUuid = BluetoothUuid.FromGuid(new Guid("3B140EF5-0A72-4891-AD38-83B5A2595622"));
         static BluetoothUuid mainStatusUuid = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
-        static BluetoothUuid mainCounterUuid = BluetoothUuid.FromGuid(new Guid("612DD356-9632-48CF-A279-935D3D4EF242"));
-        static BluetoothUuid mainCounterResetUuid = BluetoothUuid.FromGuid(new Guid("EA7CE01E-808B-4EF3-8735-2A05F1C48DFF"));
 
         static List<string> connectionList = new List<string>() {
                 //"CA8E42F29042", //LightSuitA
                 //"FA642247BCCD", //LightSuitB
 
                 "90335422B697", //LightsuitC
-                "757773C6C5F1", //LightSuitE?
+                //"757773C6C5F1", //LightSuitE?
                 
                 "FDB857FE7C3D", //HighPower                
                 //"4CEBD64CA98E", //LightSuitI - IOT
+                "9C9C1FDFDFAA", //LightSuitSquid
 
             };
     public static void StartMonitoring(List<string> bleDeviceConnectionList)
@@ -260,11 +258,6 @@ namespace KataTracks
                                 byte b = valuesStatus[0];
                                 int rssi = 255 - b;
                                 logUpdate += "(-" + rssi + ")\n";
-
-                                GattCharacteristic gattCharacteristicTimecode = bd.serviceCache[mainServiceUuid].characteristics[mainTimecodeUuid].gattCharacteristic;
-                                byte[] valuesTimecode = await gattCharacteristicTimecode.ReadValueAsync();
-                                ulong timecode = BitConverter.ToUInt32(valuesTimecode, 0);
-                                logUpdate += String.Format("  Timecode={0}", timecode);
 
                                 bd.log = logUpdate;
                             }

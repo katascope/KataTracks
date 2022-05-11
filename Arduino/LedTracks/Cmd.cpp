@@ -142,7 +142,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
     default: break;
   }
 }
-
+/*
 void processCapturedText(FxController &fxc)
 {
   if (captureMode == CaptureTimeCode)
@@ -181,10 +181,10 @@ void processCapturedText(FxController &fxc)
     trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd);
   }
 }
-
+*/
 void UserCommandInput(FxController &fxc, int data)
 {
-  if (captureMode == CaptureTimeCode && data != 10 && data != 13)
+  /*if (captureMode == CaptureTimeCode && data != 10 && data != 13)
   {
     if (captureCount < 15)
     {
@@ -195,16 +195,16 @@ void UserCommandInput(FxController &fxc, int data)
       captureCount++;
     }
     return;
-  }
+  }*/
 
   switch (data)
   {
-    case '@':
+   /* case '@':
       Serial.print(F("Capturing TimeCode"));
       captureCount = 0;
       //capturedTimeCode = "";
       captureMode = CaptureTimeCode;
-      break;
+      break;*/
     case '?': UserCommandExecute(fxc, Cmd_Help); break;
 
     case 'c': UserCommandExecute(fxc, Cmd_TransitionFade);break;
@@ -283,7 +283,7 @@ void UserCommandInput(FxController &fxc, int data)
     case '~': UserCommandExecute(fxc, Cmd_SpeedRst);break;
 
 
-
+/*
 
     
     case 10:
@@ -293,7 +293,7 @@ void UserCommandInput(FxController &fxc, int data)
         Serial.println(F("Capture end"));
         processCapturedText(fxc);
       }
-      //else Serial.println(F("UnkCR"));
+      //else Serial.println(F("UnkCR"));*/
     case 0:
     case 225: break;
     default:

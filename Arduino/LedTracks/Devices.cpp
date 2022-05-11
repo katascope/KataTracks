@@ -137,24 +137,26 @@ const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = 25;//LED_PWR;
 BLEService lightsuitService( BLE_UUID_LIGHTSUIT_SERVICE );
 BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
-BLEUnsignedLongCharacteristic testCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TEST, BLERead | BLENotify);
-BLEUnsignedLongCharacteristic timecodeCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_TIMECODE, BLERead | BLENotify );
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
 BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_LIGHTSUIT_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
-BLEUnsignedLongCharacteristic rssiCharacteristic(BLE_UUID_LIGHTSUIT_CHARACTERISTIC_RSSI, BLERead  );
 
-BLEUnsignedLongCharacteristic counterCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COUNTER, BLERead | BLENotify );
-BLEBoolCharacteristic resetCounterCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COUNTER_RESET, BLEWriteWithoutResponse );
-void blePeripheralConnectHandler(BLEDevice central) {
+//BLEDevice * central = NULL;
+void blePeripheralConnectHandler(BLEDevice c) {
+  //central = &c;
+#if DEBUG_BLE  
   // central connected event handler
-  //Serial.print(F("Connected event, central: "));
-  //Serial.println(central.address());
+  Serial.print(F("Connected event, central: "));
+  Serial.println(c.address());
+#endif 
 }
-void blePeripheralDisconnectHandler(BLEDevice central) {
+void blePeripheralDisconnectHandler(BLEDevice c) {
+  //central = NULL;
+#if DEBUG_BLE  
   // central disconnected event handler
-  //Serial.print(F("Disconnected event, central: "));
-  //Serial.println(central.address());
+  Serial.print(F("Disconnected event, central: "));
+  Serial.println(c.address());
+#endif  
 }
 bool bleSetup()
 {
@@ -172,24 +174,9 @@ bool bleSetup()
   BLE.setAdvertisedService( lightsuitService );
 
   // BLE add characteristics
-  //lightsuitService.addCharacteristic( testCharacteristic );
   lightsuitService.addCharacteristic( authenticateCharacteristic );
-  lightsuitService.addCharacteristic( timecodeCharacteristic );
-  lightsuitService.addCharacteristic( statusCharacteristic );
   lightsuitService.addCharacteristic( commandCharacteristic );
   lightsuitService.addCharacteristic( playCharacteristic );
-  lightsuitService.addCharacteristic( rssiCharacteristic );
-  
-  /*lightsuitService.addCharacteristic( accelerationCharacteristicX );
-  lightsuitService.addCharacteristic( accelerationCharacteristicY );
-  lightsuitService.addCharacteristic( accelerationCharacteristicZ );
-  lightsuitService.addCharacteristic( gyroCharacteristicX );
-  lightsuitService.addCharacteristic( gyroCharacteristicY );
-  lightsuitService.addCharacteristic( gyroCharacteristicZ );*/
-  lightsuitService.addCharacteristic( counterCharacteristic );
-  lightsuitService.addCharacteristic( resetCounterCharacteristic );
-
-//  playCharacteristic.setEventHandler(BLEWritten, switchCharacteristicWritten);
  
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -198,9 +185,6 @@ bool bleSetup()
   BLE.addService( lightsuitService );
 
   // set the initial value for the characeristics:
-  testCharacteristic.writeValue(0x12345678);
-  
-  counterCharacteristic.writeValue( 0 );
   commandCharacteristic.writeValue( 0 );
   playCharacteristic.writeValue(0);
   statusCharacteristic.writeValue(0);
@@ -210,6 +194,7 @@ bool bleSetup()
   digitalWrite( BLE_LED_PIN, HIGH );    
   return true;
 }
+
 void blePoll(FxController &fxc)
 {
   static unsigned long counter = 0;
@@ -217,24 +202,28 @@ void blePoll(FxController &fxc)
 
   // listen for BLE peripherals to connect:
   BLEDevice central = BLE.central();
-  //Serial.println(F("Waiting for connection."));
+
+#if DEBUG_BLE  
+//  Serial.println(F("Waiting for connection."));
+#endif  
 
   if ( central )
   {
-//    Serial.println( F("Connected to central: " ));
-  //  Serial.println( central.address() );
-
+#if DEBUG_BLE  
+//    Serial.print( F("Connected to central: " ));
+    //Serial.print( central.address() );
+#endif
     if ( central.connected() )
     {
       //if( authenticateCharacteristic.value() == 3838) //authenticated
       {
-        if( resetCounterCharacteristic.written() )
-        {
-          counter = 0;
-        }
         if (commandCharacteristic.written() )
         {   
-          UserCommandInput(fxc, commandCharacteristic.value());
+          Serial.print( F("BLE cmd: " ));
+          int v = commandCharacteristic.value();
+          Serial.print( (char)v);
+          UserCommandInput(fxc, v);
+          Serial.println();
         }
         if (playCharacteristic.written() )
         {
@@ -248,43 +237,14 @@ void blePoll(FxController &fxc)
           //Finally start the track
           trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd);
         }
-  
-        long interval = 20;
-        unsigned long currentMillis = millis();
-        timecodeCharacteristic.writeValue( currentMillis );
-        
-        if( currentMillis - previousMillis > interval )
-        {
-          previousMillis = currentMillis;
-  
-          if( central.rssi() != 0 )
-          {
-            digitalWrite( RSSI_LED_PIN, LOW );
-
-            
-            counter++;
-            counterCharacteristic.writeValue( counter );
-
-            unsigned long u = 
-              ( (fxc.fxState & 0xFF) << 24 ) |
-              ( ((signed char)fxc.strip[0].paletteSpeed & 0xFF) << 16 ) |
-              ( ((signed char)fxc.strip[0].paletteDirection & 0xFF) << 8 ) |
-              ( ((unsigned char)central.rssi() & 0xFF) );
-              
-            statusCharacteristic.writeValue( u );
-          }
-          else
-          {
-            digitalWrite( RSSI_LED_PIN, HIGH );
-          }
-        } // intervall
-        testCharacteristic.writeValue(0x12345678);
       }
 
     } // while connected
 
+#if DEBUG_BLE  
     //Serial.print( F( "Disconnected from central: " ) );
-    //Serial.println( central.address() );
+//    Serial.println( central->address() );
+#endif    
   } // if central
 } // loop
 #endif

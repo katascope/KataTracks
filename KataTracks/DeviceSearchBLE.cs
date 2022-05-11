@@ -20,7 +20,7 @@ namespace KataTracks
             scanFilter = new BluetoothLEScanFilter();
             rdo = new RequestDeviceOptions();
             discoveredBLE = new Dictionary<string, string>();
-            scanFilter.NamePrefix = "Light";
+            scanFilter.NamePrefix = "Light";    
             rdo.Filters.Add(scanFilter);
             discoveredDevices = await Bluetooth.ScanForDevicesAsync();            
 
