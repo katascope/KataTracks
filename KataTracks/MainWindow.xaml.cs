@@ -29,7 +29,7 @@ namespace KataTracks
         static DispatcherTimer btTextTimer;
         static bool playing = false;
         static DateTime literalTrackStartTime;
-        float volume = 50;
+        float volume = 100;
         static long timePick = 0;
         static bool b1Down = false;
         static ulong textTickCount = 0;

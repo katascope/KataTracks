@@ -122,7 +122,7 @@ void loop()
       needsUpdate = true;
   }
   
-  if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
+  if (fxController.fxState == FxState_PlayingTrack)// || needsUpdate)
   {
     unsigned long t =  millis();
     int ledDelay = 30;

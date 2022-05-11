@@ -19,7 +19,7 @@
         <Button Click="PlayButton_Click" Content="Seek" Margin="0,0,0,0" Height="79" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Left="124" Canvas.Top="22" FontSize="24"/>
         <Button Click="StopButton_Click"  Content="Stop" Margin="0,0,0,0" Height="79" Width="80" Background="#FF012461" Foreground="White" Canvas.Left="231" BorderBrush="#FF120351" Canvas.Top="21" FontSize="24"/>
         <Label x:Name="TrackTime" Content="0:0:0" Margin="0,0                ,0,0" Foreground="#FFACC0EC" Width="134" FontSize="28" Canvas.Top="19" Canvas.Left="329"/>
-        <Slider x:Name="OutputVolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="300 " Maximum="100" Canvas.Left="594" Canvas.Top="26" LargeChange="10" Value="50">
+        <Slider x:Name="OutputVolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="300 " Maximum="100" Canvas.Left="594" Canvas.Top="26" LargeChange="10" Value="100">
             <Slider.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="2"/>
             </Slider.LayoutTransform>

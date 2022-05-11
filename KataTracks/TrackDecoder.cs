@@ -156,73 +156,64 @@ namespace KataTracks
             fx_palette_dcm,
             fx_palette_dbm,
 
-            fx_palette_accel,
-            fx_palette_gyro,
-            fx_palette_mic,
+            fx_strip_all,  //Target all strips
+            fx_strip_none, //Target no strips, why?
+            fx_strip_evens, //Target even strips
+            fx_strip_odds, //Target odd strips
 
-            fx_color1_dark,
-            fx_color1_white,
-            fx_color1_red,
-            fx_color1_yellow,
-            fx_color1_green,
-            fx_color1_cyan,
-            fx_color1_blue,
-            fx_color1_magenta,
-            fx_color1_orange,
-            fx_color1_half,
-            fx_color1_lowhalf,
+            fx_stripmask_0, fx_strip = fx_stripmask_0,//make a syntactic sugar for it
+            fx_stripmask_1, fx_stripmask_2, fx_stripmask_3, fx_stripmask_4, fx_stripmask_5, fx_stripmask_6, fx_stripmask_7, fx_stripmask_8,
+            fx_stripmask_9, fx_stripmask_10, fx_stripmask_11, fx_stripmask_12, fx_stripmask_13, fx_stripmask_14, fx_stripmask_15, fx_stripmask_16,
+            fx_stripmask_17, fx_stripmask_18, fx_stripmask_19, fx_stripmask_20, fx_stripmask_21, fx_stripmask_22, fx_stripmask_23, fx_stripmask_24,
+            fx_stripmask_25, fx_stripmask_26, fx_stripmask_27, fx_stripmask_28, fx_stripmask_29, fx_stripmask_30, fx_stripmask_31, fx_stripmask_32,
+            fx_stripmask_33, fx_stripmask_34, fx_stripmask_35, fx_stripmask_36, fx_stripmask_37, fx_stripmask_38, fx_stripmask_39, fx_stripmask_40,
+            fx_stripmask_41, fx_stripmask_42, fx_stripmask_43, fx_stripmask_44, fx_stripmask_45, fx_stripmask_46, fx_stripmask_47, fx_stripmask_48,
+            fx_stripmask_49, fx_stripmask_50, fx_stripmask_51, fx_stripmask_52, fx_stripmask_53, fx_stripmask_54, fx_stripmask_55, fx_stripmask_56,
+            fx_stripmask_57, fx_stripmask_58, fx_stripmask_59, fx_stripmask_60, fx_stripmask_61, fx_stripmask_62, fx_stripmask_63, fx_stripmask_64,
+            fx_stripmask_65, fx_stripmask_66, fx_stripmask_67, fx_stripmask_68, fx_stripmask_69, fx_stripmask_70, fx_stripmask_71, fx_stripmask_72,
+            fx_stripmask_73, fx_stripmask_74, fx_stripmask_75, fx_stripmask_76, fx_stripmask_77, fx_stripmask_78, fx_stripmask_79, fx_stripmask_80,
+            fx_stripmask_81, fx_stripmask_82, fx_stripmask_83, fx_stripmask_84, fx_stripmask_85, fx_stripmask_86, fx_stripmask_87, fx_stripmask_88,
+            fx_stripmask_89, fx_stripmask_90, fx_stripmask_91, fx_stripmask_92, fx_stripmask_93, fx_stripmask_94, fx_stripmask_95, fx_stripmask_96,
+            fx_stripmask_97, fx_stripmask_98, fx_stripmask_99, fx_stripmask_100, fx_stripmask_101, fx_stripmask_102, fx_stripmask_103, fx_stripmask_104,
+            fx_stripmask_105, fx_stripmask_106, fx_stripmask_107, fx_stripmask_108, fx_stripmask_109, fx_stripmask_110, fx_stripmask_111, fx_stripmask_112,
+            fx_stripmask_113, fx_stripmask_114, fx_stripmask_115, fx_stripmask_116, fx_stripmask_117, fx_stripmask_118, fx_stripmask_119, fx_stripmask_120,
+            fx_stripmask_121, fx_stripmask_122, fx_stripmask_123, fx_stripmask_124, fx_stripmask_125, fx_stripmask_126, fx_stripmask_127, fx_stripmask_128,
+            fx_stripmask_129, fx_stripmask_130, fx_stripmask_131, fx_stripmask_132, fx_stripmask_133, fx_stripmask_134, fx_stripmask_135, fx_stripmask_136,
+            fx_stripmask_137, fx_stripmask_138, fx_stripmask_139, fx_stripmask_140, fx_stripmask_141, fx_stripmask_142, fx_stripmask_143, fx_stripmask_144,
+            fx_stripmask_145, fx_stripmask_146, fx_stripmask_147, fx_stripmask_148, fx_stripmask_149, fx_stripmask_150, fx_stripmask_151, fx_stripmask_152,
+            fx_stripmask_153, fx_stripmask_154, fx_stripmask_155, fx_stripmask_156, fx_stripmask_157, fx_stripmask_158, fx_stripmask_159, fx_stripmask_160,
+            fx_stripmask_161, fx_stripmask_162, fx_stripmask_163, fx_stripmask_164, fx_stripmask_165, fx_stripmask_166, fx_stripmask_167, fx_stripmask_168,
+            fx_stripmask_169, fx_stripmask_170, fx_stripmask_171, fx_stripmask_172, fx_stripmask_173, fx_stripmask_174, fx_stripmask_175, fx_stripmask_176,
+            fx_stripmask_177, fx_stripmask_178, fx_stripmask_179, fx_stripmask_180, fx_stripmask_181, fx_stripmask_182, fx_stripmask_183, fx_stripmask_184,
+            fx_stripmask_185, fx_stripmask_186, fx_stripmask_187, fx_stripmask_188, fx_stripmask_189, fx_stripmask_190, fx_stripmask_191, fx_stripmask_192,
+            fx_stripmask_193, fx_stripmask_194, fx_stripmask_195, fx_stripmask_196, fx_stripmask_197, fx_stripmask_198, fx_stripmask_199, fx_stripmask_200,
+            fx_stripmask_201, fx_stripmask_202, fx_stripmask_203, fx_stripmask_204, fx_stripmask_205, fx_stripmask_206, fx_stripmask_207, fx_stripmask_208,
+            fx_stripmask_209, fx_stripmask_210, fx_stripmask_211, fx_stripmask_212, fx_stripmask_213, fx_stripmask_214, fx_stripmask_215, fx_stripmask_216,
+            fx_stripmask_217, fx_stripmask_218, fx_stripmask_219, fx_stripmask_220, fx_stripmask_221, fx_stripmask_222, fx_stripmask_223, fx_stripmask_224,
+            fx_stripmask_225, fx_stripmask_226, fx_stripmask_227, fx_stripmask_228, fx_stripmask_229, fx_stripmask_230, fx_stripmask_231, fx_stripmask_232,
+            fx_stripmask_233, fx_stripmask_234, fx_stripmask_235, fx_stripmask_236, fx_stripmask_237, fx_stripmask_238, fx_stripmask_239, fx_stripmask_240,
+            fx_stripmask_241, fx_stripmask_242, fx_stripmask_243, fx_stripmask_244, fx_stripmask_245, fx_stripmask_246, fx_stripmask_247, fx_stripmask_248,
+            fx_stripmask_249, fx_stripmask_250, fx_stripmask_251, fx_stripmask_252, fx_stripmask_253, fx_stripmask_254, fx_stripmask_255,//Same as fx_strips_all
 
-            fx_color2_dark,
-            fx_color2_white,
-            fx_color2_red,
-            fx_color2_yellow,
-            fx_color2_green,
-            fx_color2_cyan,
-            fx_color2_blue,
-            fx_color2_magenta,
-            fx_color2_orange,
-            fx_color2_half,
-            fx_color2_lowhalf,
+            fx_strip0 = fx_stripmask_1,
+            fx_strip1 = fx_stripmask_2,
+            fx_strip2 = fx_stripmask_4,
+            fx_strip3 = fx_stripmask_8,
+            fx_strip4 = fx_stripmask_16,
+            fx_strip5 = fx_stripmask_32,
+            fx_strip6 = fx_stripmask_64,
+            fx_strip7 = fx_stripmask_128,
 
-            fx_color3_dark,
-            fx_color3_white,
-            fx_color3_red,
-            fx_color3_yellow,
-            fx_color3_green,
-            fx_color3_cyan,
-            fx_color3_blue,
-            fx_color3_magenta,
-            fx_color3_orange,
-            fx_color3_half,
-            fx_color3_lowhalf,
-
-            fx_colors1,
-            fx_colors2,
-            fx_colors3,
-            fx_colors4,
-            fx_colors5,
-            fx_colors6,
-            fx_colors7,
-            fx_colors8,
-            fx_colors9,
-            fx_colors10,
-            fx_colors11,
-            fx_colors12,
-            fx_colors13,
-            fx_colors14,
-            fx_colors15,
-            fx_colors16,
-
-            fx_nothing = 255
+            fx_nothing = 0xFFFF
         };
 
         static List<ulong> track = new List<ulong>()
-        {
-
-  //Basic setup, fade in to blue
+        {  //Basic setup, fade in to blue
+  1, (ulong)Fx.fx_strip_all,
   1, (ulong)Fx.fx_palette_dark,
   1, (ulong)Fx.fx_speed_0,
   1, (ulong)Fx.fx_speed_pos,
+  1, (ulong)Fx.fx_speed_rst,
 
   //Lead CrossStep
   2500, (ulong)Fx.fx_transition_fast,
@@ -246,7 +237,7 @@ namespace KataTracks
   7300, (ulong)Fx.fx_transition_fast,
   7300, (ulong)Fx.fx_palette_half,
   7300, (ulong)Fx.fx_transition_timed_wipe_pos,
-  7300, (ulong)Fx.fx_palette_magenta,
+  7300, (ulong)Fx.fx_palette_rb,
 
   8450, (ulong)Fx.fx_transition_timed_fade,
   8450, (ulong)Fx.fx_palette_dark,
@@ -259,17 +250,17 @@ namespace KataTracks
 
   //March together
   //Arms up
-  /*10800,fx_transition_timed_fade,
-    10800,fx_palette_blue,
-    11200,fx_palette_red,
-    11600,fx_palette_blue,
-    12000,fx_palette_red,
-    12400,fx_palette_blue,
-    12800,fx_palette_red,
-    13200,fx_palette_blue,
-    13600,fx_palette_red,
-    14000,fx_palette_blue,
-    14400,fx_palette_red,*/
+  10800,(ulong)Fx.fx_transition_timed_fade,
+  10800,(ulong)Fx.fx_palette_blue,
+  11200,(ulong)Fx.fx_palette_red,
+  11600,(ulong)Fx.fx_palette_blue,
+  12000,(ulong)Fx.fx_palette_red,
+  12400,(ulong)Fx.fx_palette_blue,
+  12800,(ulong)Fx.fx_palette_red,
+  13200,(ulong)Fx.fx_palette_blue,
+  13600,(ulong)Fx.fx_palette_red,
+  14000,(ulong)Fx.fx_palette_blue,
+  14400,(ulong)Fx.fx_palette_red,
 
   //Circles around each other
   14600, (ulong)Fx.fx_transition_fast, //timed_fade,
@@ -278,30 +269,32 @@ namespace KataTracks
 
   //Build2
   16800, (ulong)Fx.fx_transition_fast, //_timed_fade,
-  16800, (ulong)Fx.fx_palette_cm,
+  16800, (ulong)Fx.fx_palette_half,
   16800, (ulong)Fx.fx_speed_2,
   16800, (ulong)Fx.fx_speed_neg,
+  17000, (ulong)Fx.fx_transition_timed_fade,
+  17000, (ulong)Fx.fx_palette_cm,
 
   //18600 beat
-  /*18600,fx_transition_fast,
-    18600,fx_palette_pulse_yellow,
+  /*18600,(ulong)Fx.fx_transition_fast,
+    18600,(ulong)Fx.fx_palette_pulse_yellow,
 
     //Coast2
-    19200,fx_transition_timed_fade,
-    19200,fx_palette_pulse2_orange,*/
+    19200,(ulong)Fx.fx_transition_timed_fade,
+    19200,(ulong)Fx.fx_palette_pulse2_orange,*/
 
   //BEATS
   19600, (ulong)Fx.fx_transition_timed_wipe_pos,
   19600, (ulong)Fx.fx_palette_red,
   20200, (ulong)Fx.fx_palette_yellow,
-  20800, (ulong)Fx.fx_palette_red,
-  21400, (ulong)Fx.fx_palette_yellow,
-  22000, (ulong)Fx.fx_palette_red,
-  22600, (ulong)Fx.fx_palette_yellow,
-  23200, (ulong)Fx.fx_palette_white,
+  20800, (ulong)Fx.fx_palette_wr,
+  21400, (ulong)Fx.fx_palette_ry,
+  22000, (ulong)Fx.fx_palette_wy,
+  22600, (ulong)Fx.fx_palette_wr,
+  23200, (ulong)Fx.fx_palette_ry,
 
   //calm/smooth in down
-  24200, (ulong)Fx.fx_transition_timed_wipe_pos,
+  24200, (ulong)Fx.fx_transition_fast,
   24200, (ulong)Fx.fx_palette_red,
   26500, (ulong)Fx.fx_transition_timed_fade,
   26500, (ulong)Fx.fx_palette_db,
@@ -331,7 +324,7 @@ namespace KataTracks
   32910, (ulong)Fx.fx_palette_green,
   33300, (ulong)Fx.fx_palette_blue,
   33690, (ulong)Fx.fx_palette_red,
-  //33690,fx_transition_fast,
+  //33690,(ulong)Fx.fx_transition_fast,
   34080, (ulong)Fx.fx_speed_2,
   34080, (ulong)Fx.fx_speed_neg,
   34080, (ulong)Fx.fx_palette_green,
@@ -347,8 +340,8 @@ namespace KataTracks
 
   //Paso Spins
   38700, (ulong)Fx.fx_transition_timed_fade,
-  38700, (ulong)Fx.fx_palette_red,
-  39200, (ulong)Fx.fx_palette_red,
+  38700, (ulong)Fx.fx_palette_dr,
+  39200, (ulong)Fx.fx_palette_dr,
 
   43300, (ulong)Fx.fx_speed_0,
   43300, (ulong)Fx.fx_speed_neg,
@@ -401,8 +394,8 @@ namespace KataTracks
   80000, (ulong)Fx.fx_transition_timed_wipe_pos,
   80000, (ulong)Fx.fx_palette_magenta,
 
-  //  80400,fx_transition_timed_fade,
-  //  80400,fx_palette_magenta,
+  //  80400,(ulong)Fx.fx_transition_timed_fade,
+  //  80400,(ulong)Fx.fx_palette_magenta,
   ///bwaaah
   81800, (ulong)Fx.fx_speed_2,
   81800, (ulong)Fx.fx_speed_neg,
@@ -425,10 +418,10 @@ namespace KataTracks
   //98 to 107 = the spin and recover
 
   //pulsy approach
-  /*98500,fx_speed_3,
-    98500,fx_speed_pos,
-    98500,fx_transition_timed_fade,
-    98500,fx_palette_pulse_white,*/
+  /*98500,(ulong)Fx.fx_speed_3,
+    98500,(ulong)Fx.fx_speed_pos,
+    98500,(ulong)Fx.fx_transition_timed_fade,
+    98500,(ulong)Fx.fx_palette_pulse_white,*/
   //imu approach
   98500, (ulong)Fx.fx_speed_2,
   98500, (ulong)Fx.fx_speed_neg,
@@ -501,7 +494,15 @@ namespace KataTracks
   129000, (ulong)Fx.fx_transition_timed_fade,
   129000, (ulong)Fx.fx_palette_dark
         };
-        
+
+        public static int FindNextTimeIndex(ulong tc)
+        {
+            for (int i = 0; i < (track.Count / 2); i += 2)
+                if (track[i * 2 + 0] > tc)
+                    return i;
+            return 0;
+        }
+
 
         public static void Decode(byte[] pixels)
         {
@@ -511,33 +512,10 @@ namespace KataTracks
             r2 = g2 = b2 = 0;
             ulong last = 0;
 
-            for (int t = 0; t < track.Count/2-2; t+=2)
+            for (int t = 0; t < track.Count/2-2; t++)
             {
                 ulong tc = track[t * 2 + 0];
                 Fx fx = (Fx)track[t * 2 + 1];
-
-                if ( tc > last)
-                {
-                    for (ulong tx = last / 100; tx < tc / 100; tx++)
-                    {
-                        int plotX = (int)tx;
-                        for (int y = 0; y < 4; y++)
-                        {
-                            pixels[y * 1300 * 4 + plotX * 4 + 0] = (byte)(b1 / 2);
-                            pixels[y * 1300 * 4 + plotX * 4 + 1] = (byte)(g1 / 2);
-                            pixels[y * 1300 * 4 + plotX * 4 + 2] = (byte)(r1 / 2);
-                            pixels[y * 1300 * 4 + plotX * 4 + 3] = 127;
-                        }
-                        for (int y = 4; y < 8; y++)
-                        {
-                            pixels[y * 1300 * 4 + plotX * 4 + 0] = (byte)(b2 / 2);
-                            pixels[y * 1300 * 4 + plotX * 4 + 1] = (byte)(g2 / 2);
-                            pixels[y * 1300 * 4 + plotX * 4 + 2] = (byte)(r2 / 2);
-                            pixels[y * 1300 * 4 + plotX * 4 + 3] = 127;
-                        }
-                    }
-                    last = tc;
-                }
 
                 if (fx >= Fx.fx_palette_dark && fx <= Fx.fx_palette_lowhalf)
                 {
@@ -563,9 +541,15 @@ namespace KataTracks
                 {
                     switch (fx)
                     {
-                        case Fx.fx_palette_rb: { r1 = 255; g1 = 0;  r2 = 0; g2 = 0; b2 = 0; } break;
+                        case Fx.fx_palette_dr: { r1 = 255; g1 = 0; b1 = 0; r2 = 0; g2 = 0; b2 = 0; } break;
+                        case Fx.fx_palette_rb: { r1 = 255; g1 = 0; b1 = 0; r2 = 0; g2 = 0; b2 = 255; } break;
                         case Fx.fx_palette_cm: { r1 = g1 = 255; b1 = 255; r2 = 255; g2 = 0; b2 = 255; } break;
                         case Fx.fx_palette_rm: { r1 = 255; g1 = 0; b1 = 255; r2 = 255; g2 = 0; b2 = 255; } break;
+                        case Fx.fx_palette_wr: { r1 = 255; g1 = 255; b1 = 255; r2 = 255; g2 = 0; b2 = 0; } break;
+                        case Fx.fx_palette_wy: { r1 = 255; g1 = 255; b1 = 255; r2 = 255; g2 = 255; b2 = 0; } break;
+                        case Fx.fx_palette_ry: { r1 = 255; g1 = 0; b1 = 0; r2 = 255; g2 = 255; b2 = 0; } break;
+                        case Fx.fx_palette_db: { r1 = 0; g1 = 0; b1 = 0; r2 = 0; g2 = 0; b2 = 255; } break;
+                        case Fx.fx_palette_gb: { r1 = 0; g1 = 255; b1 = 0; r2 = 0; g2 = 0; b2 = 255; } break;
                     }
                 }
                 if (fx >= Fx.fx_palette_pulse_dark && fx <= Fx.fx_palette_pulse_lowhalf)
@@ -608,6 +592,31 @@ namespace KataTracks
                     g2 = 0;
                     b2 = 0;
                 }
+
+                int timeNextIndex = FindNextTimeIndex(tc);
+                ulong timeNext = track[timeNextIndex * 2];
+
+                for (ulong tx = tc/100;tx<timeNext/100;tx++)
+                {
+                    int plotX = (int)tx;
+                    for (int y = 0; y < 4; y++)
+                    {
+                        pixels[y * 1300 * 4 + plotX * 4 + 0] = (byte)(b1 / 2);
+                        pixels[y * 1300 * 4 + plotX * 4 + 1] = (byte)(g1 / 2);
+                        pixels[y * 1300 * 4 + plotX * 4 + 2] = (byte)(r1 / 2);
+                        pixels[y * 1300 * 4 + plotX * 4 + 3] = 127;
+                    }
+                    for (int y = 4; y < 8; y++)
+                    {
+                        pixels[y * 1300 * 4 + plotX * 4 + 0] = (byte)(b2 / 2);
+                        pixels[y * 1300 * 4 + plotX * 4 + 1] = (byte)(g2 / 2);
+                        pixels[y * 1300 * 4 + plotX * 4 + 2] = (byte)(r2 / 2);
+                        pixels[y * 1300 * 4 + plotX * 4 + 3] = 127;
+                    }
+                }
+
+                //t = (int)timeNextIndex-1;
+
             }
         }
     }

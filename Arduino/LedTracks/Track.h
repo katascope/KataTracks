@@ -87,6 +87,7 @@ const unsigned long SongTrack[] PROGMEM =
   1, fx_palette_dark,
   1, fx_speed_0,
   1, fx_speed_pos,
+  1, fx_speed_rst,
 
   //Lead CrossStep
   2500, fx_transition_fast,
@@ -142,9 +143,11 @@ const unsigned long SongTrack[] PROGMEM =
 
   //Build2
   16800, fx_transition_fast, //_timed_fade,
-  16800, fx_palette_cm,
+  16800, fx_palette_half,
   16800, fx_speed_2,
   16800, fx_speed_neg,
+  17000, fx_transition_timed_fade,
+  17000, fx_palette_cm,
 
   //18600 beat
   /*18600,fx_transition_fast,
@@ -158,14 +161,14 @@ const unsigned long SongTrack[] PROGMEM =
   19600, fx_transition_timed_wipe_pos,
   19600, fx_palette_red,
   20200, fx_palette_yellow,
-  20800, fx_palette_red,
-  21400, fx_palette_yellow,
-  22000, fx_palette_red,
-  22600, fx_palette_yellow,
-  23200, fx_palette_white,
+  20800, fx_palette_wr,
+  21400, fx_palette_ry,
+  22000, fx_palette_wy,
+  22600, fx_palette_wr,
+  23200, fx_palette_ry,
 
   //calm/smooth in down
-  24200, fx_transition_timed_wipe_pos,
+  24200, fx_transition_fast,
   24200, fx_palette_red,
   26500, fx_transition_timed_fade,
   26500, fx_palette_db,
@@ -186,14 +189,14 @@ const unsigned long SongTrack[] PROGMEM =
   29400, fx_palette_red,
   29790, fx_palette_green,
   30180, fx_palette_blue,
-  30570, fx_palette_red,
-  30960, fx_palette_green,
-  31350, fx_palette_red,
-  31740, fx_palette_green,
-  32130, fx_palette_blue,
-  32520, fx_palette_red,
-  32910, fx_palette_green,
-  33300, fx_palette_blue,
+  30570, fx_palette_rg,
+  30960, fx_palette_gb,
+  31350, fx_palette_rb,
+  31740, fx_palette_red,
+  32130, fx_palette_green,
+  32520, fx_palette_blue,
+  32910, fx_palette_rg,
+  33300, fx_palette_rb,
   33690, fx_palette_red,
   //33690,fx_transition_fast,
   34080, fx_speed_2,
@@ -211,8 +214,8 @@ const unsigned long SongTrack[] PROGMEM =
 
   //Paso Spins
   38700, fx_transition_timed_fade,
-  38700, fx_palette_red,
-  39200, fx_palette_red,
+  38700, fx_palette_dr,
+  39200, fx_palette_dr,
 
   43300, fx_speed_0,
   43300, fx_speed_neg,
@@ -306,8 +309,8 @@ const unsigned long SongTrack[] PROGMEM =
 
   //CHAPTER 3
   //big march around
-  107900, fx_speed_0,
-  107900, fx_speed_pos,
+//  107900, fx_speed_0,
+//  107900, fx_speed_pos,
   107900, fx_transition_timed_fade,
   107900, fx_palette_half,
 
