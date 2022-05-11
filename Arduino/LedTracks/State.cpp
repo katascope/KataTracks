@@ -143,6 +143,7 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
     for (int i = 0; i < numSongTracks; i++)
       if (SongTrack_timecode(i) == matchedTimecode)
       {
+        /*
         Serial.println();
         Serial.print(" @");
         Serial.print(GetTime());
@@ -150,7 +151,6 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
         Serial.print(matchedTimecode);
         Serial.print(" ");
         PrintFxEventName(SongTrack_event(i));        
-        FxEventProcess(fxc, SongTrack_event(i));
         Serial.print(" : ");
         Serial.print(fxc.transitionMux);
         Serial.print(F(" "));
@@ -158,10 +158,10 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
         {
           PrintFxTransitionName(fxc.strip[strip].transitionType);
           Serial.print(F(", "));
-        }
-
-       
+        }       
         Serial.print(F(" => "));
+        */
+        FxEventProcess(fxc, SongTrack_event(i));
       }
       
     setTimecodeLastMatched(timecode);//timeController.lastMatchedTimecode = timecode;

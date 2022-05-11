@@ -174,8 +174,8 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
     if (fxc.stripMask & (1<<strip)) 
     {
       fxc.strip[strip].transitionType = t;
-      if (t == fx_transition_timed_wipe_pos || t == fx_transition_timed_wipe_neg
-        || t == fx_transition_timed_wipe_outin || t == fx_transition_timed_wipe_inout) 
+      if (t == Transition_TimedWipePos || t == Transition_TimedWipeNeg
+        || t == Transition_TimedWipeOutIn || t == Transition_TimedWipeInOut) 
         {
           fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::None;
           fxc.strip[strip].paletteIndex = 0;
@@ -186,12 +186,26 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
   }
 }
 
-void SetPaletteSpeed(FxController &fxc, int ps)
+void ResetPaletteSpeed(FxController &fxc)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+      fxc.strip[strip].paletteSpeed = 0;
+      fxc.strip[strip].paletteIndex = 0;
+      fxc.strip[strip].paletteDirection = 1;
+    }
+  }
+}
+
+void SetPaletteSpeed(FxController &fxc, int v)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
     if (fxc.stripMask & (1<<strip)) 
-      fxc.strip[strip].paletteSpeed = ps;
+      fxc.strip[strip].paletteSpeed = v;
 }
+
 void ChangePaletteSpeed(FxController &fxc, int ps)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
@@ -260,7 +274,8 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_speed_neg:SetPaletteDirection(fxc,-1);break;
     case fx_speed_inc:ChangePaletteSpeed(fxc,1);break;
     case fx_speed_dec:ChangePaletteSpeed(fxc,-1);break;
-    case fx_speed_rst:SetPaletteSpeed(fxc,0);break;
+    case fx_speed_rst:
+      ResetPaletteSpeed(fxc);break;
       
     case fx_transition_fast:             SetTransitionType(fxc,Transition_Instant);break;
     case fx_transition_timed_fade:       SetTransitionType(fxc,Transition_TimedFade);break;

@@ -28,7 +28,7 @@ const unsigned long SongTrackTest2[] PROGMEM =
 };
 
 
-const unsigned long SongTrackTest[] PROGMEM =
+const unsigned long SongTrack[] PROGMEM =
 {
   //Basic setup, fade in to blue
   1, fx_strip_all,
@@ -37,7 +37,7 @@ const unsigned long SongTrackTest[] PROGMEM =
   1, fx_speed_pos,
 
   500, fx_transition_fast,
-  500, fx_palette_green,
+  500, fx_palette_half,
 
   750, fx_transition_timed_fade,
   750, fx_palette_blue,
@@ -58,29 +58,84 @@ const unsigned long SongTrackTest[] PROGMEM =
   2500, fx_palette_red,
   2750, fx_strip + (LEDS_7),
   2750, fx_palette_red,
-
-  3000, fx_strip_evens,
-  3000, fx_speed_2,
-  3000, fx_speed_pos,
-  3000, fx_transition_fast,
-  3000, fx_palette_rainbow,
-  3000, fx_speed_2,
-  3000, fx_speed_pos,
-  
-  3000, fx_strip_odds,
-  3000, fx_speed_2,
-  3000, fx_speed_neg,
-  3000, fx_transition_fast,
-  3000, fx_palette_rb,
   3000, fx_strip_all,
+  3000, fx_transition_timed_fade,
+  3000, fx_palette_dark,
+  3500, fx_transition_timed_fade,
+  3500, fx_palette_dark,
+  
+  4000, fx_strip_evens,
+  4000, fx_speed_2,
+  4000, fx_speed_pos,
+  4000, fx_transition_fast,
+  4000, fx_palette_pulse2_cyan,
+  
+  4000, fx_strip_odds,
+  4000, fx_speed_2,
+  4000, fx_speed_neg,
+  4000, fx_transition_fast,
+  4000, fx_palette_pulse2_magenta,
+  4000, fx_strip_all,
 
-  10000, fx_strip_all,
-  10000, fx_transition_fast,
-  10000, fx_palette_dark,
-  10500, fx_palette_dark
+  7000, fx_strip_all,
+  7000, fx_transition_timed_fade,
+  7000, fx_palette_dark,
+  8000, fx_speed_rst,
+  8000, fx_strip + (LEDS_4|LEDS_5),//arms
+  8000, fx_transition_timed_wipe_pos,
+  8000, fx_palette_magenta,
+
+  10000, fx_speed_rst,
+  10000, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3),//chest
+  10000, fx_transition_timed_wipe_neg,
+  10000, fx_palette_magenta,
+    
+  11000, fx_speed_rst,
+  11000, fx_strip + (LEDS_6|LEDS_7),//legs
+  11000, fx_transition_timed_wipe_neg,
+  11000, fx_palette_magenta,
+
+ //opposite arms
+  13900, fx_strip_all,
+  13900, fx_transition_fast,
+  13900, fx_palette_dark,
+  14000, fx_strip + (LEDS_4|LEDS_5),
+  14000, fx_speed_rst,
+  14000, fx_transition_fast,
+  14000, fx_palette_pulse2_magenta,
+  14000, fx_strip + (LEDS_4),
+  14000, fx_speed_4,
+  14000, fx_speed_pos,
+  14000, fx_strip + (LEDS_5),
+  14000, fx_speed_4,
+  14000, fx_speed_neg,
+  14000, fx_strip_all,
+
+  17000, fx_strip + (LEDS_0),
+  17000, fx_palette_red,
+  17250, fx_strip + (LEDS_1),
+  17250, fx_palette_yellow,
+  17500, fx_strip + (LEDS_2),
+  17500, fx_palette_green,
+  17750, fx_strip + (LEDS_3),
+  17750, fx_palette_cyan,
+  18000, fx_strip + (LEDS_4),
+  18000, fx_palette_blue,
+  18250, fx_strip + (LEDS_5),
+  18250, fx_palette_magenta,
+  18500, fx_strip + (LEDS_6),
+  18500, fx_palette_orange,
+  18750, fx_strip + (LEDS_7),
+  18750, fx_palette_white,
+  19000, fx_strip_all,
+  
+  22000, fx_strip_all,
+  22000, fx_transition_fast,
+  22000, fx_palette_dark,
+  22500, fx_palette_dark
 };
 
-const unsigned long SongTrack[] PROGMEM =
+const unsigned long SongTrackGood[] PROGMEM =
 {
   //Basic setup, fade in to blue
   1, fx_strip_all,

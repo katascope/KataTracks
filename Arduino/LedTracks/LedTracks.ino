@@ -54,7 +54,7 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
-  fxController.fxState = FxState_Default;//FxState_Default;//FxState_TestPattern;//PlayingTrack;//
+  fxController.fxState = FxState_PlayingTrack;//FxState_Default;//FxState_TestPattern;//PlayingTrack;//
 
   if (fxController.fxState == FxState_TestPattern)
   { 
@@ -126,6 +126,11 @@ void loop()
   {
     unsigned long t =  millis();
     int ledDelay = 30;
+
+#if SYSTEM_NANO_33_IOT
+    ledDelay = 100;
+#endif
+
     if (t - fxController.lastTimeLedUpdate > ledDelay)//delay to let bluetooth get data(fastled issue)
     {
       UpdatePalette();
@@ -139,6 +144,7 @@ void loop()
     }
 
   }
+
 
 //Display status once a second
   unsigned long t =  millis();
