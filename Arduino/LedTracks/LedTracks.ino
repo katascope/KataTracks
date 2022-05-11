@@ -36,8 +36,9 @@ void setup() {
   Serial.println(F("Delaying 3 seconds for LEDs."));
   delay( 3000 ); // power-up safety delay
   neopixelSetup();
-  for (int led=0;led<NUM_LEDS;led++)
-   fxController.palette[led] = 0;
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+    for (int led=0;led<NUM_LEDS;led++)
+      fxController.strip[strip].palette[led] = 0;
   Serial.print(F("NeoPixel init: "));
   Serial.print(NUM_LEDS);
   Serial.print(F(" LEDs on pin "));
@@ -59,13 +60,10 @@ void setup() {
   { 
     Serial.println("Setting test pattern.");
     FxEventProcess(fxController, fx_palette_drb);
-    fxController.paletteDirection = 1;
-    fxController.paletteSpeed = 1;
 #if ENABLE_NEOPIXEL &&  ENABLE_BRIGHTNESS
     fxController.brightness = 192;
     neopixelSetBrightness(fxController.brightness);    
 #endif
-    fxController.fxPaletteUpdateType = FxPaletteUpdateType::Always;
   }
 
   if (fxController.fxState == FxState_PlayingTrack)
@@ -75,35 +73,33 @@ void setup() {
   }
   else Serial.println(F("Ready"));
 
-  for (int i=0;i<NUM_STRIPS;i++)
+//Display brightness levels
+  Serial.print(F("Brightness = { "));
+  for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    Serial.print(F("Brightness "));
-    Serial.print(i);
+    fxController.strip[strip].brightness = 25;
+    neopixelSetBrightness(strip,fxController.strip[strip].brightness);
+    Serial.print(fxController.strip[strip].brightness);
     Serial.print(F(" "));
-    fxController.strip[i].brightness = 25;
-    neopixelSetBrightness(i,fxController.strip[i].brightness);
-    Serial.print(fxController.strip[i].brightness);
-    Serial.println();
   }
+  Serial.println(F(" }"));
 
   Serial.println("Setup complete.");
 }
 
 void UpdatePalette()
 {
-  if ((int)fxController.fxPaletteUpdateType != 0)
-  {
-    fxController.paletteIndex = fxController.paletteIndex + (fxController.paletteSpeed * fxController.paletteDirection);
-    if (fxController.paletteIndex >= NUM_LEDS)
-      fxController.paletteIndex -= NUM_LEDS;
-    if (fxController.paletteIndex < 0)
-      fxController.paletteIndex = NUM_LEDS - 1;
-  }
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    //fix or remove this check later
-    if (fxController.stripMask & (1<<strip))
-      neopixelSetPalette(strip, fxController.palette, fxController.paletteIndex);
+    if ((int)fxController.strip[strip].fxPaletteUpdateType != 0)
+    {
+      fxController.strip[strip].paletteIndex = fxController.strip[strip].paletteIndex + (fxController.strip[strip].paletteSpeed * fxController.strip[strip].paletteDirection);
+      if (fxController.strip[strip].paletteIndex >= NUM_LEDS)
+        fxController.strip[strip].paletteIndex -= NUM_LEDS;
+      if (fxController.strip[strip].paletteIndex < 0)
+        fxController.strip[strip].paletteIndex = NUM_LEDS - 1;
+    }
+    neopixelSetPalette(strip, fxController.strip[strip].palette, fxController.strip[strip].paletteIndex);
   }
 }
 
@@ -118,9 +114,16 @@ void loop()
 
   State_Poll(fxController);
 
-  if (fxController.fxState == FxState_PlayingTrack 
-    || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Once
-    || fxController.fxPaletteUpdateType == FxPaletteUpdateType::Always)
+  bool needsUpdate = false;
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Once
+    || fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Always)
+      needsUpdate = true;
+  }
+  needsUpdate = true;
+  
+  if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
   {
     unsigned long t =  millis();
     int ledDelay = 30;
@@ -128,17 +131,23 @@ void loop()
     {
       UpdatePalette();
       fxController.lastTimeLedUpdate = t;
+      
+      for (int strip=0;strip<NUM_STRIPS;strip++)
+      {
+        if (fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Once)
+          fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Done;
+      }
     }
 
-    if (fxController.fxPaletteUpdateType == FxPaletteUpdateType::Once)
-      fxController.fxPaletteUpdateType == FxPaletteUpdateType::Done;
   }
 
 //Display status once a second
   unsigned long t =  millis();
   if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
   {      
-    FxDisplayStatus(fxController);      
+    if (fxController.fxState != FxState_PlayingTrack)
+      FxDisplayStatus(fxController);      
     lastTimeDisplay = t;
   }
+
 }

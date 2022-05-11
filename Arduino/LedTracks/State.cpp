@@ -7,24 +7,66 @@
 
 void State_Poll_TestPattern(FxController &fxc)
 {
-    FxEventProcess(fxc, fx_palette_rainbow);
-    fxc.paletteDirection = 1;
-    fxc.paletteSpeed = 1;
-    fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
+    for (int strip=0;strip<NUM_STRIPS;strip++)
+    {
+      fxc.strip[strip].paletteDirection = 1;
+      fxc.strip[strip].paletteSpeed = 1;
+      fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::Always;
+    }
+
+    FxEventProcess(fxc, fx_strip + LEDS_0);
+    FxEventProcess(fxc, fx_palette_white);
+#if !ENABLE_MULTISTRIP
+    FxEventProcess(fxc, fx_palette_pulse2_white);
+#endif    
+    neopixelSetPalette(0, fxc.strip[0].palette, fxc.strip[0].paletteIndex);
+    
+#if ENABLE_MULTISTRIP    
+    FxEventProcess(fxc, fx_strip + LEDS_1);
+    FxEventProcess(fxc, fx_palette_pulse2_red);
+    neopixelSetPalette(1, fxc.strip[1].palette, fxc.strip[1].paletteIndex);
+    
+    FxEventProcess(fxc, fx_strip + LEDS_2);
+    FxEventProcess(fxc, fx_palette_pulse2_yellow);
+    neopixelSetPalette(2, fxc.strip[2].palette, fxc.strip[2].paletteIndex);
+    
+    FxEventProcess(fxc, fx_strip + LEDS_3);
+    FxEventProcess(fxc, fx_palette_pulse2_green);
+    neopixelSetPalette(3, fxc.strip[3].palette, fxc.strip[3].paletteIndex);
+    
+    FxEventProcess(fxc, fx_strip + LEDS_4);
+    FxEventProcess(fxc, fx_palette_pulse2_cyan);
+    neopixelSetPalette(4, fxc.strip[4].palette, fxc.strip[4].paletteIndex);
+    
+    FxEventProcess(fxc, fx_strip + LEDS_5);
+    FxEventProcess(fxc, fx_palette_pulse2_blue);
+    neopixelSetPalette(5, fxc.strip[5].palette, fxc.strip[5].paletteIndex);
+    
+    FxEventProcess(fxc, fx_strip + LEDS_6);
+    FxEventProcess(fxc, fx_palette_pulse2_magenta);
+    neopixelSetPalette(6, fxc.strip[6].palette, fxc.strip[6].paletteIndex);
+    
+    FxEventProcess(fxc, fx_strip + LEDS_7);
+    FxEventProcess(fxc, fx_palette_pulse2_orange);
+    neopixelSetPalette(7, fxc.strip[7].palette, fxc.strip[7].paletteIndex);
+#endif    
 }
 
-void CopyRange(FxController &fxc,int first, int last)
+void CopyRange(FxController &fxc, int strip, int first, int last)
 {
-  if (first < last)
-    for (int i = first;i<last; i++)
-      fxc.palette[i] = fxc.nextPalette[i];
-  else
-    for (int i = first;i>=last;i--)
-      fxc.palette[i] = fxc.nextPalette[i];
+  if (first > 16 || last > 16) return;
+  
+      if (first < last)
+        for (int i = first;i<last; i++)
+          fxc.strip[strip].palette[i] = fxc.strip[strip].nextPalette[i];
+      else
+        for (int i = first;i>=last;i--)
+          fxc.strip[strip].palette[i] = fxc.strip[strip].nextPalette[i];
 }
 
 void State_Poll_Play(FxController &fxc, unsigned long timecode)
 {
+  
   unsigned long finalTimeCode = GetFinalTimeCodeEntry();
   if (GetTime() > finalTimeCode)
   {
@@ -54,60 +96,84 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   unsigned long matchedTimecode = SongTrack_timecode(match);
   unsigned long nextMatchedTimecode = SongTrack_timecode(nextmatch);
 
+  //FxTrackSay(timecode, matchedTimecode, nextMatchedTimecode);
+    
   if (matchedTimecode > getTimecodeLastMatched())
   {
-    if (fxc.transitionType >= Transition_TimedWipePos         
-        && fxc.transitionType <= Transition_TimedWipeInOut)
+    for (int strip=0;strip<NUM_STRIPS;strip++)
     {
-      CopyPalette(fxc.palette, fxc.nextPalette);
+      if (fxc.strip[strip].transitionType >= Transition_TimedWipePos         
+          && fxc.strip[strip].transitionType <= Transition_TimedWipeInOut)
+      {
+        CopyPalette(fxc.strip[strip].palette, fxc.strip[strip].nextPalette);
+      }
+      fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::Always;
     }
-    //fxc.transitionType = Transition_Instant;
-    fxc.fxPaletteUpdateType = FxPaletteUpdateType::Always;
-    /*Serial.print(((float)matchedTimecode / (float)1000.0f);
-      Serial.print(F(" : next @ "));
-      Serial.println((float)nextMatchedTimecode / (float)1000.0f);*/
 
     for (int i = 0; i < numSongTracks; i++)
       if (SongTrack_timecode(i) == matchedTimecode)
+      {
+        Serial.println();
+        Serial.print(" @");
+        Serial.print(GetTime());
+        Serial.print(" ");
+        Serial.print(matchedTimecode);
+        Serial.print(" ");
+        PrintFxEventName(SongTrack_event(i));        
         FxEventProcess(fxc, SongTrack_event(i));
-
+        Serial.print(" : ");
+        Serial.print(fxc.transitionMux);
+        Serial.print(F(" "));
+        for (int strip=0;strip<NUM_STRIPS;strip++)
+        {
+          PrintFxTransitionName(fxc.strip[strip].transitionType);
+          Serial.print(F(", "));
+        }
+        Serial.print(F(" => "));
+      }
+      
     setTimecodeLastMatched(timecode);//timeController.lastMatchedTimecode = timecode;
-
   }
 
-  //for (int strip=0;strip<NUM_STRIPS;strip++)
-  //{
-    unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
-    fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
-  
-    if (fxc.transitionType == Transition_TimedFade)
-    {
-      for (int i = 0; i < NUM_LEDS; i++)
-        fxc.palette[i] = LerpRGB(fxc.transitionMux,fxc.initialPalette[i],fxc.nextPalette[i]);
+  unsigned long totalSpan = nextMatchedTimecode - getTimecodeLastMatched();
+  fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
+  //Serial.print(F("Mux="));
+  //Serial.println(fxc.transitionMux);
+
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip))
+    {    
+      if (fxc.strip[strip].transitionType == Transition_TimedFade)
+      {
+        for (int i = 0; i < NUM_LEDS; i++)
+          fxc.strip[strip].palette[i] = LerpRGB(fxc.transitionMux,fxc.strip[strip].initialPalette[i],fxc.strip[strip].nextPalette[i]);
+      }
+      if (fxc.strip[strip].transitionType == Transition_TimedWipePos)
+      {
+        int limit = fxc.transitionMux * (NUM_LEDS -1);
+        CopyRange(fxc, strip, NUM_LEDS - 1, NUM_LEDS -1 - limit);      
+      }
+      if (fxc.strip[strip].transitionType == Transition_TimedWipeNeg)
+      {
+        int limit = fxc.transitionMux * (NUM_LEDS -1);
+        CopyRange(fxc,strip, 0,limit);
+      }
+      if (fxc.strip[strip].transitionType == Transition_TimedWipeOutIn)
+      {
+        int limit = fxc.transitionMux * (NUM_LEDS/2);
+        CopyRange(fxc,strip, 0,limit);
+        CopyRange(fxc,strip, NUM_LEDS-1,NUM_LEDS-limit);
+      }
+      if (fxc.strip[strip].transitionType == Transition_TimedWipeInOut)
+      {
+        int limit = fxc.transitionMux * (NUM_LEDS/2);
+        CopyRange(fxc,strip, NUM_LEDS/2,NUM_LEDS/2-limit);
+        CopyRange(fxc,strip, NUM_LEDS/2,NUM_LEDS/2+limit);
+      }
     }
-    if (fxc.transitionType == Transition_TimedWipePos)
-    {
-      int limit = fxc.transitionMux * (NUM_LEDS -1);
-      CopyRange(fxc, NUM_LEDS - 1, NUM_LEDS -1 - limit);      
-    }
-    if (fxc.transitionType == Transition_TimedWipeNeg)
-    {
-      int limit = fxc.transitionMux * (NUM_LEDS -1);
-      CopyRange(fxc,0,limit);
-    }
-    if (fxc.transitionType == Transition_TimedWipeOutIn)
-    {
-      int limit = fxc.transitionMux * (NUM_LEDS/2);
-      CopyRange(fxc,0,limit);
-      CopyRange(fxc,NUM_LEDS-1,NUM_LEDS-limit);
-    }
-    if (fxc.transitionType == Transition_TimedWipeInOut)
-    {
-      int limit = fxc.transitionMux * (NUM_LEDS/2);
-      CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2-limit);
-      CopyRange(fxc,NUM_LEDS/2,NUM_LEDS/2+limit);
-    }
-  //}
+    
+  }
 }
 
 void State_Poll(FxController &fxc)

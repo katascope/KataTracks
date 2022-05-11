@@ -204,75 +204,10 @@ enum FxEvent
   fx_palette_dcm,
   fx_palette_dbm,
 
-  fx_palette_accel,
-  fx_palette_gyro,
-  fx_palette_mic,
-
-  fx_color1_dark,
-  fx_color1_white,
-  fx_color1_red,
-  fx_color1_yellow,
-  fx_color1_green,
-  fx_color1_cyan,
-  fx_color1_blue,
-  fx_color1_magenta,
-  fx_color1_orange,
-  fx_color1_half,
-  fx_color1_lowhalf,
-
-  fx_color2_dark,
-  fx_color2_white,
-  fx_color2_red,
-  fx_color2_yellow,
-  fx_color2_green,
-  fx_color2_cyan,
-  fx_color2_blue,
-  fx_color2_magenta,
-  fx_color2_orange,
-  fx_color2_half,
-  fx_color2_lowhalf,
-
-  fx_color3_dark,
-  fx_color3_white,
-  fx_color3_red,
-  fx_color3_yellow,
-  fx_color3_green,
-  fx_color3_cyan,
-  fx_color3_blue,
-  fx_color3_magenta,
-  fx_color3_orange,
-  fx_color3_half,
-  fx_color3_lowhalf,
-
-  fx_colors1,
-  fx_colors2,
-  fx_colors3,
-  fx_colors4,
-  fx_colors5,
-  fx_colors6,
-  fx_colors7,
-  fx_colors8,
-  fx_colors9,
-  fx_colors10,
-  fx_colors11,
-  fx_colors12,
-  fx_colors13,
-  fx_colors14,
-  fx_colors15,
-  fx_colors16,
-
-  fx_strips_all,  //Target all strips
-  fx_strips_none, //Target no strips, why?
-  fx_strips_evens, //Target even strips
-  fx_strips_odds, //Target odd strips
-  fx_strip0,    
-  fx_strip1,
-  fx_strip2,
-  fx_strip3,
-  fx_strip4,
-  fx_strip5,
-  fx_strip6,
-  fx_strip7,  
+  fx_strip_all,  //Target all strips
+  fx_strip_none, //Target no strips, why?
+  fx_strip_evens, //Target even strips
+  fx_strip_odds, //Target odd strips
   
   fx_stripmask_0, fx_strip = fx_stripmask_0,//make a syntactic sugar for it
   fx_stripmask_1,fx_stripmask_2,fx_stripmask_3,fx_stripmask_4,fx_stripmask_5,fx_stripmask_6,fx_stripmask_7,fx_stripmask_8,  
@@ -307,6 +242,15 @@ enum FxEvent
   fx_stripmask_233,fx_stripmask_234,fx_stripmask_235,fx_stripmask_236,fx_stripmask_237,fx_stripmask_238,fx_stripmask_239,fx_stripmask_240,
   fx_stripmask_241,fx_stripmask_242,fx_stripmask_243,fx_stripmask_244,fx_stripmask_245,fx_stripmask_246,fx_stripmask_247,fx_stripmask_248,
   fx_stripmask_249,fx_stripmask_250,fx_stripmask_251,fx_stripmask_252,fx_stripmask_253,fx_stripmask_254,fx_stripmask_255,//Same as fx_strips_all
+
+  fx_strip0 = fx_stripmask_1,    
+  fx_strip1 = fx_stripmask_2,    
+  fx_strip2 = fx_stripmask_4,    
+  fx_strip3 = fx_stripmask_8,    
+  fx_strip4 = fx_stripmask_16,    
+  fx_strip5 = fx_stripmask_32,    
+  fx_strip6 = fx_stripmask_64,    
+  fx_strip7 = fx_stripmask_128,    
   
   fx_nothing = 0xFFFF
 };

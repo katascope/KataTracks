@@ -4,91 +4,114 @@
 #include "Fx.h"
 #include "Track.h"
 
-
-void FxCreatePalette(FxController &fxController, uint32_t *pal16, unsigned int palSize)
+void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, unsigned int palSize)
 {
-    if (fxController.transitionType == Transition_Instant)
-    {
-      LerpPaletteFromMicroPalette(fxController.palette, NUM_LEDS, pal16, palSize);
-    }
-    else if (fxController.transitionType == Transition_TimedFade)
-    {
-      CopyPalette(fxController.initialPalette, fxController.palette);
-      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
-    }
-    else if (fxController.transitionType >= Transition_TimedWipePos        
-        && fxController.transitionType <= Transition_TimedWipeInOut)
-    {
-      CopyPalette(fxController.initialPalette, fxController.palette);
-      LerpPaletteFromMicroPalette(fxController.nextPalette, NUM_LEDS, pal16, palSize);
-    }
+//      Serial.print("FxCreatePalette");
+      if (fxController.strip[strip].transitionType == Transition_Instant)
+      {
+        LerpPaletteFromMicroPalette(fxController.strip[strip].palette, NUM_LEDS, pal16, palSize);
+      }
+      else if (fxController.strip[strip].transitionType == Transition_TimedFade)
+      {
+        CopyPalette(fxController.strip[strip].initialPalette, fxController.strip[strip].palette);
+        LerpPaletteFromMicroPalette(fxController.strip[strip].nextPalette, NUM_LEDS, pal16, palSize);
+      }
+      else if (fxController.strip[strip].transitionType >= Transition_TimedWipePos        
+          && fxController.strip[strip].transitionType <= Transition_TimedWipeInOut)
+      {
+        CopyPalette(fxController.strip[strip].initialPalette, fxController.strip[strip].palette);
+        LerpPaletteFromMicroPalette(fxController.strip[strip].nextPalette, NUM_LEDS, pal16, palSize);
+      }
 }
 
-void SetMicroPaletteSlot(FxController &fxc, int slot, uint32_t rgb)
-{
-  if (slot < 16 )
+void CreateSingleColor(FxController &fxc, uint8_t r, uint8_t g, uint8_t b)
+{  
+  uint32_t palette[16];
+  for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    fxc.microPalette[slot] = rgb;  
-    if (fxc.microPaletteSize < slot)
-      fxc.microPaletteSize = slot + 1;  
-    FxCreatePalette(fxc,fxc.microPalette, fxc.microPaletteSize);
+    if (fxc.stripMask & (1<<strip)) 
+    {
+       for (int i=0;i<16;i++)
+       {
+         palette[i] = LEDRGB(r,g,b);
+       }
+       FxCreatePalette(fxc, strip, palette,16);
+    }
   }
 }
 
-void SetMicroPalette(FxController &fxc, byte r, byte g, byte b)
-{
-  fxc.microPaletteSize = 1;
-  SetMicroPaletteSlot(fxc, 0, LEDRGB(r,g,b));
+void CreateDoubleColor(FxController &fxc, uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2 )
+{  
+  uint32_t palette[16];
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+        palette[0] = LEDRGB(r1,g1,b1);
+        palette[1] = LEDRGB(r2,g2,b2);
+        FxCreatePalette(fxc,strip, palette,2);
+    }
+  }
 }
-void SetMicroPalette2(FxController &fxc, byte r1, byte g1, byte b1, byte r2, byte g2, byte b2)
-{
-  fxc.microPaletteSize = 2;
-  SetMicroPaletteSlot(fxc,0, LEDRGB(r1,g1,b1) );
-  SetMicroPaletteSlot(fxc,1, LEDRGB(r2,g2,b2) );
-}
-void SetMicroPalette4(FxController &fxc, 
+
+void CreateQuadColor(FxController &fxc, 
   byte r1, byte g1, byte b1, 
   byte r2, byte g2, byte b2,
   byte r3, byte g3, byte b3,
   byte r4, byte g4, byte b4)
-{
-  fxc.microPaletteSize = 4;
-  SetMicroPaletteSlot(fxc, 0, LEDRGB(r1,g1,b1) );
-  SetMicroPaletteSlot(fxc, 1, LEDRGB(r2,g2,b2) );
-  SetMicroPaletteSlot(fxc, 2, LEDRGB(r3,g3,b3) );
-  SetMicroPaletteSlot(fxc, 3, LEDRGB(r4,g4,b4) );
+{  
+  uint32_t palette[16];
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+        palette[0] = LEDRGB(r1,g1,b1);
+        palette[1] = LEDRGB(r2,g2,b2);
+        palette[2] = LEDRGB(r3,g3,b3);
+        palette[3] = LEDRGB(r4,g4,b4);
+        FxCreatePalette(fxc,strip, palette,2);
+    }
+  }
 }
-void SetMicroPalette16(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7,
+
+void Create16Color(FxController &fxc, uint32_t b0,uint32_t b1,uint32_t b2,uint32_t b3, uint32_t b4,uint32_t b5,uint32_t b6,uint32_t b7,
                         uint32_t b8,uint32_t b9,uint32_t b10,uint32_t b11, uint32_t b12,uint32_t b13,uint32_t b14,uint32_t b15)
 {
-  fxc.microPaletteSize = 16;
-  SetMicroPaletteSlot(fxc, 0, b0 );
-  SetMicroPaletteSlot(fxc, 1, b1 );
-  SetMicroPaletteSlot(fxc, 2, b2 );
-  SetMicroPaletteSlot(fxc, 3, b3 );
-  SetMicroPaletteSlot(fxc, 4, b4 );
-  SetMicroPaletteSlot(fxc, 5, b5 );
-  SetMicroPaletteSlot(fxc, 6, b6 );
-  SetMicroPaletteSlot(fxc, 7, b7 );
-  SetMicroPaletteSlot(fxc, 8, b8 );
-  SetMicroPaletteSlot(fxc, 9, b9 );
-  SetMicroPaletteSlot(fxc, 10, b10 );
-  SetMicroPaletteSlot(fxc, 11, b11 );
-  SetMicroPaletteSlot(fxc, 12, b12 );
-  SetMicroPaletteSlot(fxc, 13, b13 );
-  SetMicroPaletteSlot(fxc, 14, b14 );
-  SetMicroPaletteSlot(fxc, 15, b15 );
+  uint32_t palette[16];
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+        palette[0] = b0;
+        palette[1] = b1;
+        palette[2] = b2;
+        palette[3] = b3;
+        palette[4] = b4;
+        palette[5] = b5;
+        palette[6] = b6;
+        palette[7] = b7;
+        palette[8] = b8;
+        palette[9] = b9;
+        palette[10] = b10;
+        palette[11] = b11;
+        palette[12] = b12;
+        palette[13] = b13;
+        palette[14] = b14;
+        palette[15] = b15;
+        FxCreatePalette(fxc,strip, palette,16);
+    }
+  }
 }
 
 void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
-  SetMicroPalette16(fxc, LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+  Create16Color(fxc, LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
 }
 
 void CreateDoublePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
-  SetMicroPalette16(fxc, LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+  Create16Color(fxc, LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),
                       LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
@@ -96,6 +119,7 @@ void CreateDoublePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
 
 void FxDisplayStatus(FxController &fxc)
 {
+  Serial.print(F("["));
       Serial.print(DeviceName);
       Serial.print(F(":"));
       Serial.print(GetTime());
@@ -103,26 +127,31 @@ void FxDisplayStatus(FxController &fxc)
       Serial.print(getTimecodeSongOffset());
       Serial.print(F(":"));
       Serial.print(getTimecodeTimeOffset());
-      Serial.print(F("["));
+      Serial.print(F("[state="));
       PrintFxStateName(fxc.fxState);
-      Serial.print(F(" smask="));
+      Serial.print(F(", strip&="));
       Serial.print(fxc.stripMask);
-      Serial.print(F(" L="));
-      for (int i=0;i<NUM_STRIPS;i++)
+
+  //Strip debugging
+  /*
+      for (int strip=0;strip<NUM_STRIPS;strip++)
       {
-        Serial.print(fxc.strip[i].brightness);
-        Serial.print(" ");
+        Serial.print(F("["));
+        Serial.print(fxc.strip[strip].paletteSpeed);
+        Serial.print(F(","));
+        Serial.print(fxc.strip[strip].paletteDirection);
+        //Serial.print(F("*"));
+        //Serial.print(fxc.strip[strip].transitionMux);
+        Serial.print(F(",u="));
+        Serial.print(fxc.strip[strip].fxPaletteUpdateType);
+        Serial.print(F("] "));
       }
-      
-      Serial.print(F("-"));
-      PrintFxTransitionName(fxc.transitionType);
-      Serial.print(F("]Pal="));
-      PrintFxPaletteUpdateType(fxc.fxPaletteUpdateType);
-      Serial.print(F(","));
+    */  
+      Serial.print(F(",endAction="));
       PrintFxTrackEndAction(fxc.fxTrackEndAction);
-      Serial.print(F(",tc="));
+      Serial.print(F(",ftc="));
       Serial.print(GetFinalTimeCodeEntry());      
-      Serial.print(F(",end="));
+      Serial.print(F(",tclm="));
       Serial.print(getTimecodeLastMatched());
       Serial.print(F(")"));
       /*
@@ -144,8 +173,56 @@ void FxDisplayStatus(FxController &fxc)
         Serial.print(fxc.microPalette[i], HEX);
         Serial.print(F(" "));
       }*/
-      Serial.println(F(""));    
+      Serial.println(F(")"));
 }
+
+void SetTransitionType(FxController &fxc, FxTransitionType t)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+      fxc.strip[strip].transitionType = t;
+      if (t == fx_transition_timed_wipe_pos || t == fx_transition_timed_wipe_neg
+        || t == fx_transition_timed_wipe_outin || t == fx_transition_timed_wipe_inout) 
+        {
+          fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::None;
+          fxc.strip[strip].paletteIndex = 0;
+        }
+        if (t == fx_transition_timed_wipe_neg)
+          fxc.strip[strip].paletteIndex = 15;
+    }
+  }
+}
+
+void SetPaletteSpeed(FxController &fxc, int ps)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+    if (fxc.stripMask & (1<<strip)) 
+      fxc.strip[strip].paletteSpeed = ps;
+}
+void ChangePaletteSpeed(FxController &fxc, int ps)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+    if (fxc.stripMask & (1<<strip)) 
+      fxc.strip[strip].paletteSpeed += ps;
+}
+
+void SetPaletteDirection(FxController &fxc, int c)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+      fxc.strip[strip].paletteDirection = c;
+      if (fxc.strip[strip].paletteSpeed >= 18)
+        fxc.strip[strip].paletteSpeed = 18;
+      if (fxc.strip[strip].paletteSpeed < 0)
+        fxc.strip[strip].paletteSpeed = 0;
+    }
+  }
+}
+
 void FxEventProcess(FxController &fxc,int event)
 {
   bool updatePal = false;
@@ -153,10 +230,16 @@ void FxEventProcess(FxController &fxc,int event)
   if (event >= fx_stripmask_0 && event <= fx_stripmask_255)
   {
     fxc.stripMask = (unsigned int)event-(unsigned int)fx_stripmask_0;
+    return;
   }
   
   switch (event)
   {
+    case fx_strip_all:   fxc.stripMask = (unsigned int)(LEDS_0|LEDS_1|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7); break;
+    case fx_strip_odds:  fxc.stripMask = (unsigned int)(LEDS_1|LEDS_3|LEDS_5|LEDS_7); break;
+    case fx_strip_evens: fxc.stripMask = (unsigned int)(LEDS_0|LEDS_2|LEDS_4|LEDS_6); break;
+    case fx_strip_none:  fxc.stripMask = (unsigned int)0; break;
+    
     case fx_speed_0:
     case fx_speed_1:
     case fx_speed_2:
@@ -176,104 +259,39 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_speed_16:
     case fx_speed_17:
     case fx_speed_18:
-      fxc.paletteSpeed = event;
+      SetPaletteSpeed(fxc,event);
       break;
     case fx_speed_32:
-      fxc.paletteSpeed = 32;
+      SetPaletteSpeed(fxc,32);
       break;
 
-    case fx_speed_pos:fxc.paletteDirection = 1;break;
-    case fx_speed_neg:fxc.paletteDirection = -1;break;
-
-    case fx_speed_inc:
-      fxc.paletteSpeed++;
-      if (fxc.paletteSpeed >= 18)
-        fxc.paletteSpeed = 18;
-      break;
-    case fx_speed_dec:
-      fxc.paletteSpeed--;
-      if (fxc.paletteSpeed < 0)
-        fxc.paletteSpeed = 0;
-      break;
-
-    case fx_speed_rst:
-      fxc.paletteIndex = 0;
-      break;
+    case fx_speed_pos:SetPaletteDirection(fxc,1);break;
+    case fx_speed_neg:SetPaletteDirection(fxc,-1);break;
+    case fx_speed_inc:ChangePaletteSpeed(fxc,1);break;
+    case fx_speed_dec:ChangePaletteSpeed(fxc,-1);break;
+    case fx_speed_rst:SetPaletteSpeed(fxc,0);break;
       
-    case fx_transition_fast:            fxc.transitionType = Transition_Instant;break;
-    case fx_transition_timed_fade:      fxc.transitionType = Transition_TimedFade;break;
-    case fx_transition_timed_wipe_pos:  fxc.transitionType = Transition_TimedWipePos;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
-    case fx_transition_timed_wipe_neg:  fxc.transitionType = Transition_TimedWipeNeg;fxc.paletteIndex = 15;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
-    case fx_transition_timed_wipe_outin: fxc.transitionType = Transition_TimedWipeOutIn;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
-    case fx_transition_timed_wipe_inout: fxc.transitionType = Transition_TimedWipeInOut;fxc.paletteIndex = 0;fxc.fxPaletteUpdateType = FxPaletteUpdateType::None;break;
+    case fx_transition_fast:             SetTransitionType(fxc,Transition_Instant);break;
+    case fx_transition_timed_fade:       SetTransitionType(fxc,Transition_TimedFade);break;
+    case fx_transition_timed_wipe_pos:   SetTransitionType(fxc,Transition_TimedWipePos);break;
+    case fx_transition_timed_wipe_neg:   SetTransitionType(fxc,Transition_TimedWipeNeg);break;
+    case fx_transition_timed_wipe_outin: SetTransitionType(fxc,Transition_TimedWipeOutIn);break;
+    case fx_transition_timed_wipe_inout: SetTransitionType(fxc,Transition_TimedWipeInOut);break;
 
-    case fx_palette_lead:   SetMicroPalette(fxc, BLUE);break;
-    case fx_palette_follow: SetMicroPalette(fxc, RED);break;
-
-    case fx_colors1:fxc.microPaletteSize = 1; break;
-    case fx_colors2:fxc.microPaletteSize = 2; break;
-    case fx_colors3:fxc.microPaletteSize = 3; break;
-    case fx_colors4:fxc.microPaletteSize = 4; break;
-    case fx_colors5:fxc.microPaletteSize = 5; break;
-    case fx_colors6:fxc.microPaletteSize = 6; break;
-    case fx_colors7:fxc.microPaletteSize = 7; break;
-    case fx_colors8:fxc.microPaletteSize = 8; break;
-    case fx_colors9:fxc.microPaletteSize = 9; break;
-    case fx_colors10:fxc.microPaletteSize = 10; break;
-    case fx_colors11:fxc.microPaletteSize = 11; break;
-    case fx_colors12:fxc.microPaletteSize = 12; break;
-    case fx_colors13:fxc.microPaletteSize = 13; break;
-    case fx_colors14:fxc.microPaletteSize = 14; break;
-    case fx_colors15:fxc.microPaletteSize = 15; break;
-    case fx_colors16:fxc.microPaletteSize = 16; break;
-
-    case fx_color1_dark:    SetMicroPaletteSlot(fxc,0, LEDRGB(DARK));break;
-    case fx_color1_white:   SetMicroPaletteSlot(fxc,0, LEDRGB(WHITE));break;
-    case fx_color1_red:     SetMicroPaletteSlot(fxc,0, LEDRGB(RED));break;
-    case fx_color1_yellow:  SetMicroPaletteSlot(fxc,0, LEDRGB(YELLOW));break;
-    case fx_color1_green:   SetMicroPaletteSlot(fxc,0, LEDRGB(GREEN));break;
-    case fx_color1_cyan:    SetMicroPaletteSlot(fxc,0, LEDRGB(CYAN));break;
-    case fx_color1_blue:    SetMicroPaletteSlot(fxc,0, LEDRGB(BLUE));break;
-    case fx_color1_magenta: SetMicroPaletteSlot(fxc,0, LEDRGB(MAGENTA));break;
-    case fx_color1_orange:  SetMicroPaletteSlot(fxc,0, LEDRGB(ORANGE));break;
-    case fx_color1_half:    SetMicroPaletteSlot(fxc,0, LEDRGB(HALF));break;
-    case fx_color1_lowhalf: SetMicroPaletteSlot(fxc,0, LEDRGB(LOWHALF));break;
-
-    case fx_color2_dark:    SetMicroPaletteSlot(fxc,1, LEDRGB(DARK));break;
-    case fx_color2_white:   SetMicroPaletteSlot(fxc,1, LEDRGB(WHITE));break;
-    case fx_color2_red:     SetMicroPaletteSlot(fxc,1, LEDRGB(RED));break;
-    case fx_color2_yellow:  SetMicroPaletteSlot(fxc,1, LEDRGB(YELLOW));break;
-    case fx_color2_green:   SetMicroPaletteSlot(fxc,1, LEDRGB(GREEN));break;
-    case fx_color2_cyan:    SetMicroPaletteSlot(fxc,1, LEDRGB(CYAN));break;
-    case fx_color2_blue:    SetMicroPaletteSlot(fxc,1, LEDRGB(BLUE));break;
-    case fx_color2_magenta: SetMicroPaletteSlot(fxc,1, LEDRGB(MAGENTA));break;
-    case fx_color2_orange:  SetMicroPaletteSlot(fxc,1, LEDRGB(ORANGE));break;
-    case fx_color2_half:    SetMicroPaletteSlot(fxc,1, LEDRGB(HALF));break;
-    case fx_color2_lowhalf: SetMicroPaletteSlot(fxc,1, LEDRGB(LOWHALF));break;
-
-    case fx_color3_dark:    SetMicroPaletteSlot(fxc,2, LEDRGB(DARK));break;
-    case fx_color3_white:   SetMicroPaletteSlot(fxc,2, LEDRGB(WHITE));break;
-    case fx_color3_red:     SetMicroPaletteSlot(fxc,2, LEDRGB(RED));break;
-    case fx_color3_yellow:  SetMicroPaletteSlot(fxc,2, LEDRGB(YELLOW));break;
-    case fx_color3_green:   SetMicroPaletteSlot(fxc,2, LEDRGB(GREEN));break;
-    case fx_color3_cyan:    SetMicroPaletteSlot(fxc,2, LEDRGB(CYAN));break;
-    case fx_color3_blue:    SetMicroPaletteSlot(fxc,2, LEDRGB(BLUE));break;
-    case fx_color3_magenta: SetMicroPaletteSlot(fxc,2, LEDRGB(MAGENTA));break;
-    case fx_color3_orange:  SetMicroPaletteSlot(fxc,2, LEDRGB(ORANGE));break;
-    case fx_color3_half:    SetMicroPaletteSlot(fxc,2, LEDRGB(HALF));break;
-    case fx_color3_lowhalf: SetMicroPaletteSlot(fxc,2, LEDRGB(LOWHALF));break;
-
-    case fx_palette_dark:   SetMicroPalette(fxc, DARK);break;
-    case fx_palette_white:  SetMicroPalette(fxc, WHITE);break;
-    case fx_palette_red:    SetMicroPalette(fxc, RED);break;
-    case fx_palette_yellow: SetMicroPalette(fxc, YELLOW);break;
-    case fx_palette_green:  SetMicroPalette(fxc, GREEN);break;
-    case fx_palette_cyan:   SetMicroPalette(fxc, CYAN);break;
-    case fx_palette_blue:   SetMicroPalette(fxc, BLUE);break;
-    case fx_palette_magenta:SetMicroPalette(fxc, MAGENTA);break;
-    case fx_palette_orange: SetMicroPalette(fxc, ORANGE);break;
-    case fx_palette_half:   SetMicroPalette(fxc, HALF);break;
-    case fx_palette_lowhalf:SetMicroPalette(fxc, LOWHALF);break;
+    case fx_palette_lead:   CreateSingleColor(fxc, BLUE);break;
+    case fx_palette_follow: CreateSingleColor(fxc, RED);break;
+    
+    case fx_palette_dark:   CreateSingleColor(fxc, DARK);break;
+    case fx_palette_white:  CreateSingleColor(fxc, WHITE);break;
+    case fx_palette_red:    CreateSingleColor(fxc, RED);break;
+    case fx_palette_yellow: CreateSingleColor(fxc, YELLOW);break;
+    case fx_palette_green:  CreateSingleColor(fxc, GREEN);break;
+    case fx_palette_cyan:   CreateSingleColor(fxc, CYAN);break;
+    case fx_palette_blue:   CreateSingleColor(fxc, BLUE);break;
+    case fx_palette_magenta:CreateSingleColor(fxc, MAGENTA);break;
+    case fx_palette_orange: CreateSingleColor(fxc, ORANGE);break;
+    case fx_palette_half:   CreateSingleColor(fxc, HALF);break;
+    case fx_palette_lowhalf:CreateSingleColor(fxc, LOWHALF);break;
 
     case fx_palette_pulse_dark:CreateSinglePulseBand(fxc, DARK);break;
     case fx_palette_pulse_white:CreateSinglePulseBand(fxc, WHITE);break;
@@ -299,79 +317,79 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_palette_pulse2_half:CreateDoublePulseBand(fxc, HALF);break;
     case fx_palette_pulse2_lowhalf:CreateDoublePulseBand(fxc, LOWHALF);break;    
 
-    case fx_palette_dr: SetMicroPalette2(fxc, DARK, RED); break;
-    case fx_palette_dy: SetMicroPalette2(fxc, DARK, YELLOW); break;
-    case fx_palette_dg: SetMicroPalette2(fxc, DARK, GREEN); break;
-    case fx_palette_dc: SetMicroPalette2(fxc, DARK, CYAN); break;
-    case fx_palette_db: SetMicroPalette2(fxc, DARK, BLUE); break;
-    case fx_palette_dm: SetMicroPalette2(fxc, DARK, MAGENTA); break;
-    case fx_palette_wr: SetMicroPalette2(fxc, WHITE, RED); break;
-    case fx_palette_wy: SetMicroPalette2(fxc, WHITE, YELLOW); break;
-    case fx_palette_wg: SetMicroPalette2(fxc, WHITE, GREEN); break;
-    case fx_palette_wc: SetMicroPalette2(fxc, WHITE, CYAN); break;
-    case fx_palette_wb: SetMicroPalette2(fxc, WHITE, BLUE); break;
-    case fx_palette_wm: SetMicroPalette2(fxc, WHITE, MAGENTA); break;
-    case fx_palette_ry: SetMicroPalette2(fxc, RED, YELLOW); break;
-    case fx_palette_rg: SetMicroPalette2(fxc, RED, GREEN); break;
-    case fx_palette_rc: SetMicroPalette2(fxc, RED, CYAN); break;
-    case fx_palette_rb: SetMicroPalette2(fxc, RED, BLUE); break;
-    case fx_palette_rm: SetMicroPalette2(fxc, RED, MAGENTA); break;
-    case fx_palette_yg: SetMicroPalette2(fxc, YELLOW, GREEN); break;
-    case fx_palette_yc: SetMicroPalette2(fxc, YELLOW, CYAN); break;
-    case fx_palette_yb: SetMicroPalette2(fxc, YELLOW, BLUE); break;
-    case fx_palette_ym: SetMicroPalette2(fxc, YELLOW, MAGENTA); break;
-    case fx_palette_gc: SetMicroPalette2(fxc, GREEN, CYAN); break;
-    case fx_palette_gb: SetMicroPalette2(fxc, GREEN, BLUE); break;
-    case fx_palette_gm: SetMicroPalette2(fxc, GREEN, MAGENTA); break;
-    case fx_palette_cb: SetMicroPalette2(fxc, CYAN, BLUE); break;
-    case fx_palette_cm: SetMicroPalette2(fxc, CYAN, MAGENTA); break;
-    case fx_palette_bm: SetMicroPalette2(fxc, BLUE, MAGENTA); break;
+    case fx_palette_dr: CreateDoubleColor(fxc, DARK, RED); break;
+    case fx_palette_dy: CreateDoubleColor(fxc, DARK, YELLOW); break;
+    case fx_palette_dg: CreateDoubleColor(fxc, DARK, GREEN); break;
+    case fx_palette_dc: CreateDoubleColor(fxc, DARK, CYAN); break;
+    case fx_palette_db: CreateDoubleColor(fxc, DARK, BLUE); break;
+    case fx_palette_dm: CreateDoubleColor(fxc, DARK, MAGENTA); break;
+    case fx_palette_wr: CreateDoubleColor(fxc, WHITE, RED); break;
+    case fx_palette_wy: CreateDoubleColor(fxc, WHITE, YELLOW); break;
+    case fx_palette_wg: CreateDoubleColor(fxc, WHITE, GREEN); break;
+    case fx_palette_wc: CreateDoubleColor(fxc, WHITE, CYAN); break;
+    case fx_palette_wb: CreateDoubleColor(fxc, WHITE, BLUE); break;
+    case fx_palette_wm: CreateDoubleColor(fxc, WHITE, MAGENTA); break;
+    case fx_palette_ry: CreateDoubleColor(fxc, RED, YELLOW); break;
+    case fx_palette_rg: CreateDoubleColor(fxc, RED, GREEN); break;
+    case fx_palette_rc: CreateDoubleColor(fxc, RED, CYAN); break;
+    case fx_palette_rb: CreateDoubleColor(fxc, RED, BLUE); break;
+    case fx_palette_rm: CreateDoubleColor(fxc, RED, MAGENTA); break;
+    case fx_palette_yg: CreateDoubleColor(fxc, YELLOW, GREEN); break;
+    case fx_palette_yc: CreateDoubleColor(fxc, YELLOW, CYAN); break;
+    case fx_palette_yb: CreateDoubleColor(fxc, YELLOW, BLUE); break;
+    case fx_palette_ym: CreateDoubleColor(fxc, YELLOW, MAGENTA); break;
+    case fx_palette_gc: CreateDoubleColor(fxc, GREEN, CYAN); break;
+    case fx_palette_gb: CreateDoubleColor(fxc, GREEN, BLUE); break;
+    case fx_palette_gm: CreateDoubleColor(fxc, GREEN, MAGENTA); break;
+    case fx_palette_cb: CreateDoubleColor(fxc, CYAN, BLUE); break;
+    case fx_palette_cm: CreateDoubleColor(fxc, CYAN, MAGENTA); break;
+    case fx_palette_bm: CreateDoubleColor(fxc, BLUE, MAGENTA); break;
 
-    case fx_palette_wry: SetMicroPalette4(fxc, WHITE, RED,    WHITE, YELLOW); break;
-    case fx_palette_wrg: SetMicroPalette4(fxc, WHITE, RED,    WHITE, GREEN); break;
-    case fx_palette_wrc: SetMicroPalette4(fxc, WHITE, RED,    WHITE, CYAN); break;
-    case fx_palette_wrb: SetMicroPalette4(fxc, WHITE, RED,    WHITE, BLUE); break;
-    case fx_palette_wrm: SetMicroPalette4(fxc, WHITE, RED,    WHITE, MAGENTA); break;
-    case fx_palette_wyg: SetMicroPalette4(fxc, WHITE, YELLOW, WHITE, GREEN); break;
-    case fx_palette_wyc: SetMicroPalette4(fxc, WHITE, YELLOW, WHITE, CYAN); break;
-    case fx_palette_wyb: SetMicroPalette4(fxc, WHITE, YELLOW, WHITE, BLUE); break;
-    case fx_palette_wym: SetMicroPalette4(fxc, WHITE, YELLOW, WHITE, MAGENTA); break;
-    case fx_palette_wgc: SetMicroPalette4(fxc, WHITE, GREEN,  WHITE, CYAN); break;
-    case fx_palette_wgb: SetMicroPalette4(fxc, WHITE, GREEN,  WHITE, BLUE); break;
-    case fx_palette_wgm: SetMicroPalette4(fxc, WHITE, GREEN,  WHITE, MAGENTA); break;
-    case fx_palette_wcb: SetMicroPalette4(fxc, WHITE, CYAN,   WHITE, BLUE); break;
-    case fx_palette_wcm: SetMicroPalette4(fxc, WHITE, CYAN,   WHITE, MAGENTA); break;
-    case fx_palette_wbm: SetMicroPalette4(fxc, WHITE, BLUE,   WHITE, MAGENTA); break;
+    case fx_palette_wry: CreateQuadColor(fxc, WHITE, RED,    WHITE, YELLOW); break;
+    case fx_palette_wrg: CreateQuadColor(fxc, WHITE, RED,    WHITE, GREEN); break;
+    case fx_palette_wrc: CreateQuadColor(fxc, WHITE, RED,    WHITE, CYAN); break;
+    case fx_palette_wrb: CreateQuadColor(fxc, WHITE, RED,    WHITE, BLUE); break;
+    case fx_palette_wrm: CreateQuadColor(fxc, WHITE, RED,    WHITE, MAGENTA); break;
+    case fx_palette_wyg: CreateQuadColor(fxc, WHITE, YELLOW, WHITE, GREEN); break;
+    case fx_palette_wyc: CreateQuadColor(fxc, WHITE, YELLOW, WHITE, CYAN); break;
+    case fx_palette_wyb: CreateQuadColor(fxc, WHITE, YELLOW, WHITE, BLUE); break;
+    case fx_palette_wym: CreateQuadColor(fxc, WHITE, YELLOW, WHITE, MAGENTA); break;
+    case fx_palette_wgc: CreateQuadColor(fxc, WHITE, GREEN,  WHITE, CYAN); break;
+    case fx_palette_wgb: CreateQuadColor(fxc, WHITE, GREEN,  WHITE, BLUE); break;
+    case fx_palette_wgm: CreateQuadColor(fxc, WHITE, GREEN,  WHITE, MAGENTA); break;
+    case fx_palette_wcb: CreateQuadColor(fxc, WHITE, CYAN,   WHITE, BLUE); break;
+    case fx_palette_wcm: CreateQuadColor(fxc, WHITE, CYAN,   WHITE, MAGENTA); break;
+    case fx_palette_wbm: CreateQuadColor(fxc, WHITE, BLUE,   WHITE, MAGENTA); break;
 
-    case fx_palette_dry: SetMicroPalette4(fxc, DARK, RED,    DARK, YELLOW); break;
-    case fx_palette_drg: SetMicroPalette4(fxc, DARK, RED,    DARK, GREEN); break;
-    case fx_palette_drc: SetMicroPalette4(fxc, DARK, RED,    DARK, CYAN); break;
-    case fx_palette_drb: SetMicroPalette4(fxc, DARK, RED,    DARK, BLUE); break;
-    case fx_palette_drm: SetMicroPalette4(fxc, DARK, RED,    DARK, MAGENTA); break;
-    case fx_palette_dyg: SetMicroPalette4(fxc, DARK, YELLOW, DARK, GREEN); break;
-    case fx_palette_dyc: SetMicroPalette4(fxc, DARK, YELLOW, DARK, CYAN); break;
-    case fx_palette_dyb: SetMicroPalette4(fxc, DARK, YELLOW, DARK, BLUE); break;
-    case fx_palette_dym: SetMicroPalette4(fxc, DARK, YELLOW, DARK, MAGENTA); break;
-    case fx_palette_dgc: SetMicroPalette4(fxc, DARK, GREEN,  DARK, CYAN); break;
-    case fx_palette_dgb: SetMicroPalette4(fxc, DARK, GREEN,  DARK, BLUE); break;
-    case fx_palette_dgm: SetMicroPalette4(fxc, DARK, GREEN,  DARK, MAGENTA); break;
-    case fx_palette_dcb: SetMicroPalette4(fxc, DARK, CYAN,   DARK, BLUE); break;
-    case fx_palette_dcm: SetMicroPalette4(fxc, DARK, CYAN,   DARK, MAGENTA); break;
-    case fx_palette_dbm: SetMicroPalette4(fxc, DARK, BLUE,   DARK, MAGENTA); break;
+    case fx_palette_dry: CreateQuadColor(fxc, DARK, RED,    DARK, YELLOW); break;
+    case fx_palette_drg: CreateQuadColor(fxc, DARK, RED,    DARK, GREEN); break;
+    case fx_palette_drc: CreateQuadColor(fxc, DARK, RED,    DARK, CYAN); break;
+    case fx_palette_drb: CreateQuadColor(fxc, DARK, RED,    DARK, BLUE); break;
+    case fx_palette_drm: CreateQuadColor(fxc, DARK, RED,    DARK, MAGENTA); break;
+    case fx_palette_dyg: CreateQuadColor(fxc, DARK, YELLOW, DARK, GREEN); break;
+    case fx_palette_dyc: CreateQuadColor(fxc, DARK, YELLOW, DARK, CYAN); break;
+    case fx_palette_dyb: CreateQuadColor(fxc, DARK, YELLOW, DARK, BLUE); break;
+    case fx_palette_dym: CreateQuadColor(fxc, DARK, YELLOW, DARK, MAGENTA); break;
+    case fx_palette_dgc: CreateQuadColor(fxc, DARK, GREEN,  DARK, CYAN); break;
+    case fx_palette_dgb: CreateQuadColor(fxc, DARK, GREEN,  DARK, BLUE); break;
+    case fx_palette_dgm: CreateQuadColor(fxc, DARK, GREEN,  DARK, MAGENTA); break;
+    case fx_palette_dcb: CreateQuadColor(fxc, DARK, CYAN,   DARK, BLUE); break;
+    case fx_palette_dcm: CreateQuadColor(fxc, DARK, CYAN,   DARK, MAGENTA); break;
+    case fx_palette_dbm: CreateQuadColor(fxc, DARK, BLUE,   DARK, MAGENTA); break;
 
-    case fx_palette_lava:SetMicroPalette16(fxc,
+    case fx_palette_lava:Create16Color(fxc,
         WEBRGB::Black,WEBRGB::Maroon,WEBRGB::Black,WEBRGB::Maroon,    
         WEBRGB::DarkRed,WEBRGB::Maroon,WEBRGB::DarkRed,WEBRGB::DarkRed,    
         WEBRGB::DarkRed,WEBRGB::DarkRed,WEBRGB::Red,WEBRGB::Orange,    
         WEBRGB::White,WEBRGB::Orange,WEBRGB::Red,WEBRGB::DarkRed);
       break;
-    case fx_palette_cloud:SetMicroPalette16(fxc,  
+    case fx_palette_cloud:Create16Color(fxc,  
       WEBRGB::Blue,WEBRGB::DarkBlue,WEBRGB::DarkBlue,WEBRGB::DarkBlue,
       WEBRGB::DarkBlue,WEBRGB::DarkBlue,WEBRGB::DarkBlue,WEBRGB::DarkBlue,
       WEBRGB::Blue,WEBRGB::DarkBlue,WEBRGB::SkyBlue,WEBRGB::SkyBlue,
       WEBRGB::LightBlue,WEBRGB::White,WEBRGB::LightBlue,WEBRGB::SkyBlue);
       break;
-    case fx_palette_ocean:SetMicroPalette16(fxc,    
+    case fx_palette_ocean:Create16Color(fxc,    
       WEBRGB::DarkGreen,
       WEBRGB::DarkGreen,
       WEBRGB::DarkOliveGreen,
@@ -391,7 +409,7 @@ void FxEventProcess(FxController &fxc,int event)
       WEBRGB::LawnGreen,
       WEBRGB::MediumAquamarine,
       WEBRGB::ForestGreen);break;
-    case fx_palette_forest:SetMicroPalette16(fxc,    
+    case fx_palette_forest:Create16Color(fxc,    
       WEBRGB::DarkGreen,
       WEBRGB::DarkGreen,
       WEBRGB::DarkOliveGreen,
@@ -411,22 +429,22 @@ void FxEventProcess(FxController &fxc,int event)
       WEBRGB::LawnGreen,
       WEBRGB::MediumAquamarine,
       WEBRGB::ForestGreen);break;
-    case fx_palette_rainbow:SetMicroPalette16(fxc, 
+    case fx_palette_rainbow:Create16Color(fxc, 
       0xFF0000, 0xD52A00, 0xAB5500, 0xAB7F00,
       0xABAB00, 0x56D500, 0x00FF00, 0x00D52A,
       0x00AB55, 0x0056AA, 0x0000FF, 0x2A00D5,
       0x5500AB, 0x7F0081, 0xAB0055, 0xD5002B);break;
-    case fx_palette_rainbowstripe:SetMicroPalette16(fxc,    
+    case fx_palette_rainbowstripe:Create16Color(fxc,    
       0xFF0000, 0x000000, 0xAB5500, 0x000000,
       0xABAB00, 0x000000, 0x00FF00, 0x000000,
       0x00AB55, 0x000000, 0x0000FF, 0x000000,
       0x5500AB, 0x000000, 0xAB0055, 0x000000);break;
-    case fx_palette_party:SetMicroPalette16(fxc,   
+    case fx_palette_party:Create16Color(fxc,   
       0x5500AB, 0x84007C, 0xB5004B, 0xE5001B,
       0xE81700, 0xB84700, 0xAB7700, 0xABAB00,
       0xAB5500, 0xDD2200, 0xF2000E, 0xC2003E,
       0x8F0071, 0x5F00A1, 0x2F00D0, 0x0007F9);break;
-    case fx_palette_heat:SetMicroPalette16(fxc,
+    case fx_palette_heat:Create16Color(fxc,
       0x000000, 0x330000, 0x660000, 0x990000, 
       0xCC0000, 0xFF0000, 0xFF3300, 0xFF6600, 
       0xFF9900, 0xFFCC00, 0xFFFF00, 0xFFFF33, 

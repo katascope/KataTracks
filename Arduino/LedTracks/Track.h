@@ -14,39 +14,53 @@
 const unsigned long SongTrack[] PROGMEM =
 {
   //Basic setup, fade in to blue
+  1, fx_strip_all,
   1, fx_palette_dark,
   1, fx_speed_0,
   1, fx_speed_pos,
-  1, fx_strips_all,
-  1, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7),
 
   500, fx_transition_fast,
-  500, fx_palette_blue,
-  
+  500, fx_palette_green,
+
+  750, fx_transition_timed_fade,
+  750, fx_palette_blue,
+
   1000, fx_strip + (LEDS_0),
   1000, fx_palette_red,
-  1500, fx_strip + (LEDS_1),
+  1250, fx_strip + (LEDS_1),
+  1250, fx_palette_red,
+  1500, fx_strip + (LEDS_2),
   1500, fx_palette_red,
-  2000, fx_strip + (LEDS_2),
+  1750, fx_strip + (LEDS_3),
+  1750, fx_palette_red,
+  2000, fx_strip + (LEDS_4),
   2000, fx_palette_red,
-  2500, fx_strip + (LEDS_3),
+  2250, fx_strip + (LEDS_5),
+  2250, fx_palette_red,
+  2500, fx_strip + (LEDS_6),
   2500, fx_palette_red,
-  3000, fx_strip + (LEDS_4),
-  3000, fx_palette_red,
-  3500, fx_strip + (LEDS_5),
-  3500, fx_palette_red,
-  4000, fx_strip + (LEDS_6),
-  4000, fx_palette_red,
-  4500, fx_strip + (LEDS_7),
-  4500, fx_palette_red,
+  2750, fx_strip + (LEDS_7),
+  2750, fx_palette_red,
 
-  5000, fx_strip + (LEDS_1|LEDS_3|LEDS_5|LEDS_7),
-  5000, fx_palette_green,
-  5500, fx_strip + (LEDS_0|LEDS_2|LEDS_4|LEDS_6),
-  5500, fx_palette_green,
+  3000, fx_strip_evens,
+  3000, fx_speed_2,
+  3000, fx_speed_pos,
+  3000, fx_transition_fast,
+  3000, fx_palette_rainbow,
+  3000, fx_speed_2,
+  3000, fx_speed_pos,
   
-  6000, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7),
-  6000, fx_palette_dark
+  3000, fx_strip_odds,
+  3000, fx_speed_2,
+  3000, fx_speed_neg,
+  3000, fx_transition_fast,
+  3000, fx_palette_rb,
+  3000, fx_strip_all,
+
+  10000, fx_strip_all,
+  10000, fx_transition_fast,
+  10000, fx_palette_dark,
+  10500, fx_palette_dark
 };
 
 const unsigned long SongTrackGood[] PROGMEM =
@@ -55,7 +69,7 @@ const unsigned long SongTrackGood[] PROGMEM =
   1, fx_palette_dark,
   1, fx_speed_0,
   1, fx_speed_pos,
-  1, fx_strips_all,
+  1, fx_strip_all,
   1, fx_strip + (LEDS_0|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7),
   //1, fx_strip + (RIGHT_ARM|LEFT_ARM),//just arms
 
@@ -349,5 +363,5 @@ int GetPreviousTimeCodeMatch(unsigned long timecode);
 
 void trackStart(FxController &fxc, unsigned long tc, unsigned long tcOffset, FxTrackEndAction tae);
 void trackStop(FxController &fxc);
-
+void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode);
 #endif

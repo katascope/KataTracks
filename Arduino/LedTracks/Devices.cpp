@@ -89,36 +89,18 @@ void neopixelSetPalette(int slot, uint32_t *palette, int paletteIndex)
   {
     if (offset >= strip0.numPixels())
      offset=0;    
-     uint32_t rgb = palette[i];
-     byte r = (rgb >> 24)&0xFF;
-     byte g = (rgb >> 16)&0xFF;
-     byte b = (rgb >> 8)&0xFF;
-     byte h,s,v;
-
-#if ENABLE_MULTISTRIP  
-    /*switch (slot)
-    {
-      case 0: rgb = LEDRGB(255,255,255);break;
-      case 1: rgb = LEDRGB(255,0,0);break;
-      case 2: rgb = LEDRGB(255,255,0);break;
-      case 3: rgb = LEDRGB(0,255,0);break;
-      case 4: rgb = LEDRGB(0,255,255);break;
-      case 5: rgb = LEDRGB(0,0,255);break;
-      case 6: rgb = LEDRGB(255,0,255);break;
-      case 7: rgb = LEDRGB(255,127,0);break;
-    }*/
-#endif      
+    
     switch (slot)
     {
-      case 0: strip0.setPixelColor(offset, rgb); break;
+      case 0: strip0.setPixelColor(offset, palette[i]); break;
 #if ENABLE_MULTISTRIP  
-      case 1: strip1.setPixelColor(offset, rgb); break;
-      case 2: strip2.setPixelColor(offset, rgb); break;
-      case 3: strip3.setPixelColor(offset, rgb); break;
-      case 4: strip4.setPixelColor(offset, rgb); break;
-      case 5: strip5.setPixelColor(offset, rgb); break;
-      case 6: strip6.setPixelColor(offset, rgb); break;
-      case 7: strip7.setPixelColor(offset, rgb); break;
+      case 1: strip1.setPixelColor(offset, palette[i]); break;
+      case 2: strip2.setPixelColor(offset, palette[i]); break;
+      case 3: strip3.setPixelColor(offset, palette[i]); break;
+      case 4: strip4.setPixelColor(offset, palette[i]); break;
+      case 5: strip5.setPixelColor(offset, palette[i]); break;
+      case 6: strip6.setPixelColor(offset, palette[i]); break;
+      case 7: strip7.setPixelColor(offset, palette[i]); break;
 #endif      
     }
     offset++;    
@@ -285,8 +267,8 @@ void blePoll(FxController &fxc)
 
             unsigned long u = 
               ( (fxc.fxState & 0xFF) << 24 ) |
-              ( ((signed char)fxc.paletteSpeed & 0xFF) << 16 ) |
-              ( ((signed char)fxc.paletteDirection & 0xFF) << 8 ) |
+              ( ((signed char)fxc.strip[0].paletteSpeed & 0xFF) << 16 ) |
+              ( ((signed char)fxc.strip[0].paletteDirection & 0xFF) << 8 ) |
               ( ((unsigned char)central.rssi() & 0xFF) );
               
             statusCharacteristic.writeValue( u );

@@ -12,9 +12,17 @@ static int captureCount = 0;
 
 void InstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType)
 {
-  fxc.fxPaletteUpdateType = paletteUpdateType;
   fxc.fxState = FxState_Default;
-  fxc.transitionType = Transition_Instant;
+
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+      fxc.strip[strip].fxPaletteUpdateType = paletteUpdateType;
+      fxc.strip[strip].transitionType = Transition_Instant;
+    }    
+  }
+
   if (event != fx_nothing)
     PrintFxEventName(event);
   FxEventProcess(fxc, event);
@@ -42,10 +50,12 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F(") : Track Stop"));
       Serial.println(F("* : Track StartFrom"));
       Serial.println(F("@code : Time code"));
+      Serial.println(F("[ c v ] : Fade WipePos transition"));
       Serial.println(F("[ b n m , ] : Brightness"));
       Serial.println(F("z:default mode x:test c:imu"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
-      Serial.println(F("q:lava w:cloud e:ocean r:forest t:rainbow y:rainbowstripe u:party i:heat"));
+      Serial.println(F("q:strip0 w:strip1 e:strip2 r:strip3 t:strip4 y:strip5 u:strip6 i:strip7 p:All"));
+      Serial.println(F("Q:lava W:cloud E:ocean R:forest T:rainbow Y:rainbowstripe U:party I:heat"));
         
       break;
     case Cmd_State_Default: fxc.fxState = FxState_Default;break;
@@ -105,7 +115,10 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorParty:          InstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once); break;
     case Cmd_ColorHeat:           InstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once); break;
 
-    case Cmd_StripAll: fxc.stripMask = (LEDS_0|LEDS_1||LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7); break;
+    case Cmd_StripAll:            InstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once); break;
+    case Cmd_StripNone:           InstantEvent(fxc, fx_strip_none,    FxPaletteUpdateType::Once); break;
+    case Cmd_StripOdds:           InstantEvent(fxc, fx_strip_odds,    FxPaletteUpdateType::Once); break;
+    case Cmd_StripEvens:          InstantEvent(fxc, fx_strip_evens,   FxPaletteUpdateType::Once); break;
     case Cmd_Strip0: fxc.stripMask = LEDS_0; break;
     case Cmd_Strip1: fxc.stripMask = LEDS_1; break;
     case Cmd_Strip2: fxc.stripMask = LEDS_2; break;
@@ -114,7 +127,11 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_Strip5: fxc.stripMask = LEDS_5; break;
     case Cmd_Strip6: fxc.stripMask = LEDS_6; break;
     case Cmd_Strip7: fxc.stripMask = LEDS_7; break;
-    
+
+    case Cmd_TransitionFast: InstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once); break;
+    case Cmd_TransitionFade: InstantEvent(fxc, fx_transition_timed_fade,   FxPaletteUpdateType::Once); break;
+    case Cmd_TransitionWipePos: InstantEvent(fxc, fx_transition_timed_wipe_pos,   FxPaletteUpdateType::Once); break;
+  
 #if ENABLE_NEOPIXEL && ENABLE_BRIGHTNESS
     case Cmd_Brightness_VeryHigh: neopixelSetBrightness(250);break;
     case Cmd_Brightness_High: neopixelSetBrightness(150);break;
@@ -189,10 +206,17 @@ void UserCommandInput(FxController &fxc, int data)
       captureMode = CaptureTimeCode;
       break;
     case '?': UserCommandExecute(fxc, Cmd_Help); break;
+
+    case 'c': UserCommandExecute(fxc, Cmd_TransitionFade);break;
+    case 'v': UserCommandExecute(fxc, Cmd_TransitionWipePos);break;
       
     case 'z': UserCommandExecute(fxc, Cmd_State_Default);break;
     case 'x': UserCommandExecute(fxc, Cmd_State_Test);break;
-    
+    case 'b': UserCommandExecute(fxc, Cmd_Brightness_High);break;
+    case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
+    //case 'm': UserCommandExecute(fxc, Cmd_Brightness_Low);break;
+    case ',': UserCommandExecute(fxc, Cmd_Brightness_VeryHigh);break;
+        
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
     case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;
     case '(': UserCommandExecute(fxc, Cmd_PlayStop); break;
@@ -240,6 +264,7 @@ void UserCommandInput(FxController &fxc, int data)
     case 'y': UserCommandExecute(fxc, Cmd_Strip5);break;
     case 'u': UserCommandExecute(fxc, Cmd_Strip6);break;
     case 'i': UserCommandExecute(fxc, Cmd_Strip7);break;
+    case 'o': UserCommandExecute(fxc, Cmd_StripNone);break;
     case 'p': UserCommandExecute(fxc, Cmd_StripAll);break;
 
     case 'Q': UserCommandExecute(fxc, Cmd_ColorLava);break;
@@ -257,10 +282,7 @@ void UserCommandInput(FxController &fxc, int data)
     case '=': UserCommandExecute(fxc, Cmd_SpeedInc);break;
     case '~': UserCommandExecute(fxc, Cmd_SpeedRst);break;
 
-    case 'b': UserCommandExecute(fxc, Cmd_Brightness_High);break;
-    case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
-    //case 'm': UserCommandExecute(fxc, Cmd_Brightness_Low);break;
-    case ',': UserCommandExecute(fxc, Cmd_Brightness_VeryHigh);break;
+
 
 
     

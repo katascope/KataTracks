@@ -76,6 +76,9 @@ enum UserCommand
   Cmd_SpeedRst,
 
   Cmd_StripAll,
+  Cmd_StripNone,
+  Cmd_StripOdds,
+  Cmd_StripEvens,
   Cmd_Strip0,
   Cmd_Strip1,
   Cmd_Strip2,
@@ -84,6 +87,10 @@ enum UserCommand
   Cmd_Strip5,
   Cmd_Strip6,
   Cmd_Strip7,
+
+  Cmd_TransitionFast,
+  Cmd_TransitionFade,
+  Cmd_TransitionWipePos
 };
 
 void UserCommandExecute(FxController &fxc, int cmd);
