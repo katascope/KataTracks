@@ -28,7 +28,7 @@ const unsigned long SongTrackTest2[] PROGMEM =
 };
 
 
-const unsigned long SongTrack[] PROGMEM =
+const unsigned long SongTrackSquid[] PROGMEM =
 {
   //Basic setup, fade in to blue
   1, fx_strip_all,
@@ -135,7 +135,7 @@ const unsigned long SongTrack[] PROGMEM =
   22500, fx_palette_dark
 };
 
-const unsigned long SongTrackGood[] PROGMEM =
+const unsigned long SongTrack[] PROGMEM =
 {
   //Basic setup, fade in to blue
   1, fx_strip_all,
@@ -172,6 +172,8 @@ const unsigned long SongTrackGood[] PROGMEM =
   8450, fx_palette_dark,
 
   //Both CrossStep
+  9700, fx_transition_fast,
+  9700, fx_palette_half,
   9700, fx_transition_timed_fade,
   9700, fx_palette_rb,
   9700, fx_speed_1,
@@ -195,24 +197,23 @@ const unsigned long SongTrackGood[] PROGMEM =
   14600, fx_transition_fast, //timed_fade,
   14600, fx_palette_magenta,
   14600, fx_speed_0,
+  14600, fx_transition_fast, //_timed_fade,
+  14600, fx_palette_dark,
 
   //Build2
   16800, fx_transition_fast, //_timed_fade,
   16800, fx_palette_half,
   16800, fx_speed_2,
   16800, fx_speed_neg,
-  17000, fx_transition_timed_fade,
-  17000, fx_palette_cm,
-
-  //18600 beat
-  /*18600,fx_transition_fast,
-    18600,fx_palette_pulse_yellow,
-
-    //Coast2
-    19200,fx_transition_timed_fade,
-    19200,fx_palette_pulse2_orange,*/
+  16800, fx_transition_timed_fade,
+  16800, fx_palette_cm,
+    
+  19200,fx_transition_timed_fade,
+  19200,fx_palette_dark,
 
   //BEATS
+  19600, fx_transition_fast,
+  19600, fx_palette_half,
   19600, fx_transition_timed_wipe_pos,
   19600, fx_palette_red,
   20200, fx_palette_yellow,
@@ -221,10 +222,11 @@ const unsigned long SongTrackGood[] PROGMEM =
   22000, fx_palette_wy,
   22600, fx_palette_wr,
   23200, fx_palette_ry,
+  23700, fx_palette_dark,
 
   //calm/smooth in down
-  24200, fx_transition_fast,
-  24200, fx_palette_red,
+/  24200, fx_transition_fast,
+  24200, fx_palette_half,
   26500, fx_transition_timed_fade,
   26500, fx_palette_db,
   28900, fx_transition_fast,
@@ -240,6 +242,8 @@ const unsigned long SongTrackGood[] PROGMEM =
   //35100 beat
   //36400 beat
   //37600 beat
+  29400, fx_transition_fast,
+  29400, fx_palette_half,
   29400, fx_transition_timed_fade,
   29400, fx_palette_red,
   29790, fx_palette_green,
@@ -329,9 +333,9 @@ const unsigned long SongTrackGood[] PROGMEM =
   81800, fx_speed_2,
   81800, fx_speed_neg,
   81800, fx_transition_timed_fade,
-  81800, fx_palette_red,
+  81800, fx_palette_pulse_red,
   82800, fx_transition_timed_fade,
-  82800, fx_palette_red,
+  82800, fx_palette_pulse_red,
   //end of bwaah
 
   88000, fx_transition_timed_fade,

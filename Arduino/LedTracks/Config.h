@@ -1,7 +1,7 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-static const char *DeviceName = "LightSuitSquid";
+static const char *DeviceName = "LightSuitE";
 
 #define NUM_LEDS            70
 #define NUM_STRIPS          8
@@ -12,8 +12,8 @@ static const char *DeviceName = "LightSuitSquid";
 #if ARDUINO_AVR_NANO
  #define SYSTEM_NANO         1
 #else
- #define SYSTEM_NANO_33_IOT  1
-// #define SYSTEM_NANO_33_BLE  1
+// #define SYSTEM_NANO_33_IOT  1
+ #define SYSTEM_NANO_33_BLE  1
 #endif
 
 #ifdef SYSTEM_NANO
