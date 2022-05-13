@@ -15,7 +15,7 @@ void State_Poll_TestPattern(FxController &fxc)
     }
 
     FxEventProcess(fxc, fx_strip + LEDS_0);
-    FxEventProcess(fxc, fx_palette_white);
+    FxEventProcess(fxc, fx_palette_rainbow);
 #if !ENABLE_MULTISTRIP
     FxEventProcess(fxc, fx_palette_pulse2_white);
 #endif    
@@ -49,6 +49,7 @@ void State_Poll_TestPattern(FxController &fxc)
     FxEventProcess(fxc, fx_strip + LEDS_7);
     FxEventProcess(fxc, fx_palette_pulse2_orange);
     neopixelSetPalette(7, fxc.strip[7].palette, fxc.strip[7].paletteIndex);
+    FxEventProcess(fxc, fx_strip_all);
 #endif    
 }
 

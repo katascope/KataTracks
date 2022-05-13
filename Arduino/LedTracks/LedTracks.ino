@@ -54,7 +54,7 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
-  fxController.fxState = FxState_Default;//FxState_TestPattern;//PlayingTrack;//
+  fxController.fxState = FxState_PlayingTrack;//Default;//FxState_TestPattern;//PlayingTrack;//
 
   if (fxController.fxState == FxState_TestPattern)
   { 
