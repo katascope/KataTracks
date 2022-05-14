@@ -10,7 +10,7 @@
 // Main Track set to 'The Game Has Changed'
 #define TRACK_START_DELAY    0  // Delay time from start until track should truly 'start'
 
-const unsigned long SongTrack[] PROGMEM =
+const unsigned long SongTrackSquid[] PROGMEM =
 {
   //Basic setup, fade in to blue
   1, fx_strip_all,
@@ -117,7 +117,7 @@ const unsigned long SongTrack[] PROGMEM =
   22500, fx_palette_dark
 };
 
-const unsigned long SongTrackGood[] PROGMEM =
+const unsigned long SongTrack[] PROGMEM =
 {
   //Basic setup, fade in to blue
   1, fx_strip_all,

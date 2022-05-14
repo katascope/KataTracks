@@ -54,14 +54,14 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
-  fxController.fxState = FxState_PlayingTrack;//Default;//FxState_TestPattern;//PlayingTrack;//
+  fxController.fxState = STARTUP_STATE;
 
   if (fxController.fxState == FxState_TestPattern)
   { 
     Serial.println("Setting test pattern.");
     FxEventProcess(fxController, fx_palette_drb);
 #if ENABLE_NEOPIXEL &&  ENABLE_BRIGHTNESS
-    fxController.brightness = 192;
+    fxController.brightness = BRIGHTNESS;
     neopixelSetBrightness(fxController.brightness);    
 #endif
   }
@@ -77,7 +77,7 @@ void setup() {
   Serial.print(F("Brightness = { "));
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    fxController.strip[strip].brightness = 25;
+    fxController.strip[strip].brightness = BRIGHTNESS;
     neopixelSetBrightness(strip,fxController.strip[strip].brightness);
     Serial.print(fxController.strip[strip].brightness);
     Serial.print(F(" "));
@@ -128,7 +128,7 @@ void loop()
     int ledDelay = 30;
 
 #if SYSTEM_NANO_33_IOT
-    ledDelay = 100;
+    //ledDelay = 100;
 #endif
 
     if (t - fxController.lastTimeLedUpdate > ledDelay)//delay to let bluetooth get data(fastled issue)
