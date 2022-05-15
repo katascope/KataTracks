@@ -129,24 +129,30 @@ void FxDisplayStatus(FxController &fxc)
       Serial.print(getTimecodeTimeOffset());
       Serial.print(F("[state="));
       PrintFxStateName(fxc.fxState);
-      Serial.print(F(", strip&="));
+      Serial.print(F(",strip&="));
       Serial.print(fxc.stripMask);
 
+#if ENABLE_BLE      
+      Serial.print(F(",BLE on"));
+#else
+      Serial.print(F(",BLE off"));
+#endif
   //Strip debugging
-  /*
+  
       for (int strip=0;strip<NUM_STRIPS;strip++)
       {
         Serial.print(F("["));
+        Serial.print(F("b="));
+        Serial.print(fxc.strip[strip].brightness);
+        Serial.print(F(",ps="));
         Serial.print(fxc.strip[strip].paletteSpeed);
-        Serial.print(F(","));
+        Serial.print(F(",pd="));
         Serial.print(fxc.strip[strip].paletteDirection);
-        //Serial.print(F("*"));
-        //Serial.print(fxc.strip[strip].transitionMux);
         Serial.print(F(",u="));
         Serial.print(fxc.strip[strip].fxPaletteUpdateType);
         Serial.print(F("] "));
       }
-    */  
+    
       Serial.print(F(",endAction="));
       PrintFxTrackEndAction(fxc.fxTrackEndAction);
       Serial.print(F(",ftc="));

@@ -6,7 +6,7 @@
 
 struct FxStripController
 {
-  unsigned char brightness = 25;
+  unsigned char brightness = BRIGHTNESS;
   FxTransitionType transitionType = Transition_Instant;  
   FxPaletteUpdateType fxPaletteUpdateType = FxPaletteUpdateType::None;
   uint32_t palette[NUM_LEDS];

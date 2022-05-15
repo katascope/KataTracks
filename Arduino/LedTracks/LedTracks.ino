@@ -60,10 +60,6 @@ void setup() {
   { 
     Serial.println("Setting test pattern.");
     FxEventProcess(fxController, fx_palette_drb);
-#if ENABLE_NEOPIXEL &&  ENABLE_BRIGHTNESS
-    fxController.brightness = BRIGHTNESS;
-    neopixelSetBrightness(fxController.brightness);    
-#endif
   }
 
   if (fxController.fxState == FxState_PlayingTrack)
@@ -125,11 +121,7 @@ void loop()
   if (fxController.fxState == FxState_PlayingTrack)// || needsUpdate)
   {
     unsigned long t =  millis();
-    int ledDelay = 30;
-
-#if SYSTEM_NANO_33_IOT
-    //ledDelay = 100;
-#endif
+    int ledDelay = UPDATE_DELAY;
 
     if (t - fxController.lastTimeLedUpdate > ledDelay)//delay to let bluetooth get data(fastled issue)
     {

@@ -19,22 +19,22 @@ static Adafruit_NeoPixel strip7 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+7, NEO_GRB
 void neopixelSetup()
 {
   strip0.begin();
-  strip0.setBrightness(25);
+  strip0.setBrightness(BRIGHTNESS);
 #if ENABLE_MULTISTRIP  
   strip1.begin();
-  strip1.setBrightness(25);
+  strip1.setBrightness(BRIGHTNESS);
   strip2.begin();
-  strip2.setBrightness(25);
+  strip2.setBrightness(BRIGHTNESS);
   strip3.begin();
-  strip3.setBrightness(25);
+  strip3.setBrightness(BRIGHTNESS);
   strip4.begin();
-  strip4.setBrightness(25);
+  strip4.setBrightness(BRIGHTNESS);
   strip5.begin();
-  strip5.setBrightness(25);
+  strip5.setBrightness(BRIGHTNESS);
   strip6.begin();
-  strip6.setBrightness(25);
+  strip6.setBrightness(BRIGHTNESS);
   strip7.begin();
-  strip7.setBrightness(25);
+  strip7.setBrightness(BRIGHTNESS);
 #endif  
 }
 void neopixelSetBrightness(int strip, unsigned char brightness)

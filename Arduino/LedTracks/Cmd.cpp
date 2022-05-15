@@ -132,13 +132,6 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_TransitionFade: InstantEvent(fxc, fx_transition_timed_fade,   FxPaletteUpdateType::Once); break;
     case Cmd_TransitionWipePos: InstantEvent(fxc, fx_transition_timed_wipe_pos,   FxPaletteUpdateType::Once); break;
   
-#if ENABLE_NEOPIXEL && ENABLE_BRIGHTNESS
-    case Cmd_Brightness_VeryHigh: neopixelSetBrightness(250);break;
-    case Cmd_Brightness_High: neopixelSetBrightness(150);break;
-    case Cmd_Brightness_Normal: neopixelSetBrightness(50);break;
-    case Cmd_Brightness_Low: neopixelSetBrightness(20);break;
-#endif    
-
     default: break;
   }
 }
