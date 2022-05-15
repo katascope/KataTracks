@@ -63,11 +63,9 @@ void PrintFxStateName(FxState s)
 {
   switch (s)
   {
-    case FxState_Default:       Serial.print(F("Norm")); break;
-    case FxState_TestPattern:   Serial.print(F("Test")); break;
-    case FxState_PlayingTrack:  Serial.print(F("Play")); break;
-    case FxState_IMU:           Serial.print(F("IMU")); break;
-    case FxState_MIC:           Serial.print(F("MIC")); break;
+    case FxState_Default:        Serial.print(F("Norm")); break;
+    case FxState_TestPattern:    Serial.print(F("Test")); break;
+    case FxState_PlayingTrack:   Serial.print(F("Play")); break;
     default: Serial.print(F("Unk"));
   }
 }
@@ -225,6 +223,8 @@ void PrintFxEventName(int event)
     case fx_palette_dcm:Serial.print(F("dcm"));return;
     case fx_palette_dbm:Serial.print(F("dbm"));return;
 
+    case fx_palette_rbm:Serial.print(F("rbm"));return;
+    
     case fx_strip_all:  Serial.print(F("strip-all"));return;
     case fx_strip_none: Serial.print(F("strip-none"));return;
     case fx_strip_odds: Serial.print(F("strip-odds"));return;

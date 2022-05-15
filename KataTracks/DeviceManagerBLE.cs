@@ -59,6 +59,7 @@ namespace KataTracks
                 "FDB857FE7C3D", //HighPower                
                 "4CEBD64CA98E", //LightSuitI - IOT
                 "9C9C1FDFDFAA", //LightSuitSquid
+                "B872B08E0D8E", //LightSuitAngelA
 
             };
     public static void StartMonitoring(List<string> bleDeviceConnectionList)

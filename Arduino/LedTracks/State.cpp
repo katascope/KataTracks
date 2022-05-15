@@ -17,37 +17,37 @@ void State_Poll_TestPattern(FxController &fxc)
     FxEventProcess(fxc, fx_strip + LEDS_0);
     FxEventProcess(fxc, fx_palette_rainbow);
 #if !ENABLE_MULTISTRIP
-    FxEventProcess(fxc, fx_palette_pulse2_white);
+    FxEventProcess(fxc, fx_palette_half);
 #endif    
     neopixelSetPalette(0, fxc.strip[0].palette, fxc.strip[0].paletteIndex);
     
 #if ENABLE_MULTISTRIP    
     FxEventProcess(fxc, fx_strip + LEDS_1);
-    FxEventProcess(fxc, fx_palette_pulse2_red);
+    FxEventProcess(fxc, fx_palette_red);
     neopixelSetPalette(1, fxc.strip[1].palette, fxc.strip[1].paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_2);
-    FxEventProcess(fxc, fx_palette_pulse2_yellow);
+    FxEventProcess(fxc, fx_palette_yellow);
     neopixelSetPalette(2, fxc.strip[2].palette, fxc.strip[2].paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_3);
-    FxEventProcess(fxc, fx_palette_pulse2_green);
+    FxEventProcess(fxc, fx_palette_green);
     neopixelSetPalette(3, fxc.strip[3].palette, fxc.strip[3].paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_4);
-    FxEventProcess(fxc, fx_palette_pulse2_cyan);
+    FxEventProcess(fxc, fx_palette_cyan);
     neopixelSetPalette(4, fxc.strip[4].palette, fxc.strip[4].paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_5);
-    FxEventProcess(fxc, fx_palette_pulse2_blue);
+    FxEventProcess(fxc, fx_palette_blue);
     neopixelSetPalette(5, fxc.strip[5].palette, fxc.strip[5].paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_6);
-    FxEventProcess(fxc, fx_palette_pulse2_magenta);
+    FxEventProcess(fxc, fx_palette_magenta);
     neopixelSetPalette(6, fxc.strip[6].palette, fxc.strip[6].paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_7);
-    FxEventProcess(fxc, fx_palette_pulse2_orange);
+    FxEventProcess(fxc, fx_palette_orange);
     neopixelSetPalette(7, fxc.strip[7].palette, fxc.strip[7].paletteIndex);
     FxEventProcess(fxc, fx_strip_all);
 #endif    

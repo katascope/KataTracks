@@ -52,7 +52,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("@code : Time code"));
       Serial.println(F("[ c v ] : Fade WipePos transition"));
       Serial.println(F("[ b n m , ] : Brightness"));
-      Serial.println(F("z:default mode x:test c:imu"));
+      Serial.println(F("z:default mode x:test"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("q:strip0 w:strip1 e:strip2 r:strip3 t:strip4 y:strip5 u:strip6 i:strip7 p:All"));
       Serial.println(F("Q:lava W:cloud E:ocean R:forest T:rainbow Y:rainbowstripe U:party I:heat"));
@@ -205,6 +205,7 @@ void UserCommandInput(FxController &fxc, int data)
       
     case 'z': UserCommandExecute(fxc, Cmd_State_Default);break;
     case 'x': UserCommandExecute(fxc, Cmd_State_Test);break;
+    
     case 'b': UserCommandExecute(fxc, Cmd_Brightness_High);break;
     case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
     //case 'm': UserCommandExecute(fxc, Cmd_Brightness_Low);break;

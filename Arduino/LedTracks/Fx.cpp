@@ -389,6 +389,8 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_palette_dcm: CreateQuadColor(fxc, DARK, CYAN,   DARK, MAGENTA); break;
     case fx_palette_dbm: CreateQuadColor(fxc, DARK, BLUE,   DARK, MAGENTA); break;
 
+    case fx_palette_rbm: CreateQuadColor(fxc, RED, MAGENTA, BLUE,   DARK); break;
+
     case fx_palette_lava:Create16Color(fxc,
         WEBRGB::Black,WEBRGB::Maroon,WEBRGB::Black,WEBRGB::Maroon,    
         WEBRGB::DarkRed,WEBRGB::Maroon,WEBRGB::DarkRed,WEBRGB::DarkRed,    

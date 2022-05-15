@@ -50,11 +50,9 @@ enum FxPaletteUpdateType
 
 enum FxState
 {
-  FxState_Default       = 0,
-  FxState_TestPattern   = 1,
-  FxState_PlayingTrack  = 2,
-  FxState_IMU           = 3,
-  FxState_MIC           = 4,
+  FxState_Default        = 0,
+  FxState_TestPattern    = 1,
+  FxState_PlayingTrack   = 2
 };
 
 enum FxStripMask
@@ -217,6 +215,8 @@ enum FxEvent
   fx_palette_dcb,
   fx_palette_dcm,
   fx_palette_dbm,
+
+  fx_palette_rbm,
 
   fx_strip_all,  //Target all strips
   fx_strip_none, //Target no strips, why?
