@@ -497,15 +497,41 @@ const unsigned long SongTrack[] PROGMEM =
   22000, fx_palette_wy,
   22600, fx_palette_wr,
   23200, fx_palette_ry,
-  23700, fx_palette_dark,
+  23700, fx_palette_wry,
 
   //calm/smooth in down
  
   //calm/smooth in down
   24200, fx_transition_fast,
   24200, fx_palette_half,
-  26500, fx_transition_fast,
-  26500, fx_palette_db,
+  //26500, fx_transition_fast,
+  //26500, fx_palette_db,
+
+  24500, fx_speed_rst,
+  24500, fx_strip + (LEDS_6|LEDS_7),//legs
+  24500, fx_transition_timed_wipe_pos,
+  24500, fx_palette_blue,  
+
+  25250, fx_speed_rst,
+  25250, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3),//chest
+  25250, fx_transition_timed_wipe_neg,
+  25250, fx_palette_blue,
+
+  26000, fx_speed_rst,
+  26000, fx_strip + (LEDS_4|LEDS_5),//arms
+  26000, fx_transition_timed_wipe_neg,
+  26000, fx_palette_blue,  
+    
+  26500, fx_strip_all,
+  26500, fx_transition_timed_fade,
+  26500, fx_speed_1,
+  26500, fx_speed_neg,
+  26500, fx_palette_db,  
+
+  26900, fx_speed_rst,
+  26900, fx_transition_timed_wipe_neg,
+  26900, fx_palette_wrb,
+  
   28900, fx_transition_fast,
   28900, fx_palette_half,
   29000, fx_transition_timed_fade,
@@ -529,15 +555,25 @@ const unsigned long SongTrack[] PROGMEM =
   //33690,fx_transition_fast,
   34080, fx_speed_2,
   34080, fx_speed_neg,
+  34080, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3),//chest
   34080, fx_palette_green,
+  34470, fx_strip + (LEDS_4|LEDS_5|LEDS_6|LEDS_7),//arms + legs
   34470, fx_palette_gb,
+  34860, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3),//chest
   34860, fx_palette_blue,
+  35250, fx_strip + (LEDS_4|LEDS_5|LEDS_6|LEDS_7),//arms + legs
   35250, fx_palette_rb,
+  35640, fx_strip_evens,
   35640, fx_palette_red,
+  36030, fx_strip_odds,
   36030, fx_palette_rg,
+  36420, fx_strip_evens,
   36420, fx_palette_green,
+  36810, fx_strip + (LEDS_4|LEDS_5|LEDS_6|LEDS_7),//arms + legs
   36810, fx_palette_gb,
+  37200, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3),//chest
   37200, fx_palette_blue,
+  37590, fx_strip_all,
   37590, fx_palette_rb,
 
   //Paso Spins

@@ -13,10 +13,8 @@ enum UserCommand
   Cmd_Unk,
   Cmd_Help,
 
-  Cmd_Brightness_VeryHigh,
-  Cmd_Brightness_High,
+  Cmd_Brightness_Max,
   Cmd_Brightness_Normal,
-  Cmd_Brightness_Low,
 
   Cmd_State_Default,
   Cmd_State_Test,
@@ -91,6 +89,7 @@ enum UserCommand
   Cmd_TransitionFast,
   Cmd_TransitionFade,
   Cmd_TransitionWipePos
+
 };
 
 void UserCommandExecute(FxController &fxc, int cmd);
