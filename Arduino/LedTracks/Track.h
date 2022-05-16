@@ -10,21 +10,142 @@
 // Main Track set to 'The Game Has Changed'
 #define TRACK_START_DELAY    0  // Delay time from start until track should truly 'start'
 
+#define MACRO_FX_TRACK_BEGIN \
+  1, fx_strip_all, \
+  1, fx_palette_dark, \
+  1, fx_speed_0, \
+  1, fx_speed_pos, \
+
+#define MACRO_FX_TRACK_END(I) \
+  I, fx_strip_all, \
+  I, fx_transition_timed_fade, \
+  I, fx_palette_dark, \
+  I + 1000, fx_transition_fast,\
+  I + 1000, fx_palette_dark,
+
+#define MACRO_FX_FLASH_COLOR(I, FXRGB1, FXRGB2) \
+  I, fx_transition_fast,\
+  I, FXRGB1,\
+  I, fx_transition_timed_fade,\
+  I, FXRGB2,
+
+#define MACRO_FX_FAST_OPPOSING_SIDES(I, FXRGB1, FXRGB2) \
+    I, fx_strip_evens,\
+    I, fx_speed_2,\
+    I, fx_speed_pos,\
+    I, fx_transition_fast,\
+    I, FXRGB1,\
+    I, fx_strip_odds,\
+    I, fx_speed_2,\
+    I, fx_speed_neg,\
+    I, fx_transition_fast,\
+    I, FXRGB2,\
+    I, fx_strip_all,\
+
+#define MACRO_FX_FAST_OPPOSING_ARMS(I, FXRGB) \
+  I, fx_strip_all, \
+  I, fx_transition_fast, \
+  I, fx_palette_dark, \
+  I + 100, fx_strip + (LEDS_4|LEDS_5), \
+  I + 100, fx_speed_rst, \
+  I + 100, fx_transition_fast, \
+  I + 100, FXRGB, \
+  I + 100, fx_strip + (LEDS_4), \
+  I + 100, fx_speed_4, \
+  I + 100, fx_speed_pos, \
+  I + 100, fx_strip + (LEDS_5), \
+  I + 100, fx_speed_4, \
+  I + 100, fx_speed_neg, \
+  I + 100, fx_strip_all,  
+
+#define MACRO_FX_TIMED_BARS(I, FXRGB) \
+  I + 0, fx_strip + (LEDS_0),\
+  I + 0, FXRGB,\
+  I + 250, fx_strip + (LEDS_1),\
+  I + 250, FXRGB,\
+  I + 500, fx_strip + (LEDS_2),\
+  I + 500, FXRGB, \
+  I + 750, fx_strip + (LEDS_3),\
+  I + 750, FXRGB,\
+  I + 1000, fx_strip + (LEDS_4),\
+  I + 1000, FXRGB,\
+  I + 1250, fx_strip + (LEDS_5),\
+  I + 1250, FXRGB,\
+  I + 1500, fx_strip + (LEDS_6),\
+  I + 1500, FXRGB,\
+  I + 1750, fx_strip + (LEDS_7),\
+  I + 1750, FXRGB,\
+  I + 2000, fx_strip_all,\
+  I + 2000, fx_transition_timed_fade,\
+  I + 2000, fx_palette_dark,\
+  I + 2500, fx_transition_timed_fade,\
+  I + 2500, fx_palette_dark,
+
+#define MACRO_FX_TIMED_FROM_ARMS(I, FXRGB) \
+  I, fx_strip_all,\
+  I, fx_transition_timed_fade,\
+  I, fx_palette_dark,\
+  I + 1000, fx_speed_rst,\
+  I + 1000, fx_strip + (LEDS_4|LEDS_5),\ 
+  I + 1000, fx_transition_timed_wipe_pos,\
+  I + 1000, FXRGB,\
+  I + 3000, fx_speed_rst,\
+  I + 3000, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3),\
+  I + 3000, fx_transition_timed_wipe_neg,\
+  I + 3000, FXRGB,\    
+  I + 4000, fx_speed_rst,\
+  I + 4000, fx_strip + (LEDS_6|LEDS_7),\
+  I + 4000, fx_transition_timed_wipe_neg,\
+  I + 4000, FXRGB,  
+
+#define MACRO_FX_TIMED_COLOR_INTRO(I) \
+  I, fx_strip + (LEDS_0), \
+  I, fx_palette_red, \
+  I + 250, fx_strip + (LEDS_1), \
+  I + 250, fx_palette_yellow, \
+  I + 500, fx_strip + (LEDS_2),\
+  I + 500, fx_palette_green,\
+  I + 750, fx_strip + (LEDS_3),\
+  I + 750, fx_palette_cyan,\
+  I + 1000, fx_strip + (LEDS_4),\
+  I + 1000, fx_palette_blue,\
+  I + 1250, fx_strip + (LEDS_5),\
+  I + 1250, fx_palette_magenta,\
+  I + 1500, fx_strip + (LEDS_6),\
+  I + 1500, fx_palette_orange,\
+  I + 1750, fx_strip + (LEDS_7),\
+  I + 1750, fx_palette_half,\
+  I + 2000, fx_strip_all,
+
 const unsigned long SongTrackTests[] PROGMEM =
 {
+  MACRO_FX_TRACK_BEGIN
+  MACRO_FX_FLASH_COLOR(500, fx_palette_half, fx_palette_blue)
+  MACRO_FX_TIMED_BARS(1000, fx_palette_red)
+  MACRO_FX_FAST_OPPOSING_SIDES(4000, fx_palette_pulse2_cyan, fx_palette_pulse2_magenta)
+  MACRO_FX_TIMED_FROM_ARMS(7000, fx_palette_magenta)
+  MACRO_FX_FAST_OPPOSING_ARMS(13900, fx_palette_pulse2_magenta)
+  MACRO_FX_TIMED_COLOR_INTRO(17000)
+  MACRO_FX_TRACK_END(22000)
+};
+
+const unsigned long SongTrackTestsRewind[] PROGMEM =
+{
   //Basic setup, fade in to blue
-  1, fx_strip_all,
+  MACRO_FX_TRACK_BEGIN
+  /*1, fx_strip_all,
   1, fx_palette_dark,
   1, fx_speed_0,
-  1, fx_speed_pos,
+  1, fx_speed_pos,*/
 
-  500, fx_transition_fast,
+  MACRO_FX_FLASH_COLOR(500, fx_palette_half, fx_palette_blue)
+  /*500, fx_transition_fast,
   500, fx_palette_half,
+  500, fx_transition_timed_fade,
+  500, fx_palette_blue,*/
 
-  750, fx_transition_timed_fade,
-  750, fx_palette_blue,
-
-  1000, fx_strip + (LEDS_0),
+  MACRO_FX_TIMED_BARS(1000, fx_palette_red)
+  /*1000, fx_strip + (LEDS_0),
   1000, fx_palette_red,
   1250, fx_strip + (LEDS_1),
   1250, fx_palette_red,
@@ -45,8 +166,10 @@ const unsigned long SongTrackTests[] PROGMEM =
   3000, fx_palette_dark,
   3500, fx_transition_timed_fade,
   3500, fx_palette_dark,
-  
-  4000, fx_strip_evens,
+  */
+
+  MACRO_FX_FAST_OPPOSING_SIDES(4000,fx_palette_pulse2_cyan,fx_palette_pulse2_magenta)
+  /*4000, fx_strip_evens,
   4000, fx_speed_2,
   4000, fx_speed_pos,
   4000, fx_transition_fast,
@@ -57,8 +180,10 @@ const unsigned long SongTrackTests[] PROGMEM =
   4000, fx_speed_neg,
   4000, fx_transition_fast,
   4000, fx_palette_pulse2_magenta,
-  4000, fx_strip_all,
+  4000, fx_strip_all,*/
 
+  MACRO_FX_TIMED_FROM_ARMS(7000, fx_palette_magenta)
+/*
   7000, fx_strip_all,
   7000, fx_transition_timed_fade,
   7000, fx_palette_dark,
@@ -76,8 +201,10 @@ const unsigned long SongTrackTests[] PROGMEM =
   11000, fx_strip + (LEDS_6|LEDS_7),//legs
   11000, fx_transition_timed_wipe_neg,
   11000, fx_palette_magenta,
-
- //opposite arms
+*/
+  MACRO_FX_FAST_OPPOSING_ARMS(13900, fx_palette_pulse2_magenta)
+  /*
+  //opposite arms
   13900, fx_strip_all,
   13900, fx_transition_fast,
   13900, fx_palette_dark,
@@ -91,9 +218,10 @@ const unsigned long SongTrackTests[] PROGMEM =
   14000, fx_strip + (LEDS_5),
   14000, fx_speed_4,
   14000, fx_speed_neg,
-  14000, fx_strip_all,
+  14000, fx_strip_all,*/
 
-  17000, fx_strip + (LEDS_0),
+  MACRO_FX_TIMED_COLOR_INTRO(17000)
+  /*17000, fx_strip + (LEDS_0),
   17000, fx_palette_red,
   17250, fx_strip + (LEDS_1),
   17250, fx_palette_yellow,
@@ -109,13 +237,15 @@ const unsigned long SongTrackTests[] PROGMEM =
   18500, fx_palette_orange,
   18750, fx_strip + (LEDS_7),
   18750, fx_palette_half,
-  19000, fx_strip_all,
-  
-  22000, fx_strip_all,
+  19000, fx_strip_all,*/
+
+  MACRO_FX_TRACK_END(22000)
+  /*22000, fx_strip_all,
   22000, fx_transition_fast,
   22000, fx_palette_dark,
-  22500, fx_palette_dark
+  22500, fx_palette_dark*/
 };
+
 
 //Single strip
 const unsigned long SongTrackDanceSingle[] PROGMEM =
