@@ -6,7 +6,7 @@ static const char *DeviceName = "LightSuitAngelA";
 #define STARTUP_STATE       FxState_Default    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
 #define UPDATE_DELAY        30 //100 //Milliseconds to delay between palette updates, set to 100 for iot, 30 for ble
 #define NUM_STRIPS          8
-#define BRIGHTNESS          75  //Default brightness
+#define BRIGHTNESS          60  //Default brightness
 #define BRIGHTNESS_LIMIT    75 //Maximum allowed brightness
 #define ENABLE_SAFETY       1
 #define NUM_LEDS            80

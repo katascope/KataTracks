@@ -553,17 +553,42 @@ const unsigned long SongTrack[] PROGMEM =
   47100, fx_transition_timed_fade,
   47100, fx_palette_red,
 
+//primetime
   50400, fx_transition_timed_fade,
   50400, fx_palette_half,
-  53300, fx_transition_timed_fade,
-  53300, fx_palette_magenta,
+
+  50600, fx_speed_rst,
+  50600, fx_speed_2,
+  50600, fx_speed_neg,
+  50600, fx_transition_fast,
+  50600, fx_palette_half,
+  50600, fx_transition_timed_wipe_pos,
+  50600, fx_palette_blue,
+  51200, fx_palette_magenta,
+  51800, fx_palette_wb,
+  52400, fx_palette_bm,
+  53000, fx_palette_wm,
+  53600, fx_palette_wb,
+  54200, fx_palette_bm,
+  54600, fx_palette_blue,
+  55200, fx_palette_magenta,
+  55800, fx_palette_wb,
+  56400, fx_palette_bm,
+  57000, fx_palette_wb,
+      
+  //53300, fx_transition_timed_fade,
+  //53300, fx_palette_magenta,
 
   //coasting orange
-  54600, fx_speed_0,
+  /*54600, fx_speed_0,
   54600, fx_speed_pos,
   54600, fx_transition_timed_fade,
   54600, fx_palette_blue,
+*/
+  //57000, fx_palette_dark,
 
+  57800, fx_speed_0,
+  57800, fx_speed_pos,
   57800, fx_transition_timed_fade,
   57800, fx_palette_pulse_dark,
 /*
@@ -575,12 +600,12 @@ const unsigned long SongTrack[] PROGMEM =
   60000, fx_strip_evens,
   60000, fx_speed_2,
   60000, fx_speed_pos,
-  60000, fx_transition_fast,
+  60000, fx_transition_timed_fade,
   60000, fx_palette_pulse2_cyan,
   60000, fx_strip_odds,
   60000, fx_speed_3,
   60000, fx_speed_neg,
-  60000, fx_transition_fast,
+  60000, fx_transition_timed_fade,
   60000, fx_palette_pulse2_magenta,
   60000, fx_strip_all,  
 
@@ -612,9 +637,9 @@ const unsigned long SongTrack[] PROGMEM =
   81500, fx_speed_2,
   81500, fx_speed_neg,
   81500, fx_transition_timed_fade,
-  81500, fx_palette_pulse_red,
+  81500, fx_palette_pulse2_red,
   82800, fx_transition_timed_fade,
-  82800, fx_palette_pulse_red,
+  82800, fx_palette_pulse2_red,
   //end of bwaah
 
   88000, fx_transition_timed_fade,
@@ -657,20 +682,16 @@ const unsigned long SongTrack[] PROGMEM =
   104000, fx_speed_neg,
   104000, fx_transition_timed_fade,
   104000, fx_palette_rbm,
+  105000, fx_transition_timed_fade,
+  105000, fx_palette_dark,
 
   //CHAPTER 3
   //big march around
   107900, fx_transition_timed_fade,
   107900, fx_palette_half,
+  108900, fx_transition_timed_fade,
+  108900, fx_palette_cm,
 
-  110000, fx_transition_timed_fade,
-  110000, fx_palette_half,
-
-  111000, fx_transition_timed_fade,
-  111000, fx_palette_half,
-
-  111000, fx_speed_1,
-  111000, fx_speed_neg,
   111000, fx_transition_timed_fade,
   111000, fx_palette_cyan,
   118000, fx_transition_timed_fade,
@@ -680,9 +701,9 @@ const unsigned long SongTrack[] PROGMEM =
   119500, fx_transition_timed_fade,
   119500, fx_palette_blue,
   120000, fx_transition_timed_fade,
-  120000, fx_palette_red,
+  120000, fx_palette_rb,
   120500, fx_transition_timed_fade,
-  120500, fx_palette_blue,
+  120500, fx_palette_wrb,
   121000, fx_speed_neg,
   121000, fx_speed_4,
   121000, fx_transition_timed_fade,
