@@ -297,7 +297,7 @@ unsigned long GetTime() { return (unsigned long)((signed long)millis() - (signed
 
 void setTimecodeLastMatched(unsigned long match)
 {
-//  Serial.print("Set match=");
+//  Serial.print(F("Set match="));
 //  Serial.println(match);
   timeController.lastMatchedTimecode = match;
 }

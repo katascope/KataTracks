@@ -6,7 +6,6 @@
 
 void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, unsigned int palSize)
 {
-//      Serial.print("FxCreatePalette");
       if (fxController.strip[strip].transitionType == Transition_Instant)
       {
         LerpPaletteFromMicroPalette(fxController.strip[strip].palette, NUM_LEDS, pal16, palSize);

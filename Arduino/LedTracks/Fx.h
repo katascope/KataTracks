@@ -27,7 +27,7 @@ struct FxController
   FxTrackEndAction fxTrackEndAction;
   unsigned long lastTimeLedUpdate = 0;  
   unsigned char stripMask = 255;
-  FxStripController strip[8];
+  FxStripController strip[NUM_STRIPS];
 };
 
 void FxEventProcess(FxController &fxc,int event);

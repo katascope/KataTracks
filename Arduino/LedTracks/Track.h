@@ -368,7 +368,7 @@ const unsigned long SongTrack[] PROGMEM =
   __TRACK_END(127000)
 };
 
-
+#if 0
 //Single strip
 const unsigned long SongTrackDanceSingle[] PROGMEM =
 {
@@ -661,7 +661,7 @@ const unsigned long SongTrackDanceSingle[] PROGMEM =
   129000, fx_transition_timed_fade,
   129000, fx_palette_dark
 };
-
+#endif
 
 const PROGMEM int numSongTracks = sizeof(SongTrack) / (sizeof(unsigned long) * 2);
 

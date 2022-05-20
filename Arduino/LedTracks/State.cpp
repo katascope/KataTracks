@@ -146,13 +146,13 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
       {
         /*
         Serial.println();
-        Serial.print(" @");
+        Serial.print(F(" @"));
         Serial.print(GetTime());
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.print(matchedTimecode);
-        Serial.print(" ");
+        Serial.print(F(" "));
         PrintFxEventName(SongTrack_event(i));        
-        Serial.print(" : ");
+        Serial.print(F(" : "));
         Serial.print(fxc.transitionMux);
         Serial.print(F(" "));
         for (int strip=0;strip<NUM_STRIPS;strip++)
