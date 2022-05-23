@@ -7,6 +7,9 @@
 
 void State_Poll_TestPattern(FxController &fxc)
 {
+  FxEventProcess(fxc, fx_strip_all);
+  FxEventProcess(fxc, fx_transition_fast);
+  //Serial.println("Polling test pattern");
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
       fxc.strip[strip].paletteDirection = 1;
@@ -14,7 +17,7 @@ void State_Poll_TestPattern(FxController &fxc)
       fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::Always;
     }
 
-    FxEventProcess(fxc, fx_strip + LEDS_0);
+    FxEventProcess(fxc, fx_strip_all);//fx_strip + LEDS_0);
     FxEventProcess(fxc, fx_palette_rainbow);
 #if !ENABLE_MULTISTRIP
     FxEventProcess(fxc, fx_palette_half);
@@ -49,8 +52,8 @@ void State_Poll_TestPattern(FxController &fxc)
     FxEventProcess(fxc, fx_strip + LEDS_7);
     FxEventProcess(fxc, fx_palette_orange);
     neopixelSetPalette(7, fxc.strip[7].palette, fxc.strip[7].paletteIndex);
-    FxEventProcess(fxc, fx_strip_all);
 #endif    
+    FxEventProcess(fxc, fx_strip_all);
 }
 
 void CopyRange(FxController &fxc, int strip, int first, int last)
