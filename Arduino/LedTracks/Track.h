@@ -122,10 +122,16 @@
   I, fx_transition_timed_wipe_neg, \
   I, FXRGB, \
 
-#define __COLOR_FROM_SHOULDERS(I, FXRGB) \
+#define __COLOR_FROM_SHOULDERS_TO_WRISTS(I, FXRGB) \
   I, fx_strip + (LEDS_4|LEDS_5), \
   I, fx_transition_timed_wipe_neg, \
   I, FXRGB, \
+
+#define __COLOR_FROM_SHOULDERS_TO_CENTER(I, FXRGB) \
+  I, fx_strip + (LEDS_0|LEDS_1|LEDS_2|LEDS_3), \
+  I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
 
 #define __COLOR_FROM_WAIST(I, FXRGB) \
   I, fx_speed_rst, \
@@ -202,7 +208,7 @@ const unsigned long SongTrack[] PROGMEM =
   __FLASH_WHITE(2500)
   __COLOR_FROM_FEET(2500, COLOR_ALPHA)
   __COLOR_FROM_BELLY(2900, COLOR_ALPHA)
-  __COLOR_FROM_SHOULDERS(3300, COLOR_ALPHA)
+  __COLOR_FROM_SHOULDERS_TO_WRISTS(3300, COLOR_ALPHA)
   3650, fx_strip_all,
   __FADE_TO(3650, fx_palette_dark)
   
@@ -210,7 +216,7 @@ const unsigned long SongTrack[] PROGMEM =
   __FLASH_WHITE(4800)
   __COLOR_FROM_FEET(4800, COLOR_BETA)
   __COLOR_FROM_BELLY(5200, COLOR_BETA)
-  __COLOR_FROM_SHOULDERS(5600, COLOR_BETA)
+  __COLOR_FROM_SHOULDERS_TO_WRISTS(5600, COLOR_BETA)
   5950, fx_strip_all,
   __FADE_TO(5950, fx_palette_dark)
   
@@ -218,7 +224,7 @@ const unsigned long SongTrack[] PROGMEM =
   __FLASH_WHITE(7300)
   __COLOR_FROM_FEET(7300, fx_palette_rb)
   __COLOR_FROM_BELLY(7700, fx_palette_rb)
-  __COLOR_FROM_SHOULDERS(8100, fx_palette_rb)  
+  __COLOR_FROM_SHOULDERS_TO_WRISTS(8100, fx_palette_rb)  
   8450, fx_strip_all,
   __FADE_TO(8450, fx_palette_dark)
   
@@ -247,7 +253,7 @@ const unsigned long SongTrack[] PROGMEM =
   //Build2
   __FLASH_WHITE(16800)
   __PLASMA_FAST(16800, fx_palette_cm)
-  __FADE_TO(19200, fx_palette_dark)
+  //__FADE_TO(19200, fx_palette_dark)
   
   //BEATS
   __FLASH_WHITE(19600)
@@ -258,29 +264,28 @@ const unsigned long SongTrack[] PROGMEM =
 
   __COLOR_FROM_FEET(24500, COLOR_ALPHA)
   __COLOR_FROM_BELLY(25250, COLOR_ALPHA)
-  __COLOR_FROM_SHOULDERS(26000, COLOR_ALPHA)
+  __COLOR_FROM_SHOULDERS_TO_WRISTS(26000, COLOR_ALPHA)
 
-  __FLASH_WHITE(26900)
-  __COLOR_FROM_WRISTS(26900, fx_palette_dark)
-  __COLOR_FROM_NECK(27650, fx_palette_dark)
-  __COLOR_FROM_WAIST(28400, fx_palette_dark)
+  __FLASH_WHITE(26500)
+  //__COLOR_FROM_WRISTS(26900, fx_palette_dark)
+  //__COLOR_FROM_NECK(27650, fx_palette_dark)
+  //__COLOR_FROM_WAIST(28400, fx_palette_dark)
 
 //Reachout?
-  __COLOR_FROM_WRISTS(28400, fx_palette_magenta)
-  __COLOR_FROM_SHOULDERS(28900, fx_palette_magenta)
-  __COLOR_FROM_WAIST(29400, fx_palette_magenta)
+  __COLOR_FROM_WRISTS(26900, fx_palette_magenta)
+  __COLOR_FROM_SHOULDERS_TO_CENTER(27400, fx_palette_magenta)
+  __COLOR_FROM_WAIST(27900, fx_palette_magenta)
 
-  __FLASH_WHITE(30570)
+  __FLASH_WHITE(29400)
   //Take them to crazytown.. we came together, so purple again?
 /*  
   __FADE_TO(29000, fx_palette_dr)
   29400, fx_transition_fast,
-  29400, fx_palette_half,
+  29400, fx_palette_half,*/
   29400, fx_transition_timed_fade,
   29400, fx_palette_red,
   29790, fx_palette_green,
-  30180, fx_palette_blue,*/
-  
+  30180, fx_palette_blue,  
   30570, fx_palette_rg,
   30960, fx_palette_gb,
   31350, fx_palette_rb,
@@ -295,13 +300,13 @@ const unsigned long SongTrack[] PROGMEM =
   34080, fx_speed_neg,
   __COLOR_FROM_FEET(34080, COLOR_BETA)
   __COLOR_FROM_BELLY(34470, fx_palette_rb)
-  __COLOR_FROM_SHOULDERS(34860, COLOR_ALPHA)
+  __COLOR_FROM_SHOULDERS_TO_WRISTS(34860, COLOR_ALPHA)
   __COLOR_FROM_FEET(35250, fx_palette_rb)
   __COLOR_FROM_BELLY(35640, COLOR_ALPHA)
-  __COLOR_FROM_SHOULDERS(36030, COLOR_BETA)
+  __COLOR_FROM_SHOULDERS_TO_WRISTS(36030, COLOR_BETA)
   __COLOR_FROM_FEET(36420, COLOR_ALPHA)
   __COLOR_FROM_BELLY(36810, COLOR_BETA)
-  __COLOR_FROM_SHOULDERS(37200, fx_palette_rb)
+  __COLOR_FROM_SHOULDERS_TO_WRISTS(37200, fx_palette_rb)
   37590, fx_strip_all,
   37590, fx_transition_timed_fade,
   37590, fx_palette_red,
@@ -377,11 +382,11 @@ const unsigned long SongTrack[] PROGMEM =
 
   //98 to 107 = the spin and recover
   //pulsy approach  
-  98500, fx_speed_2,
-  98500, fx_speed_neg,
+ // 98500, fx_speed_2,
+  //98500, fx_speed_neg,
 //  __FADE_TO(98500, fx_palette_pulse_magenta)
 #if LEAD
-  100000, fx_strip_all,
+//  100000, fx_strip_all,
   //__FADE_TO(100000, fx_palette_dark)
   //pickup from spinning
   __COLOR_FROM_WRISTS(101000, fx_palette_magenta)
