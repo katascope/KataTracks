@@ -4,8 +4,17 @@
 #include <avr/pgmspace.h>
 #include "FxCore.h"
 
-#define TRACK_LEAD      1
-#define TRACK_FOLLOW    0
+#if LEAD
+#define COLOR_ALPHA fx_palette_red
+#define COLOR_BETA  fx_palette_blue
+#define COLOR_THETA  fx_palette_cyan
+#define COLOR_DELTA  fx_palette_magenta
+#elif FOLLOW
+#define COLOR_ALPHA fx_palette_blue
+#define COLOR_BETA  fx_palette_red
+#define COLOR_THETA fx_palette_magenta
+#define COLOR_DELTA  fx_palette_cyan
+#endif
 
 // Main Track set to 'The Game Has Changed'
 #define TRACK_START_DELAY    0  // Delay time from start until track should truly 'start'
@@ -131,9 +140,58 @@
 
 #define __COLOR_FROM_WRISTS(I, FXRGB) \
   I, fx_speed_rst, \
-  I, fx_strip + (LEDS_4|LEDS_5), \
+  I, fx_strip + (RIGHT_ARM|LEFT_ARM), \
   I, fx_transition_timed_wipe_pos, \
   I, FXRGB, \
+
+#define __COLOR_FROM_RIGHT_WRIST(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (RIGHT_ARM), \
+  I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
+#define __COLOR_FROM_LEFT_WRIST(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (LEFT_ARM), \
+  I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
+#define __COLOR_TO_RIGHT_WRIST(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (RIGHT_ARM), \
+  I, fx_transition_timed_wipe_neg, \
+  I, FXRGB, \
+
+#define __COLOR_TO_LEFT_WRIST(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (LEFT_ARM), \
+  I, fx_transition_timed_wipe_neg, \
+  I, FXRGB, \
+
+#define __COLOR_FROM_RIGHT_SHOULDER_TO_CENTER(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (RIGHT_CHEST_A|RIGHT_CHEST_B), \
+  I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
+#define __COLOR_FROM_LEFT_SHOULDER_TO_CENTER(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (LEFT_CHEST_A|LEFT_CHEST_B), \
+  I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
+#define __COLOR_FROM_CENTER_TO_LEFT_SHOULDER(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (LEFT_CHEST_A|LEFT_CHEST_B), \
+  I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
+#define __COLOR_FROM_CENTER_TO_RIGHT_SHOULDER(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (RIGHT_CHEST_A|RIGHT_CHEST_B), \
+  I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
 
 //Multistrip
 const unsigned long SongTrack[] PROGMEM =
@@ -142,17 +200,17 @@ const unsigned long SongTrack[] PROGMEM =
 
   //Lead CrossStep
   __FLASH_WHITE(2500)
-  __COLOR_FROM_FEET(2500, fx_palette_blue)
-  __COLOR_FROM_BELLY(2900, fx_palette_blue)
-  __COLOR_FROM_SHOULDERS(3300, fx_palette_blue)
+  __COLOR_FROM_FEET(2500, COLOR_ALPHA)
+  __COLOR_FROM_BELLY(2900, COLOR_ALPHA)
+  __COLOR_FROM_SHOULDERS(3300, COLOR_ALPHA)
   3650, fx_strip_all,
   __FADE_TO(3650, fx_palette_dark)
   
   //Follow CrossStep
   __FLASH_WHITE(4800)
-  __COLOR_FROM_FEET(4800, fx_palette_red)
-  __COLOR_FROM_BELLY(5200, fx_palette_red)
-  __COLOR_FROM_SHOULDERS(5600, fx_palette_red)
+  __COLOR_FROM_FEET(4800, COLOR_BETA)
+  __COLOR_FROM_BELLY(5200, COLOR_BETA)
+  __COLOR_FROM_SHOULDERS(5600, COLOR_BETA)
   5950, fx_strip_all,
   __FADE_TO(5950, fx_palette_dark)
   
@@ -169,8 +227,22 @@ const unsigned long SongTrack[] PROGMEM =
   __PLASMA(9700, fx_palette_rb)
   
   //Arms up & Circles around each other
-  __STROBE_COLORS(10800,fx_palette_blue, fx_palette_red)
-  __FADE_TO(14800, fx_palette_dark)
+  __STROBE_COLORS(10800,COLOR_ALPHA, COLOR_BETA)
+  //__FADE_TO(14800, fx_palette_dark)
+  //__COLOR_FROM_WRISTS(14800, fx_palette_magenta)
+#if LEAD  
+  __COLOR_FROM_RIGHT_WRIST(14800, fx_palette_magenta)
+  __COLOR_FROM_RIGHT_SHOULDER_TO_CENTER(15200, fx_palette_magenta)
+  __COLOR_FROM_CENTER_TO_LEFT_SHOULDER(15600, fx_palette_magenta)
+  __COLOR_FROM_WAIST(16000, fx_palette_magenta)
+  __COLOR_TO_LEFT_WRIST(16400, fx_palette_magenta)
+#elif FOLLOW
+  __COLOR_FROM_LEFT_WRIST(14800, fx_palette_magenta)
+  __COLOR_FROM_LEFT_SHOULDER_TO_CENTER(15200, fx_palette_magenta)
+  __COLOR_FROM_CENTER_TO_RIGHT_SHOULDER(15600, fx_palette_magenta)
+  __COLOR_FROM_WAIST(16000, fx_palette_magenta)
+  __COLOR_TO_RIGHT_WRIST(16400, fx_palette_magenta)
+#endif  
 
   //Build2
   __FLASH_WHITE(16800)
@@ -184,24 +256,31 @@ const unsigned long SongTrack[] PROGMEM =
   //calm/smooth in down
   __FLASH_WHITE(24500)
 
-  __COLOR_FROM_FEET(24500, fx_palette_blue)
-  __COLOR_FROM_BELLY(25250, fx_palette_blue)
-  __COLOR_FROM_SHOULDERS(26000, fx_palette_blue)
+  __COLOR_FROM_FEET(24500, COLOR_ALPHA)
+  __COLOR_FROM_BELLY(25250, COLOR_ALPHA)
+  __COLOR_FROM_SHOULDERS(26000, COLOR_ALPHA)
 
+  __FLASH_WHITE(26900)
   __COLOR_FROM_WRISTS(26900, fx_palette_dark)
   __COLOR_FROM_NECK(27650, fx_palette_dark)
   __COLOR_FROM_WAIST(28400, fx_palette_dark)
 
-  __FLASH_WHITE(28900)
-  __FADE_TO(29000, fx_palette_dr)
+//Reachout?
+  __COLOR_FROM_WRISTS(28400, fx_palette_magenta)
+  __COLOR_FROM_SHOULDERS(28900, fx_palette_magenta)
+  __COLOR_FROM_WAIST(29400, fx_palette_magenta)
 
-  //Take them to crazytown
+  __FLASH_WHITE(30570)
+  //Take them to crazytown.. we came together, so purple again?
+/*  
+  __FADE_TO(29000, fx_palette_dr)
   29400, fx_transition_fast,
   29400, fx_palette_half,
   29400, fx_transition_timed_fade,
   29400, fx_palette_red,
   29790, fx_palette_green,
-  30180, fx_palette_blue,
+  30180, fx_palette_blue,*/
+  
   30570, fx_palette_rg,
   30960, fx_palette_gb,
   31350, fx_palette_rb,
@@ -214,14 +293,14 @@ const unsigned long SongTrack[] PROGMEM =
   //33690,fx_transition_fast,
   34080, fx_speed_2,
   34080, fx_speed_neg,
-  __COLOR_FROM_FEET(34080, fx_palette_red)
+  __COLOR_FROM_FEET(34080, COLOR_BETA)
   __COLOR_FROM_BELLY(34470, fx_palette_rb)
-  __COLOR_FROM_SHOULDERS(34860, fx_palette_blue)
+  __COLOR_FROM_SHOULDERS(34860, COLOR_ALPHA)
   __COLOR_FROM_FEET(35250, fx_palette_rb)
-  __COLOR_FROM_BELLY(35640, fx_palette_blue)
-  __COLOR_FROM_SHOULDERS(36030, fx_palette_red)
-  __COLOR_FROM_FEET(36420, fx_palette_blue)
-  __COLOR_FROM_BELLY(36810, fx_palette_red)
+  __COLOR_FROM_BELLY(35640, COLOR_ALPHA)
+  __COLOR_FROM_SHOULDERS(36030, COLOR_BETA)
+  __COLOR_FROM_FEET(36420, COLOR_ALPHA)
+  __COLOR_FROM_BELLY(36810, COLOR_BETA)
   __COLOR_FROM_SHOULDERS(37200, fx_palette_rb)
   37590, fx_strip_all,
   37590, fx_transition_timed_fade,
@@ -272,14 +351,14 @@ const unsigned long SongTrack[] PROGMEM =
   __FADE_TO(72000, fx_palette_magenta)
 
   //Side-Kicks
-  __WIPE_UP(73000, fx_palette_cyan)
-  __WIPE_UP(74000, fx_palette_magenta)
-  __WIPE_UP(75000, fx_palette_cyan)
-  __WIPE_UP(76000, fx_palette_magenta)
-  __WIPE_UP(77000, fx_palette_cyan)
-  __WIPE_UP(78000, fx_palette_magenta)
-  __WIPE_UP(79000, fx_palette_cyan)
-  __WIPE_UP(80000, fx_palette_magenta)
+  __WIPE_UP(73000, COLOR_THETA)
+  __WIPE_UP(74000, COLOR_DELTA)
+  __WIPE_UP(75000, COLOR_THETA)
+  __WIPE_UP(76000, COLOR_DELTA)
+  __WIPE_UP(77000, COLOR_THETA)
+  __WIPE_UP(78000, COLOR_DELTA)
+  __WIPE_UP(79000, COLOR_THETA)
+  __WIPE_UP(80000, COLOR_DELTA)
 
   ///bwaaah, into the sss...qqs's
   81500, fx_speed_2,
@@ -290,26 +369,32 @@ const unsigned long SongTrack[] PROGMEM =
 
   __FADE_TO(88000, fx_palette_rb)
   __FLASH_WHITE(94000)
+#if LEAD  
   __FADE_TO(94000, fx_palette_dark)
+#elif FOLLOW
+  __FADE_TO(94000, fx_palette_magenta)
+#endif
 
   //98 to 107 = the spin and recover
   //pulsy approach  
   98500, fx_speed_2,
   98500, fx_speed_neg,
-  __FADE_TO(98500, fx_palette_pulse_magenta)
-
+//  __FADE_TO(98500, fx_palette_pulse_magenta)
+#if LEAD
   100000, fx_strip_all,
-  __FADE_TO(100000, fx_palette_dark)
+  //__FADE_TO(100000, fx_palette_dark)
   //pickup from spinning
   __COLOR_FROM_WRISTS(101000, fx_palette_magenta)
   __COLOR_FROM_NECK(102000, fx_palette_magenta)
   __COLOR_FROM_WAIST(103000, fx_palette_magenta)
-  
+#elif FOLLOW  
+  __FADE_TO(103000, fx_palette_magenta)//redundant
+#endif  
   104000, fx_strip_all,  
   104000, fx_speed_2,
   104000, fx_speed_neg,
-  __FADE_TO(104000, fx_palette_rbm)
-  __FADE_TO(105000, fx_palette_dark)
+  __FADE_TO(104000, fx_palette_pulse2_magenta)
+ // __FADE_TO(105000, fx_palette_dark)
 
   //CHAPTER 3
   //big march around

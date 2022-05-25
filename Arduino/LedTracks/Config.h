@@ -1,9 +1,20 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-static const char *DeviceName = "LightSuitAngelB";
+#define LEAD      0 //Generally LightSuit*A silver
+#define FOLLOW    1 //Generally LightSuit*B gold
 
-#define STARTUP_STATE       FxState_TestPattern    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
+#if LEAD
+static const char *DeviceName = "LightSuitAngelA";
+#elif FOLLOW
+static const char *DeviceName = "LightSuitAngelB";
+#else
+static const char *DeviceName = "LightSuitAngelUnkown";
+#endif
+
+
+
+#define STARTUP_STATE       FxState_Default    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
 #define UPDATE_DELAY        30 //100 //Milliseconds to delay between palette updates, set to 100 for iot, 30 for ble
 #define NUM_STRIPS          8
 #define BRIGHTNESS          50  //Default brightness
