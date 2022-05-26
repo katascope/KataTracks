@@ -63,6 +63,9 @@ namespace KataTracks
                 "B872B08E0D8E", //LightSuitAngelA?
                 "77C648CCE101", //LightSuitAngelB?
 
+                "91CDE3A4B695", //LightSuitAngelABad
+
+
             };
     public static void StartMonitoring(List<string> bleDeviceConnectionList)
         {

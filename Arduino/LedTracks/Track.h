@@ -42,7 +42,13 @@
   I, fx_transition_fast, \
   I, fx_palette_half, \
   I, fx_speed_rst,
-  
+
+#define __FLASH(I, FXRGB) \
+  I, fx_strip_all, \
+  I, fx_transition_fast, \
+  I, FXRGB, \
+  I, fx_speed_rst,
+
 #define __WIPE_UP(I,FXRGB) \
   I, fx_speed_rst, \
   I, fx_transition_timed_wipe_pos, \
@@ -243,11 +249,16 @@ const unsigned long SongTrack[] PROGMEM =
   __COLOR_FROM_WAIST(16000, fx_palette_magenta)
   __COLOR_TO_LEFT_WRIST(16400, fx_palette_magenta)
 #elif FOLLOW
-  __COLOR_FROM_LEFT_WRIST(14800, fx_palette_magenta)
+  __COLOR_FROM_RIGHT_WRIST(14800, fx_palette_magenta)
+  __COLOR_FROM_RIGHT_SHOULDER_TO_CENTER(15200, fx_palette_magenta)
+  __COLOR_FROM_CENTER_TO_LEFT_SHOULDER(15600, fx_palette_magenta)
+  __COLOR_FROM_WAIST(16000, fx_palette_magenta)
+  __COLOR_TO_LEFT_WRIST(16400, fx_palette_magenta)
+/*  __COLOR_FROM_LEFT_WRIST(14800, fx_palette_magenta`)
   __COLOR_FROM_LEFT_SHOULDER_TO_CENTER(15200, fx_palette_magenta)
   __COLOR_FROM_CENTER_TO_RIGHT_SHOULDER(15600, fx_palette_magenta)
   __COLOR_FROM_WAIST(16000, fx_palette_magenta)
-  __COLOR_TO_RIGHT_WRIST(16400, fx_palette_magenta)
+  __COLOR_TO_RIGHT_WRIST(16400, fx_palette_magenta)*/
 #endif  
 
   //Build2
@@ -257,7 +268,7 @@ const unsigned long SongTrack[] PROGMEM =
   
   //BEATS
   __FLASH_WHITE(19600)
-  __FIRE_EFFECT(19600, fx_palette_red, fx_palette_yellow, fx_palette_wr, fx_palette_wy, fx_palette_ry)
+  __FIRE_EFFECT(19600, fx_palette_red, fx_palette_blue, fx_palette_rb, fx_palette_pulse2_blue, fx_palette_pulse2_red)
 
   //calm/smooth in down
   __FLASH_WHITE(24500)
@@ -276,13 +287,14 @@ const unsigned long SongTrack[] PROGMEM =
   __COLOR_FROM_SHOULDERS_TO_CENTER(27400, fx_palette_magenta)
   __COLOR_FROM_WAIST(27900, fx_palette_magenta)
 
-  __FLASH_WHITE(29400)
+  __FLASH_WHITE(29000)
   //Take them to crazytown.. we came together, so purple again?
 /*  
   __FADE_TO(29000, fx_palette_dr)
   29400, fx_transition_fast,
   29400, fx_palette_half,*/
-  29400, fx_transition_timed_fade,
+  29000, fx_transition_timed_fade,
+  29000, fx_palette_blue,
   29400, fx_palette_red,
   29790, fx_palette_green,
   30180, fx_palette_blue,  
@@ -346,6 +358,8 @@ const unsigned long SongTrack[] PROGMEM =
 //blue fire
   __FIRE_EFFECT(50600, fx_palette_pulse2_blue, fx_palette_pulse2_cyan, fx_palette_pulse2_white, fx_palette_blue, fx_palette_cyan)
   __FIRE_EFFECT(55000, fx_palette_pulse2_blue, fx_palette_pulse2_magenta, fx_palette_db, fx_palette_dm, fx_palette_dbm)
+  
+  __FADE_TO(57200, fx_palette_magenta)
   __FADE_TO(59600, fx_palette_pulse_dark)
 
   __PLASMA_OPPOSING(60000, fx_palette_pulse2_cyan, fx_palette_pulse2_magenta)
@@ -373,21 +387,17 @@ const unsigned long SongTrack[] PROGMEM =
   //end of bwaah
 
   __FADE_TO(88000, fx_palette_rb)
-  __FLASH_WHITE(94000)
-#if LEAD  
-  __FADE_TO(94000, fx_palette_dark)
-#elif FOLLOW
-  __FADE_TO(94000, fx_palette_magenta)
-#endif
+  __FLASH(94000, fx_palette_magenta)
+  //__FADE_TO(96000, fx_palette_magenta)
 
   //98 to 107 = the spin and recover
   //pulsy approach  
  // 98500, fx_speed_2,
   //98500, fx_speed_neg,
-//  __FADE_TO(98500, fx_palette_pulse_magenta)
+  //__FADE_TO(98500, fx_palette_pulse_magenta)
 #if LEAD
 //  100000, fx_strip_all,
-  //__FADE_TO(100000, fx_palette_dark)
+  __FADE_TO(100000, fx_palette_dark)
   //pickup from spinning
   __COLOR_FROM_WRISTS(101000, fx_palette_magenta)
   __COLOR_FROM_NECK(102000, fx_palette_magenta)
@@ -404,14 +414,14 @@ const unsigned long SongTrack[] PROGMEM =
   //CHAPTER 3
   //big march around
   __FADE_TO(107900, fx_palette_half)
-  __FADE_TO(108900, fx_palette_cm)
+  __FADE_TO(108900, COLOR_ALPHA)
 
-  __FADE_TO(111000, fx_palette_cyan)
-  __FADE_TO(118000, fx_palette_magenta)
+  //__FADE_TO(111000, fx_palette_red)
+  __FADE_TO(118000, fx_palette_blue)
   __FADE_TO(119000, fx_palette_red)
   __FADE_TO(119500, fx_palette_blue)
   __FADE_TO(120000, fx_palette_red)
-  __FADE_TO(120500, fx_palette_blue)
+  __FADE_TO(120500, fx_palette_magenta)
 
   121000, fx_speed_neg,
   121000, fx_speed_4,
@@ -451,7 +461,7 @@ const unsigned long SongTrack[] PROGMEM =
   124700, fx_palette_pulse2_magenta,
   124800, fx_palette_pulse2_white,  
 
-  __FADE_TO(125000, fx_palette_half)
+  __FADE_TO(125000, fx_palette_magenta)
   __FADE_TO(126000, fx_palette_dark)
 
   //the end

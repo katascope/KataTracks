@@ -1,8 +1,8 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEAD      0 //Generally LightSuit*A silver
-#define FOLLOW    1 //Generally LightSuit*B gold
+#define LEAD      1 //Generally LightSuit*A silver
+#define FOLLOW    0 //Generally LightSuit*B gold
 
 #if LEAD
 static const char *DeviceName = "LightSuitAngelA";
