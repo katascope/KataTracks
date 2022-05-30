@@ -64,6 +64,7 @@ namespace KataTracks
                 "77C648CCE101", //LightSuitAngelB?
 
                 "91CDE3A4B695", //LightSuitAngelABad
+"F6426025BEE", //LightSuitAngelA
 
 
             };

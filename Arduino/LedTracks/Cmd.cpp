@@ -6,9 +6,9 @@
 void UpdatePalette();
 unsigned long GetTime();
 
-static CaptureTextMode captureMode = CaptureNone;
-static char captureBuffer[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0};
-static int captureCount = 0;
+//static CaptureTextMode captureMode = CaptureNone;
+//static char captureBuffer[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0};
+//static int captureCount = 0;
 
 void InstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType)
 {
@@ -18,8 +18,8 @@ void InstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdat
   {
     if (fxc.stripMask & (1<<strip)) 
     {
-      fxc.strip[strip].fxPaletteUpdateType = paletteUpdateType;
-      fxc.strip[strip].transitionType = Transition_Instant;
+      fxc.strip[strip]->fxPaletteUpdateType = paletteUpdateType;
+      fxc.strip[strip]->transitionType = Transition_Instant;
     }    
   }
 
@@ -131,6 +131,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_TransitionFast: InstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once); break;
     case Cmd_TransitionFade: InstantEvent(fxc, fx_transition_timed_fade,   FxPaletteUpdateType::Once); break;
     case Cmd_TransitionWipePos: InstantEvent(fxc, fx_transition_timed_wipe_pos,   FxPaletteUpdateType::Once); break;
+#if ENABLE_NEOPIXEL
 
     case Cmd_Brightness_Max: 
     {
@@ -144,7 +145,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
         neopixelSetBrightness(strip,BRIGHTNESS);
       break;
     }
-  
+#endif  
     default: break;
   }
 }

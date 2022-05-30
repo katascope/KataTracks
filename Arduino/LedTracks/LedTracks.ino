@@ -7,6 +7,7 @@
 #include "State.h"
 #include "Devices.h"
 static FxController fxController;
+
 static unsigned long lastTimeDisplay = 0;
 
 void setup() {
@@ -14,6 +15,7 @@ void setup() {
   Serial.print(DeviceName);
   Serial.print(F("Serial init: "));
   Serial.println(SERIAL_BAUD_RATE);
+  
 #if SYSTEM_NANO_33_BLE
   Serial.println(F("System: Arduino Nano 33 BLE"));
 #elif SYSTEM_NANO_33_IOT
@@ -37,10 +39,9 @@ void setup() {
   delay( 3000 ); // power-up safety delay
   neopixelSetup();
   for (int strip=0;strip<NUM_STRIPS;strip++)
-    for (int led=0;led<NUM_LEDS;led++)
-      fxController.strip[strip].palette[led] = 0;
+    for (int led=0;led<fxController.strip[strip]->numleds;led++)
+      fxController.strip[strip]->palette[led] = 0;
   Serial.print(F("NeoPixel init: "));
-  Serial.print(NUM_LEDS);
   Serial.print(F(" LEDs on pin "));
   Serial.println(LED_PIN);
 #else
@@ -69,16 +70,18 @@ void setup() {
   }
   else Serial.println(F("Ready"));
 
+#if ENABLE_NEOPIXEL
 //Display brightness levels
   Serial.print(F("Brightness = { "));
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    fxController.strip[strip].brightness = BRIGHTNESS;
-    neopixelSetBrightness(strip,fxController.strip[strip].brightness);
-    Serial.print(fxController.strip[strip].brightness);
+    fxController.strip[strip]->brightness = BRIGHTNESS;
+    neopixelSetBrightness(strip,fxController.strip[strip]->brightness);
+    Serial.print(fxController.strip[strip]->brightness);
     Serial.print(F(" "));
   }
   Serial.println(F(" }"));
+#endif
 
   Serial.println("Setup complete.");
 }
@@ -87,38 +90,50 @@ void UpdatePalette()
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    if ((int)fxController.strip[strip].fxPaletteUpdateType != 0)
+    if ((int)fxController.strip[strip]->fxPaletteUpdateType != 0)
     {
-      fxController.strip[strip].paletteIndex = fxController.strip[strip].paletteIndex + (fxController.strip[strip].paletteSpeed * fxController.strip[strip].paletteDirection);
-      if (fxController.strip[strip].paletteIndex >= NUM_LEDS)
-        fxController.strip[strip].paletteIndex -= NUM_LEDS;
-      if (fxController.strip[strip].paletteIndex < 0)
-        fxController.strip[strip].paletteIndex = NUM_LEDS - 1;
+      fxController.strip[strip]->paletteIndex = fxController.strip[strip]->paletteIndex + (fxController.strip[strip]->paletteSpeed * fxController.strip[strip]->paletteDirection);
+      if (fxController.strip[strip]->paletteIndex >= fxController.strip[strip]->numleds)
+        fxController.strip[strip]->paletteIndex -= fxController.strip[strip]->numleds;
+      if (fxController.strip[strip]->paletteIndex < 0)
+        fxController.strip[strip]->paletteIndex = fxController.strip[strip]->numleds - 1;
     }
-    neopixelSetPalette(strip, fxController.strip[strip].palette, fxController.strip[strip].paletteIndex);
+#if ENABLE_NEOPIXEL
+    neopixelSetPalette(strip, fxController.strip[strip]->numleds, fxController.strip[strip]->palette, fxController.strip[strip]->paletteIndex);
+#endif    
   }
 }
 
 void loop()
 {
+
+//Display status once a second
+  unsigned long t =  millis();
+  if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
+  {      
+    if (fxController.fxState != FxState_PlayingTrack)
+      FxDisplayStatus(fxController);      
+    lastTimeDisplay = t;
+  }
+  
   while (Serial.available())  
     UserCommandInput(fxController, Serial.read());
- 
+
 #if ENABLE_BLE
   blePoll(fxController);
 #endif
 
   State_Poll(fxController);
 
-  bool needsUpdate = false;
+  bool needsUpdate = true;//false;
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    if (fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Once
-    || fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Always)
+    if (fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Once
+    || fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Always)
       needsUpdate = true;
   }
   
-  if (fxController.fxState == FxState_PlayingTrack)// || needsUpdate)
+  if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
   {
     unsigned long t =  millis();
     int ledDelay = UPDATE_DELAY;
@@ -130,21 +145,9 @@ void loop()
       
       for (int strip=0;strip<NUM_STRIPS;strip++)
       {
-        if (fxController.strip[strip].fxPaletteUpdateType == FxPaletteUpdateType::Once)
-          fxController.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::Done;
+        if (fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Once)
+          fxController.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Done;
       }
     }
-
   }
-
-
-//Display status once a second
-  unsigned long t =  millis();
-  if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
-  {      
-    if (fxController.fxState != FxState_PlayingTrack)
-      FxDisplayStatus(fxController);      
-    lastTimeDisplay = t;
-  }
-
 }

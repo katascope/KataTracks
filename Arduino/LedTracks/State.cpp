@@ -7,14 +7,16 @@
 
 void State_Poll_TestPattern(FxController &fxc)
 {
+#if ENABLE_NEOPIXEL
+
   FxEventProcess(fxc, fx_strip_all);
   FxEventProcess(fxc, fx_transition_fast);
   //Serial.println("Polling test pattern");
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
-      fxc.strip[strip].paletteDirection = 1;
-      fxc.strip[strip].paletteSpeed = 1;
-      fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::Always;
+      fxc.strip[strip]->paletteDirection = 0;
+      fxc.strip[strip]->paletteSpeed = 0;
+      fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Always;
     }
 
     FxEventProcess(fxc, fx_strip_all);//fx_strip + LEDS_0);
@@ -22,55 +24,82 @@ void State_Poll_TestPattern(FxController &fxc)
 #if !ENABLE_MULTISTRIP
     FxEventProcess(fxc, fx_palette_half);
 #endif    
-    neopixelSetPalette(0, fxc.strip[0].palette, fxc.strip[0].paletteIndex);
+    neopixelSetPalette(0, fxc.strip[0]->numleds, fxc.strip[0]->palette, fxc.strip[0]->paletteIndex);
+    neopixelSetPixel(0, 0, CRGB_WHITE);
     
 #if ENABLE_MULTISTRIP    
     FxEventProcess(fxc, fx_strip + LEDS_1);
     FxEventProcess(fxc, fx_palette_red);
-    neopixelSetPalette(1, fxc.strip[1].palette, fxc.strip[1].paletteIndex);
+    neopixelSetPalette(1, fxc.strip[1]->numleds, fxc.strip[1]->palette, fxc.strip[1]->paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_2);
     FxEventProcess(fxc, fx_palette_yellow);
-    neopixelSetPalette(2, fxc.strip[2].palette, fxc.strip[2].paletteIndex);
+    neopixelSetPalette(2, fxc.strip[2]->numleds, fxc.strip[2]->palette, fxc.strip[2]->paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_3);
     FxEventProcess(fxc, fx_palette_green);
-    neopixelSetPalette(3, fxc.strip[3].palette, fxc.strip[3].paletteIndex);
+    neopixelSetPalette(3, fxc.strip[3]->numleds, fxc.strip[3]->palette, fxc.strip[3]->paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_4);
     FxEventProcess(fxc, fx_palette_cyan);
-    neopixelSetPalette(4, fxc.strip[4].palette, fxc.strip[4].paletteIndex);
+    neopixelSetPalette(4, fxc.strip[4]->numleds, fxc.strip[4]->palette, fxc.strip[4]->paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_5);
     FxEventProcess(fxc, fx_palette_blue);
-    neopixelSetPalette(5, fxc.strip[5].palette, fxc.strip[5].paletteIndex);
+    neopixelSetPalette(5, fxc.strip[5]->numleds, fxc.strip[5]->palette, fxc.strip[5]->paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_6);
     FxEventProcess(fxc, fx_palette_magenta);
-    neopixelSetPalette(6, fxc.strip[6].palette, fxc.strip[6].paletteIndex);
+    neopixelSetPalette(6, fxc.strip[6]->numleds, fxc.strip[6]->palette, fxc.strip[6]->paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_7);
-    FxEventProcess(fxc, fx_palette_orange);
-    neopixelSetPalette(7, fxc.strip[7].palette, fxc.strip[7].paletteIndex);
+    FxEventProcess(fxc, fx_palette_magenta);
+    neopixelSetPalette(7, fxc.strip[7]->numleds, fxc.strip[7]->palette, fxc.strip[7]->paletteIndex);
 #endif    
     FxEventProcess(fxc, fx_strip_all);
+
+    for (int strip=0;strip<NUM_STRIPS;strip++)
+    {
+        fxc.strip[strip]->palette[0] = CRGB_ORANGE;    
+        fxc.strip[strip]->initialPalette[0] = CRGB_ORANGE;
+        fxc.strip[strip]->nextPalette[0] = CRGB_ORANGE;
+        int nl = fxc.strip[strip]->numleds;
+        fxc.strip[strip]->palette[nl-1] = CRGB_ORANGE;    
+        fxc.strip[strip]->initialPalette[nl-1] = CRGB_ORANGE;
+        fxc.strip[strip]->nextPalette[nl-1] = CRGB_ORANGE;
+    }
+#endif    
 }
 
-void CopyRange(FxController &fxc, int strip, int first, int last)
+void CopyFromNext(FxController &fxc, int strip, int first, int last)
 {
-  if (last >= NUM_LEDS)
-   last = NUM_LEDS;
+  if (last >= fxc.strip[strip]->numleds)
+   last = fxc.strip[strip]->numleds;
   if (first < 0)
    first = 0;
   
-      if (first < last)
-        for (int i = first;i<last; i++)
-          fxc.strip[strip].palette[i] = fxc.strip[strip].nextPalette[i];
-      else
-        for (int i = first;i>=last;i--)
-          fxc.strip[strip].palette[i] = fxc.strip[strip].nextPalette[i];
+  if (first < last)
+    for (int i = first;i<last; i++)
+      fxc.strip[strip]->palette[i] = fxc.strip[strip]->nextPalette[i];
+  else
+    for (int i = first;i>=last;i--)
+      fxc.strip[strip]->palette[i] = fxc.strip[strip]->nextPalette[i];
 }
 
+void CopyFromPrev(FxController &fxc, int strip, int first, int last)
+{
+  if (last >= fxc.strip[strip]->numleds)
+   last = fxc.strip[strip]->numleds;
+  if (first < 0)
+   first = 0;
+  
+  if (first < last)
+    for (int i = first;i<last; i++)
+      fxc.strip[strip]->palette[i] = fxc.strip[strip]->initialPalette[i];
+  else
+    for (int i = first;i>=last;i--)
+      fxc.strip[strip]->palette[i] = fxc.strip[strip]->initialPalette[i];
+}
 
 void PrintPalette(FxController &fxc)
 {
@@ -78,21 +107,21 @@ void PrintPalette(FxController &fxc)
   Serial.print(F(" ini("));     
   for (int i=0;i<limit;i++)
   {
-    Serial.print(fxc.strip[0].initialPalette[i], HEX);
+    Serial.print(fxc.strip[0]->initialPalette[i], HEX);
     Serial.print(F(" "));
   }
   Serial.print(F("), ")); 
   Serial.print(F(" pal("));
   for (int i=0;i<limit;i++)
   {
-    Serial.print(fxc.strip[0].palette[i], HEX);
+    Serial.print(fxc.strip[0]->palette[i], HEX);
     Serial.print(F(" "));
   }
   Serial.print(F(")")); 
   Serial.print(F(" next("));
   for (int i=0;i<limit;i++)
   {
-    Serial.print(fxc.strip[0].nextPalette[i], HEX);
+    Serial.print(fxc.strip[0]->nextPalette[i], HEX);
     Serial.print(F(" "));
   }
   Serial.print(F(")"));   
@@ -136,12 +165,12 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   {
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
-      if (fxc.strip[strip].transitionType >= Transition_TimedWipePos         
-          && fxc.strip[strip].transitionType <= Transition_TimedWipeInOut)
+      if (fxc.strip[strip]->transitionType >= Transition_TimedWipePos         
+          && fxc.strip[strip]->transitionType <= Transition_TimedFadeCos)
       {
-        CopyPalette(fxc.strip[strip].palette, fxc.strip[strip].nextPalette);
+        CopyPalette(fxc.strip[strip]->numleds, fxc.strip[strip]->palette, fxc.strip[strip]->nextPalette);
       }
-      fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::Always;
+      fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Always;
     }
 
     for (int i = 0; i < numSongTracks; i++)
@@ -160,7 +189,7 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
         Serial.print(F(" "));
         for (int strip=0;strip<NUM_STRIPS;strip++)
         {
-          PrintFxTransitionName(fxc.strip[strip].transitionType);
+          PrintFxTransitionName(fxc.strip[strip]->transitionType);
           Serial.print(F(", "));
         }       
         Serial.print(F(" => "));
@@ -175,43 +204,56 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   fxc.transitionMux = ((float)timecode - (float)getTimecodeLastMatched() ) / (float)totalSpan;
 
 //For debugging palette/transitions
-/*
+
   Serial.print(F("Mux="));
   Serial.print(fxc.transitionMux);
   Serial.print(F(" .. "));
   PrintPalette(fxc);
   Serial.println();
-*/  
+  
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
+        int numleds = fxc.strip[strip]->numleds;
     if (fxc.stripMask & (1<<strip))
     {    
-      if (fxc.strip[strip].transitionType == Transition_TimedFade)
+      if (fxc.strip[strip]->transitionType == Transition_TimedFade)
       {
-        for (int i = 0; i < NUM_LEDS; i++)
-          fxc.strip[strip].palette[i] = LerpRGB(fxc.transitionMux,fxc.strip[strip].initialPalette[i],fxc.strip[strip].nextPalette[i]);
+        for (int i = 0; i < numleds; i++)
+          fxc.strip[strip]->palette[i] = LerpRGB(fxc.transitionMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
       }
-      if (fxc.strip[strip].transitionType == Transition_TimedWipePos)
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipePos)
       {
-        int limit = fxc.transitionMux * (NUM_LEDS -1);
-        CopyRange(fxc, strip, NUM_LEDS - 1, NUM_LEDS -1 - limit);      
+        int limit = fxc.transitionMux * (numleds -1);
+        CopyFromNext(fxc, strip, numleds - 1, numleds -1 - limit);      
       }
-      if (fxc.strip[strip].transitionType == Transition_TimedWipeNeg)
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeNeg)
       {
-        int limit = fxc.transitionMux * (NUM_LEDS -1);
-        CopyRange(fxc,strip, 0,limit);
+        int limit = fxc.transitionMux * (numleds -1);
+        CopyFromNext(fxc,strip, 0,limit);
       }
-      if (fxc.strip[strip].transitionType == Transition_TimedWipeOutIn)
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeOutIn)
       {
-        int limit = fxc.transitionMux * (NUM_LEDS/2);
-        CopyRange(fxc,strip, 0,limit);
-        CopyRange(fxc,strip, NUM_LEDS-1,NUM_LEDS-limit);
+        int limit = fxc.transitionMux * (numleds/2);
+        CopyFromNext(fxc,strip, 0,limit);
+        CopyFromNext(fxc,strip, numleds-1,numleds-limit);
       }
-      if (fxc.strip[strip].transitionType == Transition_TimedWipeInOut)
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeInOut)
       {
-        int limit = fxc.transitionMux * (NUM_LEDS/2);
-        CopyRange(fxc,strip, NUM_LEDS/2,NUM_LEDS/2-limit);
-        CopyRange(fxc,strip, NUM_LEDS/2,NUM_LEDS/2+limit);
+        int limit = fxc.transitionMux * (numleds/2);
+        CopyFromNext(fxc,strip, numleds/2,numleds/2-limit);
+        CopyFromNext(fxc,strip, numleds/2,numleds/2+limit);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedFadeSin)
+      {
+        float sinMux = abs(sin(fxc.transitionMux * 3.14159f * 4 * 1.5f));
+        for (int i = 0; i < numleds; i++)
+          fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedFadeCos)
+      {
+        float sinMux = cos(fxc.transitionMux * 3.14159f * 2 * 1.5f);
+        for (int i = 0; i < numleds; i++)
+          fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
       }
     }
     

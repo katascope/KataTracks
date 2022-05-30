@@ -104,6 +104,9 @@ enum FxEvent
   fx_transition_timed_wipe_outin,
   fx_transition_timed_wipe_inout,
 
+  fx_transition_timed_fade_sin,
+  fx_transition_timed_fade_cos,
+
   fx_palette_lead,
   fx_palette_follow,
 
@@ -282,6 +285,8 @@ enum FxTransitionType
   Transition_TimedWipeNeg   = 3,
   Transition_TimedWipeOutIn = 4,
   Transition_TimedWipeInOut = 5,
+  Transition_TimedFadeSin   = 6,
+  Transition_TimedFadeCos   = 7,
 };
 
 enum FxTrackEndAction
@@ -336,7 +341,7 @@ unsigned char lerp(float mux, unsigned char a, unsigned char b);
 uint32_t LerpRGB(float t, unsigned char r1, unsigned char g1, unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2);
 uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2);
 void LerpPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, uint32_t* microPalette, unsigned int microPaletteSize);
-void CopyPalette(uint32_t *dst, uint32_t *src);
+void CopyPalette(int numleds, uint32_t *dst, uint32_t *src);
 
 uint32_t ShortnameToCRGB(char shortName);
 

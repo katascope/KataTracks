@@ -6,20 +6,15 @@
 
 void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, unsigned int palSize)
 {
-      if (fxController.strip[strip].transitionType == Transition_Instant)
+  int numleds = fxController.strip[strip]->numleds;
+      if (fxController.strip[strip]->transitionType == Transition_Instant)
       {
-        LerpPaletteFromMicroPalette(fxController.strip[strip].palette, NUM_LEDS, pal16, palSize);
+        LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
       }
-      else if (fxController.strip[strip].transitionType == Transition_TimedFade)
+      else
       {
-        CopyPalette(fxController.strip[strip].initialPalette, fxController.strip[strip].palette);
-        LerpPaletteFromMicroPalette(fxController.strip[strip].nextPalette, NUM_LEDS, pal16, palSize);
-      }
-      else if (fxController.strip[strip].transitionType >= Transition_TimedWipePos        
-          && fxController.strip[strip].transitionType <= Transition_TimedWipeInOut)
-      {
-        CopyPalette(fxController.strip[strip].initialPalette, fxController.strip[strip].palette);
-        LerpPaletteFromMicroPalette(fxController.strip[strip].nextPalette, NUM_LEDS, pal16, palSize);
+        CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+        LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
       }
 }
 
@@ -137,21 +132,22 @@ void FxDisplayStatus(FxController &fxc)
       Serial.print(F(",BLE off"));
 #endif
   //Strip debugging
-  
+
+#if ENABLE_NEOPIXEL  
       for (int strip=0;strip<NUM_STRIPS;strip++)
       {
         Serial.print(F("["));
         Serial.print(F("b="));
-        Serial.print(fxc.strip[strip].brightness);
+        Serial.print(fxc.strip[strip]->brightness);
         Serial.print(F(",ps="));
-        Serial.print(fxc.strip[strip].paletteSpeed);
+        Serial.print(fxc.strip[strip]->paletteSpeed);
         Serial.print(F(",pd="));
-        Serial.print(fxc.strip[strip].paletteDirection);
+        Serial.print(fxc.strip[strip]->paletteDirection);
         Serial.print(F(",u="));
-        Serial.print(fxc.strip[strip].fxPaletteUpdateType);
+        Serial.print(fxc.strip[strip]->fxPaletteUpdateType);
         Serial.print(F("] "));
       }
-    
+#endif    
       Serial.print(F(",endAction="));
       PrintFxTrackEndAction(fxc.fxTrackEndAction);
       Serial.print(F(",ftc="));
@@ -178,15 +174,16 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
   {
     if (fxc.stripMask & (1<<strip)) 
     {
-      fxc.strip[strip].transitionType = t;
+      fxc.strip[strip]->transitionType = t;
       if (t == Transition_TimedWipePos || t == Transition_TimedWipeNeg
-        || t == Transition_TimedWipeOutIn || t == Transition_TimedWipeInOut) 
+        || t == Transition_TimedWipeOutIn || t == Transition_TimedWipeInOut
+        || t == Transition_TimedFadeSin || t == Transition_TimedFadeCos) 
         {
-          fxc.strip[strip].fxPaletteUpdateType = FxPaletteUpdateType::None;
-          fxc.strip[strip].paletteIndex = 0;
+          fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::None;
+          fxc.strip[strip]->paletteIndex = 0;
         }
         if (t == fx_transition_timed_wipe_neg)
-          fxc.strip[strip].paletteIndex = 15;
+          fxc.strip[strip]->paletteIndex = 15;
     }
   }
 }
@@ -197,9 +194,9 @@ void ResetPaletteSpeed(FxController &fxc)
   {
     if (fxc.stripMask & (1<<strip)) 
     {
-      fxc.strip[strip].paletteSpeed = 0;
-      fxc.strip[strip].paletteIndex = 0;
-      fxc.strip[strip].paletteDirection = 1;
+      fxc.strip[strip]->paletteSpeed = 0;
+      fxc.strip[strip]->paletteIndex = 0;
+      fxc.strip[strip]->paletteDirection = 1;
     }
   }
 }
@@ -208,14 +205,14 @@ void SetPaletteSpeed(FxController &fxc, int v)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
     if (fxc.stripMask & (1<<strip)) 
-      fxc.strip[strip].paletteSpeed = v;
+      fxc.strip[strip]->paletteSpeed = v;
 }
 
 void ChangePaletteSpeed(FxController &fxc, int ps)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
     if (fxc.stripMask & (1<<strip)) 
-      fxc.strip[strip].paletteSpeed += ps;
+      fxc.strip[strip]->paletteSpeed += ps;
 }
 
 void SetPaletteDirection(FxController &fxc, int c)
@@ -224,11 +221,11 @@ void SetPaletteDirection(FxController &fxc, int c)
   {
     if (fxc.stripMask & (1<<strip)) 
     {
-      fxc.strip[strip].paletteDirection = c;
-      if (fxc.strip[strip].paletteSpeed >= 18)
-        fxc.strip[strip].paletteSpeed = 18;
-      if (fxc.strip[strip].paletteSpeed < 0)
-        fxc.strip[strip].paletteSpeed = 0;
+      fxc.strip[strip]->paletteDirection = c;
+      if (fxc.strip[strip]->paletteSpeed >= 18)
+        fxc.strip[strip]->paletteSpeed = 18;
+      if (fxc.strip[strip]->paletteSpeed < 0)
+        fxc.strip[strip]->paletteSpeed = 0;
     }
   }
 }
@@ -288,6 +285,8 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_transition_timed_wipe_neg:   SetTransitionType(fxc,Transition_TimedWipeNeg);break;
     case fx_transition_timed_wipe_outin: SetTransitionType(fxc,Transition_TimedWipeOutIn);break;
     case fx_transition_timed_wipe_inout: SetTransitionType(fxc,Transition_TimedWipeInOut);break;
+    case fx_transition_timed_fade_sin:   SetTransitionType(fxc,Transition_TimedFadeSin);break;
+    case fx_transition_timed_fade_cos:   SetTransitionType(fxc,Transition_TimedFadeCos);break;
 
     case fx_palette_lead:   CreateSingleColor(fxc, BLUE);break;
     case fx_palette_follow: CreateSingleColor(fxc, RED);break;

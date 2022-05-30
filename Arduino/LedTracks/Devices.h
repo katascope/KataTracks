@@ -6,7 +6,8 @@
 #include <Adafruit_NeoPixel.h>
 void neopixelSetup();
 void neopixelSetBrightness(int strip, unsigned char brightness);
-void neopixelSetPalette(int slot, uint32_t *palette, int paletteIndex);
+void neopixelSetPalette(int slot, int numleds , uint32_t *palette, int paletteIndex);
+void neopixelSetPixel(int slot, int offset, uint32_t rgb);
 #endif
 //////////////// NeoPixel Section ////////////////
 

@@ -6,15 +6,15 @@
 /////////////////////////////////////////////////////////////////////////
 #if ENABLE_NEOPIXEL
 #include <Adafruit_NeoPixel.h>
-static Adafruit_NeoPixel strip0 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+0, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip0 = Adafruit_NeoPixel(NUM_LEDS_0, LED_PIN+0, NEO_GRB + NEO_KHZ800);
 #if ENABLE_MULTISTRIP
-static Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+1, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+2, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+3, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+4, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+5, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip6 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+6, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip7 = Adafruit_NeoPixel(NUM_LEDS, LED_PIN+7, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUM_LEDS_1, LED_PIN+1, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUM_LEDS_2, LED_PIN+2, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUM_LEDS_3, LED_PIN+3, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(NUM_LEDS_4, LED_PIN+4, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(NUM_LEDS_5, LED_PIN+5, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip6 = Adafruit_NeoPixel(NUM_LEDS_6, LED_PIN+6, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip7 = Adafruit_NeoPixel(NUM_LEDS_7, LED_PIN+7, NEO_GRB + NEO_KHZ800);
 #endif
 void neopixelSetup()
 {
@@ -80,31 +80,69 @@ void neopixelSetBrightness(int strip, unsigned char brightness)
 #endif  
   }
 }
-void neopixelSetPalette(int slot, uint32_t *palette, int paletteIndex)
+
+void neopixelSetPixel(int slot, int offset, uint32_t rgb)
+{
+    switch (slot)
+    {
+      case 0: strip0.setPixelColor(offset, rgb); break;
+#if ENABLE_MULTISTRIP  
+      case 1: strip1.setPixelColor(offset, rgb); break;
+      case 2: strip2.setPixelColor(offset, rgb); break;
+      case 3: strip3.setPixelColor(offset, rgb); break;
+      case 4: strip4.setPixelColor(offset, rgb); break;
+      case 5: strip5.setPixelColor(offset, rgb); break;
+      case 6: strip6.setPixelColor(offset, rgb); break;
+      case 7: strip7.setPixelColor(offset, rgb); break;
+#endif      
+    }
+}
+
+void neopixelSetPalette(int slot, int numleds, uint32_t *palette, int paletteIndex)
 {  
   uint32_t offset = paletteIndex;
   unsigned char r,g,b;
   unsigned char h,s,v;
-  for(uint16_t i=0; i<strip0.numPixels(); i++)
+  for(uint16_t i=0; i<numleds; i++)
   {
-    if (offset >= strip0.numPixels())
+    if (offset >= numleds)
      offset=0;    
-    
-    switch (slot)
+
+    uint32_t rgb = palette[i];
+    r = (rgb >> 16) & 0xFF;
+    g = (rgb >> 8) & 0xFF;
+    b = (rgb >> 0) & 0xFF;
+
+//shimmer effect, unstable
+/*    int scale = 32;
+    if (r < 255-scale && r > scale && g < 255-scale
+       && g > scale && b < 255-scale && b > scale) 
+       {
+        int s = random(-scale,scale);
+        r += s;
+        g += s;
+        b += s;
+       }
+*/
+//pulsar effect
+/*
+    if (i %NUM_LEDS==0) 
     {
-      case 0: strip0.setPixelColor(offset, palette[i]); break;
-#if ENABLE_MULTISTRIP  
-      case 1: strip1.setPixelColor(offset, palette[i]); break;
-      case 2: strip2.setPixelColor(offset, palette[i]); break;
-      case 3: strip3.setPixelColor(offset, palette[i]); break;
-      case 4: strip4.setPixelColor(offset, palette[i]); break;
-      case 5: strip5.setPixelColor(offset, palette[i]); break;
-      case 6: strip6.setPixelColor(offset, palette[i]); break;
-      case 7: strip7.setPixelColor(offset, palette[i]); break;
-#endif      
+      r=g=0;
+      b=255;
+    }*/
+
+    //rgb=LEDRGB(r,g,b);
+
+    if (offset < 4)
+    {
+    //  rgb = CRGB_WHITE;
     }
+    
+    neopixelSetPixel(slot,offset,rgb);
     offset++;    
   }
+  
     switch (slot)
     {
       case 0: strip0.show();break;
