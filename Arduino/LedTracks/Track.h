@@ -325,7 +325,7 @@
 
     __COLOR_FROM_FEET(24500, COLOR_ALPHA)
     __COLOR_FROM_BELLY(25250, COLOR_ALPHA)
-    __COLOR_FROM_SHOULDERS_TO_WRISTS(26000, COLOR_ALPHA)
+    __COLOR_FROM_SHOULDERS_TO_WRISTS(25800, COLOR_ALPHA)
 
     __FLASH_WHITE(26500)
     //__COLOR_FROM_WRISTS(26900, fx_palette_dark)
@@ -422,7 +422,7 @@
     57200, fx_speed_neg, 
     57200, fx_transition_fast,
     //57200, fx_palette_dbm,
-    __FADE_TO(57200, fx_palette_magenta)
+    __FADE_TO(57200, fx_palette_blue)
     __FADE_TO(59600, fx_palette_pulse_dark)
 
     __PLASMA_OPPOSING(60000, fx_palette_pulse2_cyan, fx_palette_pulse2_magenta)
@@ -477,6 +477,8 @@
     //98500, fx_speed_neg,
     //__FADE_TO(98500, fx_palette_pulse_magenta)
 #if LEAD
+    97000, fx_speed_2,
+    97000, fx_speed_neg,
     __FADE_TO(97000, fx_palette_pulse2_magenta)
     //  100000, fx_strip_all,
     __FADE_TO(100000, fx_palette_dark)
