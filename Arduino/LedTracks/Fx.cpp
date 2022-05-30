@@ -168,6 +168,29 @@ void FxDisplayStatus(FxController &fxc)
       Serial.println();
 }
 
+void sequence_linear(unsigned int arr[], int n)
+{
+  for (unsigned int i=0;i < n;i++)
+    arr[i] = n;
+}
+
+void swap(unsigned int *a, unsigned int *b)
+{
+  unsigned int temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+void sequence_random(unsigned int arr[], int n)
+{
+  srand(time(NULL));
+  for (int i = n - 1; i > 0; i--)
+  {
+    unsigned int j = rand() % (i + 1);
+    swap(&arr[i], &arr[j]);
+  }
+}
+
 void SetTransitionType(FxController &fxc, FxTransitionType t)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
@@ -185,6 +208,13 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
         if (t == fx_transition_timed_wipe_neg)
           fxc.strip[strip]->paletteIndex = 15;
     }
+    if (t == Transition_TimedWipeRandom)
+    {
+      fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::None;
+      fxc.strip[strip]->paletteIndex = 0;
+      //sequence_linear(fxc.strip[strip]->sequence, fxc.strip[strip]->numleds);
+      sequence_random(fxc.strip[strip]->sequence, fxc.strip[strip]->numleds);
+    }    
   }
 }
 
@@ -279,14 +309,15 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_speed_rst:
       ResetPaletteSpeed(fxc);break;
       
-    case fx_transition_fast:             SetTransitionType(fxc,Transition_Instant);break;
-    case fx_transition_timed_fade:       SetTransitionType(fxc,Transition_TimedFade);break;
-    case fx_transition_timed_wipe_pos:   SetTransitionType(fxc,Transition_TimedWipePos);break;
-    case fx_transition_timed_wipe_neg:   SetTransitionType(fxc,Transition_TimedWipeNeg);break;
-    case fx_transition_timed_wipe_outin: SetTransitionType(fxc,Transition_TimedWipeOutIn);break;
-    case fx_transition_timed_wipe_inout: SetTransitionType(fxc,Transition_TimedWipeInOut);break;
-    case fx_transition_timed_fade_sin:   SetTransitionType(fxc,Transition_TimedFadeSin);break;
-    case fx_transition_timed_fade_cos:   SetTransitionType(fxc,Transition_TimedFadeCos);break;
+    case fx_transition_fast:              SetTransitionType(fxc,Transition_Instant);break;
+    case fx_transition_timed_fade:        SetTransitionType(fxc,Transition_TimedFade);break;
+    case fx_transition_timed_wipe_pos:    SetTransitionType(fxc,Transition_TimedWipePos);break;
+    case fx_transition_timed_wipe_neg:    SetTransitionType(fxc,Transition_TimedWipeNeg);break;
+    case fx_transition_timed_wipe_outin:  SetTransitionType(fxc,Transition_TimedWipeOutIn);break;
+    case fx_transition_timed_wipe_inout:  SetTransitionType(fxc,Transition_TimedWipeInOut);break;
+    case fx_transition_timed_wipe_random: SetTransitionType(fxc,Transition_TimedWipeRandom);break;
+    case fx_transition_timed_fade_sin:    SetTransitionType(fxc,Transition_TimedFadeSin);break;
+    case fx_transition_timed_fade_cos:    SetTransitionType(fxc,Transition_TimedFadeCos);break;
 
     case fx_palette_lead:   CreateSingleColor(fxc, BLUE);break;
     case fx_palette_follow: CreateSingleColor(fxc, RED);break;

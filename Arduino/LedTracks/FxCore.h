@@ -103,6 +103,7 @@ enum FxEvent
   fx_transition_timed_wipe_neg,
   fx_transition_timed_wipe_outin,
   fx_transition_timed_wipe_inout,
+  fx_transition_timed_wipe_random,
 
   fx_transition_timed_fade_sin,
   fx_transition_timed_fade_cos,
@@ -279,14 +280,15 @@ struct Fx {
 
 enum FxTransitionType
 {
-  Transition_Instant        = 0,
-  Transition_TimedFade      = 1,
-  Transition_TimedWipePos   = 2,
-  Transition_TimedWipeNeg   = 3,
-  Transition_TimedWipeOutIn = 4,
-  Transition_TimedWipeInOut = 5,
-  Transition_TimedFadeSin   = 6,
-  Transition_TimedFadeCos   = 7,
+  Transition_Instant         = 0,
+  Transition_TimedFade       = 1,
+  Transition_TimedWipePos    = 2,
+  Transition_TimedWipeNeg    = 3,
+  Transition_TimedWipeOutIn  = 4,
+  Transition_TimedWipeInOut  = 5,
+  Transition_TimedWipeRandom = 6,
+  Transition_TimedFadeSin    = 7,
+  Transition_TimedFadeCos    = 8,
 };
 
 enum FxTrackEndAction

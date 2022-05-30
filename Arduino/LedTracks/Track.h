@@ -38,6 +38,10 @@
   I + 1000, fx_transition_fast,\
   I + 1000, fx_palette_dark,
 
+#define __RANDOM_TO(I, FXRGB) \
+  I, fx_transition_timed_wipe_random, \
+  I, FXRGB,
+
 #define __FADE_TO(I, FXRGB) \
   I, fx_transition_timed_fade, \
   I, FXRGB,
@@ -243,7 +247,7 @@
     __TRACK_BEGIN
 
     __FLASH_WHITE(1000)
-    1000, fx_transition_timed_wipe_inout,
+    1000, fx_transition_timed_wipe_random,
     1000, fx_palette_red,  
     5000, fx_palette_yellow,  
     10000, fx_palette_green,  
@@ -479,9 +483,12 @@
 #if LEAD
     97000, fx_speed_2,
     97000, fx_speed_neg,
-    __FADE_TO(97000, fx_palette_pulse2_magenta)
+    97000, fx_transition_timed_wipe_random,
+    97000, fx_palette_dark,//fx_palette_pulse2_magenta,
+    //__FADE_TO(97000, fx_palette_pulse2_magenta)
     //  100000, fx_strip_all,
-    __FADE_TO(100000, fx_palette_dark)
+    //__FADE_TO(100000, fx_palette_dark)
+    100000, fx_palette_dark,
     //pickup from spinning
     __COLOR_FROM_WRISTS(101000, fx_palette_magenta)
     __COLOR_FROM_NECK(102000, fx_palette_magenta)
@@ -497,15 +504,24 @@
 
     //CHAPTER 3
     //big march around
-    __FADE_TO(108000, fx_palette_half)
-    __BURST_OUT_TO(109000, COLOR_ALPHA)
+    __FADE_TO(108000, COLOR_ALPHA)
+    __BURST_OUT_TO(109000, fx_palette_half)
+    __BURST_OUT_TO(109500, COLOR_BETA)
     __BURST_OUT_TO(110000, fx_palette_half)
-    __BURST_OUT_TO(111000, COLOR_BETA)
+    __BURST_OUT_TO(110500, COLOR_ALPHA)
+    __BURST_OUT_TO(111000, fx_palette_half)
+    __BURST_OUT_TO(111500, COLOR_BETA)
     __BURST_OUT_TO(112000, fx_palette_half)
-    __BURST_OUT_TO(113000, COLOR_ALPHA)
+    __BURST_OUT_TO(112500, COLOR_ALPHA)
+    __BURST_OUT_TO(113000, fx_palette_half)
+    __BURST_OUT_TO(113500, COLOR_BETA)
     __BURST_OUT_TO(114000, fx_palette_half)
-    __BURST_OUT_TO(115000, COLOR_BETA)
+    __BURST_OUT_TO(114500, COLOR_ALPHA)
+    __BURST_OUT_TO(115000, fx_palette_half)
+    __BURST_OUT_TO(115500, COLOR_BETA)
     __BURST_OUT_TO(116000, fx_palette_half)
+    __BURST_OUT_TO(116500, COLOR_ALPHA)
+    __BURST_OUT_TO(117000, fx_palette_half)
 
     //__FADE_TO(111000, fx_palette_red)
     __FADE_TO(118000, fx_palette_blue)

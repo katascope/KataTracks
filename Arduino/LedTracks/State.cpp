@@ -205,7 +205,9 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
 
 //For debugging palette/transitions
 
-  Serial.print(F("Mux="));
+  Serial.print(F("Tr="));
+  PrintFxTransitionName(fxc.strip[0]->transitionType);
+  Serial.print(F(" Mux="));
   Serial.print(fxc.transitionMux);
   Serial.print(F(" .. "));
   PrintPalette(fxc);
@@ -242,6 +244,15 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
         int limit = fxc.transitionMux * (numleds/2);
         CopyFromNext(fxc,strip, numleds/2,numleds/2-limit);
         CopyFromNext(fxc,strip, numleds/2,numleds/2+limit);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeRandom)
+      {
+        int limit = fxc.transitionMux * (numleds -1);
+        for (int i=0;i<limit;i++)
+        {
+          int remap = fxc.strip[strip]->sequence[i];
+          fxc.strip[strip]->palette[remap] = LerpRGB(fxc.transitionMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
+        }
       }
       if (fxc.strip[strip]->transitionType == Transition_TimedFadeSin)
       {

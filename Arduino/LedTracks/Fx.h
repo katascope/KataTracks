@@ -14,6 +14,7 @@ public:
   uint32_t *palette;
   uint32_t *nextPalette;
   uint32_t *initialPalette;
+  unsigned int *sequence;
   //uint32_t palette[80];
   //uint32_t nextPalette[80];
   //uint32_t initialPalette[80];
@@ -27,11 +28,13 @@ public:
     palette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
     nextPalette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
     initialPalette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
+    sequence = (unsigned int *)malloc(sizeof(sequence) * numleds);
     for (int i=0;i<numleds;i++)
     {
       palette[i] = LEDRGB(0,0,0);
       nextPalette[i] = LEDRGB(0,0,0);
       initialPalette[i] = LEDRGB(0,0,0);
+      sequence[i] = i;
     }
   } 
 };

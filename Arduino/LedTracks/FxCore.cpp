@@ -113,6 +113,7 @@ void PrintFxEventName(int event)
     case fx_transition_timed_wipe_neg:Serial.print(F("t-timed-wipe-neg"));return;
     case fx_transition_timed_wipe_outin:Serial.print(F("t-timed-wipe-outin"));return;
     case fx_transition_timed_wipe_inout:Serial.print(F("t-timed-wipe-inout"));return;
+    case fx_transition_timed_wipe_random:Serial.print(F("t-timed-wipe-rnd"));return;
     case fx_transition_timed_fade_sin:Serial.print(F("t-timed-wipe-sine"));return;    
     case fx_transition_timed_fade_cos:Serial.print(F("t-timed-wipe-sine"));return;    
     
@@ -255,6 +256,7 @@ void PrintFxTransitionName(FxTransitionType t)
     case Transition_TimedWipeNeg:   Serial.print(F("Wip-")); return;
     case Transition_TimedWipeOutIn: Serial.print(F("WipOI")); return;
     case Transition_TimedWipeInOut: Serial.print(F("WipIO")); return;
+    case Transition_TimedWipeRandom: Serial.print(F("WipRnd")); return;
     case Transition_TimedFadeSin:   Serial.print(F("FadeSin")); return;
     case Transition_TimedFadeCos:   Serial.print(F("FadeCos")); return;
     default: Serial.print(F("Unknown"));
