@@ -43,12 +43,20 @@
   I, FXRGB,
 
 #define __BURST_OUT_TO(I, FXRGB) \
+  I, fx_speed_rst, \
   I, fx_transition_timed_wipe_inout, \
   I, FXRGB,
 
 #define __BURST_IN_TO(I, FXRGB) \
+  I, fx_speed_rst, \
   I, fx_transition_timed_wipe_out, \
   I, FXRGB,
+
+#define __BURST_WHITE(I) \
+  I, fx_strip_all, \
+  I, fx_transition_timed_wipe_inout, \
+  I, fx_palette_half, \
+  I, fx_speed_rst,
 
 #define __FLASH_WHITE(I) \
   I, fx_strip_all, \
@@ -118,7 +126,7 @@
   I, fx_speed_rst, \
   I, fx_speed_3, \
   I, fx_speed_neg, \
-  I, fx_transition_timed_wipe_pos, \
+  I, fx_transition_timed_wipe_pos, \  
   I, FXRGB1, \
   I+600, FXRGB2, \
   I+1200, FXRGB3, \
@@ -215,6 +223,18 @@
   I, fx_speed_rst, \
   I, fx_strip + (RIGHT_CHEST_A|RIGHT_CHEST_B), \
   I, fx_transition_timed_wipe_pos, \
+  I, FXRGB, \
+
+#define __SIDE_KICK_EVENS(I, FXRGB) \
+  I, fx_strip + (LEDS_0|LEDS_2|LEDS_4|LEDS_6), \
+  I, fx_speed_rst, \
+  I, fx_transition_timed_wipe_outin, \
+  I, FXRGB, \
+  
+#define __SIDE_KICK_ODDS(I, FXRGB) \
+  I, fx_strip + (LEDS_1|LEDS_3|LEDS_5|LEDS_7), \
+  I, fx_speed_rst, \
+  I, fx_transition_timed_wipe_inout, \
   I, FXRGB, \
 
   //Multistrip
@@ -317,24 +337,25 @@
     __COLOR_FROM_SHOULDERS_TO_CENTER(27400, fx_palette_magenta)
     __COLOR_FROM_WAIST(27900, fx_palette_magenta)
 
-    __FLASH_WHITE(29000)
+    29000, fx_strip_all,
+    __BURST_OUT_TO(29000, fx_palette_half)
     //Take them to crazytown.. we came together, so purple again?
     /*
       __FADE_TO(29000, fx_palette_dr)
       29400, fx_transition_fast,
       29400, fx_palette_half,*/
-    29000, fx_transition_timed_fade,
+    29000, fx_transition_timed_wipe_inout,
     29000, fx_palette_blue,
     29400, fx_palette_red,
-    29790, fx_palette_green,
+    29790, fx_palette_magenta,
     30180, fx_palette_blue,
-    30570, fx_palette_rg,
-    30960, fx_palette_gb,
+    30570, fx_palette_rm,
+    30960, fx_palette_bm,
     31350, fx_palette_rb,
     31740, fx_palette_red,
-    32130, fx_palette_green,
+    32130, fx_palette_magenta,
     32520, fx_palette_blue,
-    32910, fx_palette_rg,
+    32910, fx_palette_rm,
     33300, fx_palette_rb,
     33690, fx_palette_red,
     //33690,fx_transition_fast,
@@ -346,9 +367,15 @@
     __COLOR_FROM_FEET(35250, fx_palette_rb)
     __COLOR_FROM_BELLY(35640, COLOR_ALPHA)
     __COLOR_FROM_SHOULDERS_TO_WRISTS(36030, COLOR_BETA)
-    __COLOR_FROM_FEET(36420, COLOR_ALPHA)
-    __COLOR_FROM_BELLY(36810, COLOR_BETA)
-    __COLOR_FROM_SHOULDERS_TO_WRISTS(37200, fx_palette_rb)
+
+    36420, fx_strip_all,
+    36420, fx_transition_timed_wipe_inout,
+    36420, COLOR_ALPHA,
+    36810, COLOR_BETA,
+    37200, fx_palette_rb,
+    //__COLOR_FROM_FEET(36420, COLOR_ALPHA)
+    //__COLOR_FROM_BELLY(36810, COLOR_BETA)
+    //__COLOR_FROM_SHOULDERS_TO_WRISTS(37200, fx_palette_rb)
     37590, fx_strip_all,
     37590, fx_transition_timed_fade,
     37590, fx_palette_red,
@@ -360,7 +387,7 @@
     __FADE_TO(41300, fx_palette_dark)
     //__WIPE_UP(43300, fx_palette_blue)
     43300, fx_speed_rst,
-    43300, fx_transition_timed_fade,
+    43300, fx_transition_timed_wipe_inout,
     43300, fx_strip + (LEDS_2),
     43300, fx_palette_red,
     43775, fx_strip + (LEDS_1),
@@ -389,6 +416,12 @@
     __FIRE_EFFECT(50600, fx_palette_pulse2_blue, fx_palette_pulse2_cyan, fx_palette_pulse2_white, fx_palette_blue, fx_palette_cyan)
     __FIRE_EFFECT(55000, fx_palette_pulse2_blue, fx_palette_pulse2_magenta, fx_palette_db, fx_palette_dm, fx_palette_dbm)
 
+//creates the 'eva effect'
+    //57200, fx_speed_rst, 
+    57200, fx_speed_3, 
+    57200, fx_speed_neg, 
+    57200, fx_transition_fast,
+    //57200, fx_palette_dbm,
     __FADE_TO(57200, fx_palette_magenta)
     __FADE_TO(59600, fx_palette_pulse_dark)
 
@@ -400,15 +433,33 @@
     __FADE_TO(72000, fx_palette_magenta)
 
     //Side-Kicks
-    __WIPE_UP(73000, COLOR_THETA)
-    __WIPE_UP(74000, COLOR_DELTA)
+    __SIDE_KICK_EVENS(73000, COLOR_THETA)
+    __SIDE_KICK_ODDS(73500, COLOR_THETA)
+    __SIDE_KICK_EVENS(74000, COLOR_DELTA)
+    __SIDE_KICK_ODDS(74500, COLOR_DELTA)
+    __SIDE_KICK_EVENS(75000, COLOR_THETA)
+    __SIDE_KICK_ODDS(75500, COLOR_THETA)
+    __SIDE_KICK_EVENS(76000, COLOR_DELTA)
+    __SIDE_KICK_ODDS(76500, COLOR_DELTA)
+    __SIDE_KICK_EVENS(77000, COLOR_THETA)
+    __SIDE_KICK_ODDS(77500, COLOR_THETA)
+    __SIDE_KICK_EVENS(78000, COLOR_DELTA)
+    __SIDE_KICK_ODDS(78500, COLOR_DELTA)
+    __SIDE_KICK_EVENS(79000, COLOR_THETA)
+    __SIDE_KICK_ODDS(79500, COLOR_THETA)
+    __SIDE_KICK_EVENS(80000, COLOR_DELTA)
+    __SIDE_KICK_ODDS(80500, COLOR_DELTA)
+    
+    81000, fx_strip_all,
+    
+/*
     __WIPE_UP(75000, COLOR_THETA)
     __WIPE_UP(76000, COLOR_DELTA)
     __WIPE_UP(77000, COLOR_THETA)
     __WIPE_UP(78000, COLOR_DELTA)
     __WIPE_UP(79000, COLOR_THETA)
     __WIPE_UP(80000, COLOR_DELTA)
-
+*/
     ///bwaaah, into the sss...qqs's
     81500, fx_speed_2,
     81500, fx_speed_neg,
@@ -426,6 +477,7 @@
     //98500, fx_speed_neg,
     //__FADE_TO(98500, fx_palette_pulse_magenta)
 #if LEAD
+    __FADE_TO(97000, fx_palette_pulse2_magenta)
     //  100000, fx_strip_all,
     __FADE_TO(100000, fx_palette_dark)
     //pickup from spinning
@@ -443,8 +495,15 @@
 
     //CHAPTER 3
     //big march around
-    __FADE_TO(107900, fx_palette_half)
-    __FADE_TO(108900, COLOR_ALPHA)
+    __FADE_TO(108000, fx_palette_half)
+    __BURST_OUT_TO(109000, COLOR_ALPHA)
+    __BURST_OUT_TO(110000, fx_palette_half)
+    __BURST_OUT_TO(111000, COLOR_BETA)
+    __BURST_OUT_TO(112000, fx_palette_half)
+    __BURST_OUT_TO(113000, COLOR_ALPHA)
+    __BURST_OUT_TO(114000, fx_palette_half)
+    __BURST_OUT_TO(115000, COLOR_BETA)
+    __BURST_OUT_TO(116000, fx_palette_half)
 
     //__FADE_TO(111000, fx_palette_red)
     __FADE_TO(118000, fx_palette_blue)

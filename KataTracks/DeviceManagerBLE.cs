@@ -56,9 +56,9 @@ namespace KataTracks
                 //"90335422B697", //LightsuitC
                 //"757773C6C5F1", //LightSuitE?
                 
-                "FDB857FE7C3D", //HighPower                
-                "4CEBD64CA98E", //LightSuitI - IOT
-                "9C9C1FDFDFAA", //LightSuitSquid
+              //  "FDB857FE7C3D", //HighPower                
+                //"4CEBD64CA98E", //LightSuitI - IOT
+                //"9C9C1FDFDFAA", //LightSuitSquid
 
                 "B872B08E0D8E", //LightSuitAngelA?
                 "77C648CCE101", //LightSuitAngelB?
