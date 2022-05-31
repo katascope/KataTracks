@@ -111,6 +111,21 @@ void CreateDoublePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
                       LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
 }
 
+void CreateTriplePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
+  Create16Color(fxc,  LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0),LEDRGB(0,0,0));
+}
+
+void CreateQuadPulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
+  Create16Color(fxc,  LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0),
+                      LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0));
+}
+
+
 void FxDisplayStatus(FxController &fxc)
 {
   Serial.print(F("["));
@@ -357,6 +372,30 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_palette_pulse2_orange:CreateDoublePulseBand(fxc, ORANGE);break;
     case fx_palette_pulse2_half:CreateDoublePulseBand(fxc, HALF);break;
     case fx_palette_pulse2_lowhalf:CreateDoublePulseBand(fxc, LOWHALF);break;    
+
+    case fx_palette_pulse3_dark:CreateTriplePulseBand(fxc, DARK);break;
+    case fx_palette_pulse3_white:CreateTriplePulseBand(fxc, WHITE);break;
+    case fx_palette_pulse3_red:CreateTriplePulseBand(fxc, RED);break;
+    case fx_palette_pulse3_yellow:CreateTriplePulseBand(fxc, YELLOW);break;
+    case fx_palette_pulse3_green:CreateTriplePulseBand(fxc, GREEN);break;
+    case fx_palette_pulse3_cyan:CreateTriplePulseBand(fxc, CYAN);break;
+    case fx_palette_pulse3_blue:CreateTriplePulseBand(fxc, BLUE);break;
+    case fx_palette_pulse3_magenta:CreateTriplePulseBand(fxc, MAGENTA);break;
+    case fx_palette_pulse3_orange:CreateTriplePulseBand(fxc, ORANGE);break;
+    case fx_palette_pulse3_half:CreateTriplePulseBand(fxc, HALF);break;
+    case fx_palette_pulse3_lowhalf:CreateTriplePulseBand(fxc, LOWHALF);break;    
+
+    case fx_palette_pulse4_dark:CreateQuadPulseBand(fxc, DARK);break;
+    case fx_palette_pulse4_white:CreateQuadPulseBand(fxc, WHITE);break;
+    case fx_palette_pulse4_red:CreateQuadPulseBand(fxc, RED);break;
+    case fx_palette_pulse4_yellow:CreateQuadPulseBand(fxc, YELLOW);break;
+    case fx_palette_pulse4_green:CreateQuadPulseBand(fxc, GREEN);break;
+    case fx_palette_pulse4_cyan:CreateQuadPulseBand(fxc, CYAN);break;
+    case fx_palette_pulse4_blue:CreateQuadPulseBand(fxc, BLUE);break;
+    case fx_palette_pulse4_magenta:CreateQuadPulseBand(fxc, MAGENTA);break;
+    case fx_palette_pulse4_orange:CreateQuadPulseBand(fxc, ORANGE);break;
+    case fx_palette_pulse4_half:CreateQuadPulseBand(fxc, HALF);break;
+    case fx_palette_pulse4_lowhalf:CreateQuadPulseBand(fxc, LOWHALF);break;    
 
     case fx_palette_dr: CreateDoubleColor(fxc, DARK, RED); break;
     case fx_palette_dy: CreateDoubleColor(fxc, DARK, YELLOW); break;

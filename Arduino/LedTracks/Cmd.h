@@ -15,6 +15,7 @@ enum UserCommand
 
   Cmd_Brightness_Max,
   Cmd_Brightness_Normal,
+  Cmd_Brightness_Half,
 
   Cmd_State_Default,
   Cmd_State_Test,
@@ -86,9 +87,7 @@ enum UserCommand
   Cmd_Strip6,
   Cmd_Strip7,
 
-  Cmd_TransitionFast,
-  Cmd_TransitionFade,
-  Cmd_TransitionWipePos
+  Cmd_TransitionFast
 
 };
 

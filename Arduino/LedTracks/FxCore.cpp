@@ -164,7 +164,30 @@ void PrintFxEventName(int event)
     case fx_palette_pulse2_orange:  Serial.print(F("pulse2-orange"));return;
     case fx_palette_pulse2_half:  Serial.print(F("pulse2-half"));return;
     case fx_palette_pulse2_lowhalf:  Serial.print(F("pulse2-lowhalf"));return;
-   
+
+    case fx_palette_pulse3_dark:    Serial.print(F("pulse3-dark"));return;
+    case fx_palette_pulse3_white:   Serial.print(F("pulse3-white"));return;
+    case fx_palette_pulse3_red:     Serial.print(F("pulse3-red"));return;
+    case fx_palette_pulse3_yellow:  Serial.print(F("pulse3-yellow"));return;
+    case fx_palette_pulse3_green:   Serial.print(F("pulse3-green"));return;
+    case fx_palette_pulse3_cyan:    Serial.print(F("pulse3-cyan"));return;
+    case fx_palette_pulse3_blue:    Serial.print(F("pulse3-blue"));return;
+    case fx_palette_pulse3_magenta: Serial.print(F("pulse3-magenta"));return;
+    case fx_palette_pulse3_orange:  Serial.print(F("pulse3-orange"));return;
+    case fx_palette_pulse3_half:    Serial.print(F("pulse3-half"));return;
+    case fx_palette_pulse3_lowhalf: Serial.print(F("pulse3-lowhalf"));return;    
+
+    case fx_palette_pulse4_dark:    Serial.print(F("pulse4-dark"));return;
+    case fx_palette_pulse4_white:   Serial.print(F("pulse4-white"));return;
+    case fx_palette_pulse4_red:     Serial.print(F("pulse4-red"));return;
+    case fx_palette_pulse4_yellow:  Serial.print(F("pulse4-yellow"));return;
+    case fx_palette_pulse4_green:   Serial.print(F("pulse4-green"));return;
+    case fx_palette_pulse4_cyan:    Serial.print(F("pulse4-cyan"));return;
+    case fx_palette_pulse4_blue:    Serial.print(F("pulse4-blue"));return;
+    case fx_palette_pulse4_magenta: Serial.print(F("pulse4-magenta"));return;
+    case fx_palette_pulse4_orange:  Serial.print(F("pulse4-orange"));return;
+    case fx_palette_pulse4_half:    Serial.print(F("pulse4-half"));return;
+    case fx_palette_pulse4_lowhalf: Serial.print(F("pulse4-lowhalf"));return;   
     case fx_palette_dw: Serial.print(F("dark-white"));return;
     case fx_palette_dr: Serial.print(F("dark-red"));return;
     case fx_palette_dy: Serial.print(F("dark-yellow"));return;

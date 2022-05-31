@@ -158,34 +158,46 @@ namespace KataTracks
             switch (slot)
             {
                 case 0:
-                    Log1Label.Content = title;
-                    Log1Label.Foreground = brush;
-                    Log1.Text = message;
+                    Log1.Text = title + "\n" + message;
                     Log1.Foreground = brush;
                     Log1.ScrollToEnd();
                     break;
                 case 1:
-                    Log2Label.Content = title;
-                    Log2Label.Foreground = brush;
-                    Log2.Text = message;
+                    Log2.Text = title + "\n" + message;
                     Log2.Foreground = brush;
                     Log2.ScrollToEnd();
                     break;
                 case 2:
-                    Log3Label.Content = title;
-                    Log3Label.Foreground = brush;
-                    Log3.Text = message;
+                    Log3.Text = title + "\n" + message;
                     Log3.Foreground = brush;
                     Log3.ScrollToEnd();
                     break;
                 case 3:
-                    Log4Label.Content = title;
-                    Log4Label.Foreground = brush;
                     Log4.Foreground = brush;
-                    Log4.Text = message;
+                    Log4.Text = title + "\n" + message;
                     Log4.ScrollToEnd();
                     break;
-            }                
+                case 4:
+                    Log5.Text = title + "\n" + message;
+                    Log5.Foreground = brush;
+                    Log5.ScrollToEnd();
+                    break;
+                case 5:
+                    Log6.Text = title + "\n" + message;
+                    Log6.Foreground = brush;
+                    Log6.ScrollToEnd();
+                    break;
+                case 6:
+                    Log7.Text = title + "\n" + message;
+                    Log7.Foreground = brush;
+                    Log7.ScrollToEnd();
+                    break;
+                case 7:
+                    Log8.Foreground = brush;
+                    Log8.Text = title + "\n" + message;
+                    Log8.ScrollToEnd();
+                    break;
+            }
         }
 
         private void btTextTimer_Tick(object sender, EventArgs e)

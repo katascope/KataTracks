@@ -129,8 +129,6 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_Strip7: fxc.stripMask = LEDS_7; break;
 
     case Cmd_TransitionFast: InstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once); break;
-    case Cmd_TransitionFade: InstantEvent(fxc, fx_transition_timed_fade,   FxPaletteUpdateType::Once); break;
-    case Cmd_TransitionWipePos: InstantEvent(fxc, fx_transition_timed_wipe_pos,   FxPaletteUpdateType::Once); break;
 #if ENABLE_NEOPIXEL
 
     case Cmd_Brightness_Max: 
@@ -143,6 +141,12 @@ void UserCommandExecute(FxController &fxc, int cmd)
     {
       for (int strip=0;strip<NUM_STRIPS;strip++)
         neopixelSetBrightness(strip,BRIGHTNESS);
+      break;
+    }
+    case Cmd_Brightness_Half:
+    {
+      for (int strip=0;strip<NUM_STRIPS;strip++)
+        neopixelSetBrightness(strip,BRIGHTNESS/2);
       break;
     }
 #endif  
@@ -214,12 +218,10 @@ void UserCommandInput(FxController &fxc, int data)
       break;*/
     case '?': UserCommandExecute(fxc, Cmd_Help); break;
 
-    case 'c': UserCommandExecute(fxc, Cmd_TransitionFade);break;
-    case 'v': UserCommandExecute(fxc, Cmd_TransitionWipePos);break;
-      
     case 'z': UserCommandExecute(fxc, Cmd_State_Default);break;
     case 'x': UserCommandExecute(fxc, Cmd_State_Test);break;
     
+    case 'v': UserCommandExecute(fxc, Cmd_Brightness_Half);break;
     case 'b': UserCommandExecute(fxc, Cmd_Brightness_Max);break;
     case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
         

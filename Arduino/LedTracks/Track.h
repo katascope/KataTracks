@@ -411,8 +411,8 @@
     47100, fx_strip_all,
     47100, fx_speed_2,
     47100, fx_speed_neg,
-    __FADE_TO(47100, fx_palette_pulse2_red)
-    __FADE_TO(48100, fx_palette_pulse2_red)
+    __FADE_TO(47100, fx_palette_pulse2_blue)
+    __FADE_TO(48100, fx_palette_pulse2_blue)
     //primetime
     __FLASH_WHITE(50400)
 
@@ -427,9 +427,10 @@
     57200, fx_transition_fast,
     //57200, fx_palette_dbm,
     __FADE_TO(57200, fx_palette_blue)
-    __FADE_TO(59600, fx_palette_pulse_dark)
+    __FADE_TO(59600, fx_palette_pulse2_dark)
 
-    __PLASMA_OPPOSING(60000, fx_palette_pulse2_cyan, fx_palette_pulse2_magenta)
+    __PLASMA_OPPOSING(60000, fx_palette_dc, fx_palette_dm)
+    __PLASMA_OPPOSING(66000, fx_palette_pulse2_cyan, fx_palette_pulse2_magenta)
 
     //CHAPTER 2
     72000, fx_speed_0,
@@ -544,29 +545,29 @@
     122500, fx_palette_pulse_blue,
     122600, fx_palette_pulse_magenta,
     122700, fx_palette_pulse_white,
-    122800, fx_palette_pulse_red,
-    122900, fx_palette_pulse_yellow,
-    123000, fx_palette_pulse_green,
-    123100, fx_palette_pulse_cyan,
-    123200, fx_palette_pulse_blue,
-    123300, fx_palette_pulse_magenta,
-    123400, fx_palette_pulse_white,
+    122800, fx_palette_pulse2_red,
+    122900, fx_palette_pulse2_yellow,
+    123000, fx_palette_pulse2_green,
+    123100, fx_palette_pulse2_cyan,
+    123200, fx_palette_pulse2_blue,
+    123300, fx_palette_pulse2_magenta,
+    123400, fx_palette_pulse2_white,
     123500, fx_speed_16,
     123500, fx_transition_fast,
-    123500, fx_palette_pulse2_red,
-    123600, fx_palette_pulse2_yellow,
-    123700, fx_palette_pulse2_green,
-    123800, fx_palette_pulse2_cyan,
-    124900, fx_palette_pulse2_blue,
-    124000, fx_palette_pulse2_magenta,
-    124100, fx_palette_pulse2_white,
-    124200, fx_palette_pulse2_red,
-    124300, fx_palette_pulse2_yellow,
-    124400, fx_palette_pulse2_green,
-    124500, fx_palette_pulse2_cyan,
-    124600, fx_palette_pulse2_blue,
-    124700, fx_palette_pulse2_magenta,
-    124800, fx_palette_pulse2_white,
+    123500, fx_palette_pulse3_red,
+    123600, fx_palette_pulse3_yellow,
+    123700, fx_palette_pulse3_green,
+    123800, fx_palette_pulse3_cyan,
+    124900, fx_palette_pulse3_blue,
+    124000, fx_palette_pulse3_magenta,
+    124100, fx_palette_pulse3_white,
+    124200, fx_palette_pulse4_red,
+    124300, fx_palette_pulse4_yellow,
+    124400, fx_palette_pulse4_green,
+    124500, fx_palette_pulse4_cyan,
+    124600, fx_palette_pulse4_blue,
+    124700, fx_palette_pulse4_magenta,
+    124800, fx_palette_pulse4_white,
 
     __FADE_TO(125000, fx_palette_magenta)
     __FADE_TO(126000, fx_palette_dark)
