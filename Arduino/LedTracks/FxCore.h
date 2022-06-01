@@ -57,14 +57,14 @@ enum FxState
 
 enum FxStripMask
 {
-  LEDS_0 = 1,  RIGHT_CHEST_A = LEDS_0,
-  LEDS_1 = 2,  LEFT_CHEST_A = LEDS_1,
-  LEDS_2 = 4,  RIGHT_CHEST_B = LEDS_2,
-  LEDS_3 = 8,  LEFT_CHEST_B = LEDS_3,
-  LEDS_4 = 16, RIGHT_ARM = LEDS_4,
-  LEDS_5 = 32, LEFT_ARM = LEDS_5,
-  LEDS_6 = 64, RIGHT_LEG = LEDS_6,
-  LEDS_7 = 128,LEFT_LEG = LEDS_7
+  LEDS_0 = 1,   RIGHT_CHEST_A = LEDS_0,
+  LEDS_1 = 2,   LEFT_CHEST_A = LEDS_1,
+  LEDS_2 = 4,   RIGHT_CHEST_B = LEDS_2,
+  LEDS_3 = 8,   LEFT_CHEST_B = LEDS_3,
+  LEDS_4 = 16,  RIGHT_ARM = LEDS_4,
+  LEDS_5 = 32,  LEFT_ARM = LEDS_5,
+  LEDS_6 = 64,  RIGHT_LEG = LEDS_6,
+  LEDS_7 = 128, LEFT_LEG = LEDS_7
 };
 
 //List of possible Fx events
@@ -283,7 +283,7 @@ enum FxEvent
   fx_stripmask_225,fx_stripmask_226,fx_stripmask_227,fx_stripmask_228,fx_stripmask_229,fx_stripmask_230,fx_stripmask_231,fx_stripmask_232,
   fx_stripmask_233,fx_stripmask_234,fx_stripmask_235,fx_stripmask_236,fx_stripmask_237,fx_stripmask_238,fx_stripmask_239,fx_stripmask_240,
   fx_stripmask_241,fx_stripmask_242,fx_stripmask_243,fx_stripmask_244,fx_stripmask_245,fx_stripmask_246,fx_stripmask_247,fx_stripmask_248,
-  fx_stripmask_249,fx_stripmask_250,fx_stripmask_251,fx_stripmask_252,fx_stripmask_253,fx_stripmask_254,fx_stripmask_255,//Same as fx_strips_all
+  fx_stripmask_249,fx_stripmask_250,fx_stripmask_251,fx_stripmask_252,fx_stripmask_253,fx_stripmask_254,fx_stripmask_255,//Same as fx_MULTI_FINISH
 
   fx_strip0 = fx_stripmask_1,    
   fx_strip1 = fx_stripmask_2,    

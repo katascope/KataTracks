@@ -50,13 +50,11 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F(") : Track Stop"));
       Serial.println(F("* : Track StartFrom"));
       Serial.println(F("@code : Time code"));
-      Serial.println(F("[ c v ] : Fade WipePos transition"));
-      Serial.println(F("[ b | n ] : Brightness Full | Half"));
+      Serial.println(F("[ b | n | v] : Brightness Full | Normal | Half"));
       Serial.println(F("z:default mode x:test"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("q:strip0 w:strip1 e:strip2 r:strip3 t:strip4 y:strip5 u:strip6 i:strip7 p:All"));
-      Serial.println(F("Q:lava W:cloud E:ocean R:forest T:rainbow Y:rainbowstripe U:party I:heat"));
-        
+      Serial.println(F("Q:lava W:cloud E:cm R:rb T:rainbow Y:rainbowstripe U:party I:heat"));        
       break;
     case Cmd_State_Default: fxc.fxState = FxState_Default;break;
     case Cmd_State_Test:    fxc.fxState = FxState_TestPattern;break;
@@ -277,8 +275,8 @@ void UserCommandInput(FxController &fxc, int data)
 
     case 'Q': UserCommandExecute(fxc, Cmd_ColorLava);break;
     case 'W': UserCommandExecute(fxc, Cmd_ColorCloud);break;
-    case 'E': UserCommandExecute(fxc, Cmd_ColorOcean);break;
-    case 'R': UserCommandExecute(fxc, Cmd_ColorForest);break;
+    case 'E': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
+    case 'R': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
     case 'T': UserCommandExecute(fxc, Cmd_ColorRainbow);break;
     case 'Y': UserCommandExecute(fxc, Cmd_ColorRainbowstripe);break;
     case 'U': UserCommandExecute(fxc, Cmd_ColorParty);break;
@@ -290,18 +288,9 @@ void UserCommandInput(FxController &fxc, int data)
     case '=': UserCommandExecute(fxc, Cmd_SpeedInc);break;
     case '~': UserCommandExecute(fxc, Cmd_SpeedRst);break;
 
-
-/*
-
-    
     case 10:
     case 13:
-      if (captureMode != CaptureNone)
-      {
-        Serial.println(F("Capture end"));
-        processCapturedText(fxc);
-      }
-      //else Serial.println(F("UnkCR"));*/
+      break;
     case 0:
     case 225: break;
     default:

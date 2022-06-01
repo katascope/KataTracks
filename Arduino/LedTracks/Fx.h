@@ -10,14 +10,11 @@ public:
   int numleds = 0;
   unsigned char brightness = BRIGHTNESS;
   FxTransitionType transitionType = Transition_Instant;  
-  FxPaletteUpdateType fxPaletteUpdateType = FxPaletteUpdateType::Always;
+  FxPaletteUpdateType fxPaletteUpdateType = FxPaletteUpdateType::None;
   uint32_t *palette;
   uint32_t *nextPalette;
   uint32_t *initialPalette;
   unsigned int *sequence;
-  //uint32_t palette[80];
-  //uint32_t nextPalette[80];
-  //uint32_t initialPalette[80];
   int paletteSpeed = 0;
   int paletteDirection = 1;
   int paletteIndex = 0;
@@ -49,6 +46,13 @@ public:
   unsigned char stripMask = 255;
   FxStripController *strip[NUM_STRIPS];
   public:
+  bool IsAnimating()
+  {
+    for (int i=0;i<NUM_STRIPS;i++)
+        if (strip[i]->paletteSpeed > 0)
+          return true;
+    return false;
+  }
   FxController()
   {
     for (int i=0;i<NUM_STRIPS;i++)

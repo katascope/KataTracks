@@ -5,12 +5,12 @@
 #define FOLLOW    0 //Generally LightSuit*B gold
 #define SUIT_JACKET    1
 
-#if LEAD
+#if 1
+static const char *DeviceName = "LightSuitAngelC";
+#elif LEAD
 static const char *DeviceName = "LightSuitAngelA";
 #elif FOLLOW
 static const char *DeviceName = "LightSuitAngelB";
-#else
-static const char *DeviceName = "LightSuitAngelSquid";
 #endif
 
 
@@ -18,7 +18,7 @@ static const char *DeviceName = "LightSuitAngelSquid";
 #define STARTUP_STATE       FxState_Default    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
 #define UPDATE_DELAY        30 //100 //Milliseconds to delay between palette updates, set to 100 for iot, 30 for ble
 #define NUM_STRIPS          8
-#define BRIGHTNESS          50  //Default brightness
+#define BRIGHTNESS          15 //50  //Default brightness
 #define BRIGHTNESS_LIMIT    80 //Maximum allowed brightness, //90 possible but runs too hot
 #define ENABLE_SAFETY       1
 

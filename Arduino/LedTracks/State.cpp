@@ -14,7 +14,6 @@ void State_Poll_TestPattern(FxController &fxc)
   //Serial.println("Polling test pattern");
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
-      fxc.strip[strip]->paletteDirection = 0;
       fxc.strip[strip]->paletteSpeed = 0;
       fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Always;
     }

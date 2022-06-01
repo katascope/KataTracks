@@ -198,7 +198,7 @@ void swap(unsigned int *a, unsigned int *b)
 
 void sequence_random(unsigned int arr[], int n)
 {
-  srand(time(NULL));
+  //srand(time(NULL));
   for (int i = n - 1; i > 0; i--)
   {
     unsigned int j = rand() % (i + 1);
@@ -257,7 +257,11 @@ void ChangePaletteSpeed(FxController &fxc, int ps)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
     if (fxc.stripMask & (1<<strip)) 
+    {
       fxc.strip[strip]->paletteSpeed += ps;
+      if (fxc.strip[strip]->paletteSpeed < 0)
+       fxc.strip[strip]->paletteSpeed = 0;
+    }
 }
 
 void SetPaletteDirection(FxController &fxc, int c)

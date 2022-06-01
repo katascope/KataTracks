@@ -125,20 +125,19 @@ void loop()
 
   State_Poll(fxController);
 
-  bool needsUpdate = true;//false;
+  bool needsUpdate = false;
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
     if (fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Once
-    || fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Always)
+    || fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Always
+    || fxController.IsAnimating())
       needsUpdate = true;
   }
   
   if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
   {
     unsigned long t =  millis();
-    int ledDelay = UPDATE_DELAY;
-
-    if (t - fxController.lastTimeLedUpdate > ledDelay)//delay to let bluetooth get data(fastled issue)
+    if (t - fxController.lastTimeLedUpdate > UPDATE_DELAY)//delay to let bluetooth get data(fastled issue)
     {
       UpdatePalette();
       fxController.lastTimeLedUpdate = t;
