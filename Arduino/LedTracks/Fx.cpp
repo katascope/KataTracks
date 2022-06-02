@@ -10,6 +10,8 @@ void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, uns
       if (fxController.strip[strip]->transitionType == Transition_Instant)
       {
         LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
+        CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+        CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
       }
       else
       {
@@ -147,31 +149,6 @@ void FxDisplayStatus(FxController &fxc)
       Serial.print(F(",BLE off"));
 #endif
 
-//SideFX
-      Serial.print(F(", sfx{"));
-      for (int strip=0;strip<NUM_STRIPS;strip++)
-      {
-        bool found = true;
-        for (int sfx=0;sfx<NUM_SIDEFX;sfx++)      
-          if (fxc.strip[strip]->sideFx[sfx])
-            found = true;
-        if (found)
-        {
-          Serial.print(strip);
-          Serial.print(F("="));
-          for (int sfx=0;sfx<NUM_SIDEFX;sfx++)      
-          {
-            if (fxc.strip[strip]->sideFx[sfx])
-            {
-              Serial.print(sfx);
-              Serial.print(F(" "));
-            }
-          }
-          Serial.print(F(" "));
-        }
-      }
-      Serial.print(F("} "));
-
       //Strip debugging
 #if ENABLE_NEOPIXEL  
       for (int strip=0;strip<NUM_STRIPS;strip++)
@@ -302,19 +279,6 @@ void SetPaletteDirection(FxController &fxc, int c)
         fxc.strip[strip]->paletteSpeed = 0;
     }
   }
-}
-
-void SideFxSetRunning(FxController &fxc, SideFx sfx, bool isRunning)
-{
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    if (fxc.stripMask & (1<<strip))   
-    {
-      fxc.strip[strip]->sideFx[sfx] = isRunning;      
-    }
-    else
-    Serial.println(F("Not change sidefx running"));
-  }  
 }
 
 void FxEventProcess(FxController &fxc,int event)
@@ -574,15 +538,26 @@ void FxEventProcess(FxController &fxc,int event)
       0xFF9900, 0xFFCC00, 0xFFFF00, 0xFFFF33, 
       0xFFFF66, 0xFFFF99, 0xFFFFCC, 0xFFFFFF);break;
 
-    case fx_sidefx_stars_pos_on:  SideFxSetRunning(fxc, SideFx_Stars_Pos, true); break;
-    case fx_sidefx_stars_pos_off: SideFxSetRunning(fxc, SideFx_Stars_Pos, false); break;
-    case fx_sidefx_stars_neg_on:  SideFxSetRunning(fxc, SideFx_Stars_Neg, true); break;
-    case fx_sidefx_stars_neg_off: SideFxSetRunning(fxc, SideFx_Stars_Neg, false); break;
-    case fx_sidefx_bars_pos_on:   SideFxSetRunning(fxc, SideFx_Bars_Pos, true); break;
-    case fx_sidefx_bars_pos_off:  SideFxSetRunning(fxc, SideFx_Bars_Pos, false); break;
-    case fx_sidefx_bars_neg_on:   SideFxSetRunning(fxc, SideFx_Bars_Neg, true); break;
-    case fx_sidefx_bars_neg_off:  SideFxSetRunning(fxc, SideFx_Bars_Neg, false); break;
+    case fx_particles_off: fxc.SetParticlesRunning(false); break;
+    case fx_particles_pos: fxc.SetParticlesRunning(true); fxc.SetParticlesDirection(1); break;
+    case fx_particles_neg: fxc.SetParticlesRunning(true); fxc.SetParticlesDirection(-1); break;
+    case fx_particles_length_1: fxc.SetParticlesLength(1); break;
+    case fx_particles_length_2: fxc.SetParticlesLength(2); break;
+    case fx_particles_length_3: fxc.SetParticlesLength(3); break;
+    case fx_particles_length_4: fxc.SetParticlesLength(4); break;
 
+    case fx_particles_color_dark:    fxc.SetParticlesColor(CRGB_DARK); break;
+    case fx_particles_color_white:   fxc.SetParticlesColor(CRGB_WHITE); break;
+    case fx_particles_color_red:     fxc.SetParticlesColor(CRGB_RED); break;
+    case fx_particles_color_yellow:  fxc.SetParticlesColor(CRGB_YELLOW); break;
+    case fx_particles_color_green:   fxc.SetParticlesColor(CRGB_GREEN); break;
+    case fx_particles_color_cyan:    fxc.SetParticlesColor(CRGB_CYAN); break;
+    case fx_particles_color_blue:    fxc.SetParticlesColor(CRGB_BLUE); break;
+    case fx_particles_color_magenta: fxc.SetParticlesColor(CRGB_MAGENTA); break;
+    case fx_particles_color_orange:  fxc.SetParticlesColor(CRGB_ORANGE); break;
+    case fx_particles_color_half:    fxc.SetParticlesColor(CRGB_HALF); break;
+    case fx_particles_color_lowhalf: fxc.SetParticlesColor(CRGB_LOWHALF); break;
+    
  }
 }
 
@@ -595,111 +570,41 @@ void FxProcessSideFX(FxController &fxc)
         for (int i = 0; i < numleds; i++)
           fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
 */
+  if (fxc.fxState == FxState_Default && fxc.HasRunning())
+  {
+    for (int strip=0;strip<NUM_STRIPS;strip++)
+      for (int led=0;led<fxc.strip[strip]->numleds;led++)
+        fxc.strip[strip]->palette[led] = fxc.strip[strip]->initialPalette[led];
+  }
+
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    for (int sfx=0;sfx<NUM_SIDEFX;sfx++)
-    {
-      if (fxc.strip[strip]->sideFx[sfx])
-      {
-        switch (sfx)
-        {
-          case SideFx_Stars_Pos:
-          {
+
+    
             for (int particle=0;particle<NUM_PARTICLES;particle++)
             {
-              fxc.strip[strip]->particles[particle].pos += fxc.strip[strip]->particles[particle].vel;
-              if (fxc.strip[strip]->particles[particle].pos >= fxc.strip[strip]->numleds)
-                fxc.strip[strip]->particles[particle].pos = 0;
-
-              int pos = fxc.strip[strip]->particles[particle].pos;
-              fxc.strip[strip]->palette[ pos ]= LEDRGB(255,255,255);
-            }
-            break;
-          }
-          case SideFx_Stars_Neg:
-          {
-            for (int particle=0;particle<NUM_PARTICLES;particle++)
-            {
-              fxc.strip[strip]->particles[particle].pos -= fxc.strip[strip]->particles[particle].vel;
-              if (fxc.strip[strip]->particles[particle].pos < 0)
-                fxc.strip[strip]->particles[particle].pos =  fxc.strip[strip]->numleds - 1;
-
-              int pos = fxc.strip[strip]->particles[particle].pos;
-              fxc.strip[strip]->palette[ pos ]= LEDRGB(255,255,255);
-            }
-            break;
-          }
-          case SideFx_Bars_Pos:
-          {
-            for (int particle=0;particle<NUM_PARTICLES;particle++)
-            {
-              fxc.strip[strip]->particles[particle].pos += fxc.strip[strip]->particles[particle].vel;
-              if (fxc.strip[strip]->particles[particle].pos >= fxc.strip[strip]->numleds)
-                fxc.strip[strip]->particles[particle].pos = 0;
-                
-              if (fxc.strip[strip]->particles[particle].pos < 0)
-                fxc.strip[strip]->particles[particle].pos =  fxc.strip[strip]->numleds - 1;
-
-              int pos = fxc.strip[strip]->particles[particle].pos;
-              int BAR_LENGTH = 0.5+(int)abs(fxc.strip[strip]->particles[particle].vel);
-              for (int i=0;i<BAR_LENGTH;i++)
+              if (fxc.strip[strip]->particles[particle].on)
               {
-                if (pos + i < fxc.strip[strip]->numleds)
+                fxc.strip[strip]->particles[particle].loc += fxc.strip[strip]->particles[particle].vel;
+                if (fxc.strip[strip]->particles[particle].loc >= fxc.strip[strip]->numleds)
+                  fxc.strip[strip]->particles[particle].loc = 0;
+                  
+                if (fxc.strip[strip]->particles[particle].loc < 0)
+                  fxc.strip[strip]->particles[particle].loc =  fxc.strip[strip]->numleds - 1;
+  
+                int loc = fxc.strip[strip]->particles[particle].loc;
+                //int BAR_LENGTH = 0.5+(int)abs(fxc.strip[strip]->particles[particle].vel);
+                for (int i=0;i<fxc.strip[strip]->particles[particle].len;i++)
                 {
-                  uint32_t rgb = fxc.strip[strip]->palette[pos+i];
-                  int r = (rgb >> 16) & 0xFF;
-                  int g = (rgb >> 8) & 0xFF;
-                  int b = (rgb >> 0) & 0xFF;
-                  r+=128;
-                  g+=128;
-                  b+=128;
-                  if (r > 255) r = 255;
-                  if (g > 255) g = 255;
-                  if (b > 255) b = 255;
-                  fxc.strip[strip]->palette[ pos+i ] = LEDRGB(r,g,b);//v;
+                  if (loc + i < fxc.strip[strip]->numleds)
+                  {
+                    fxc.strip[strip]->palette[ loc + i ] = fxc.strip[strip]->particles[particle].rgb;
+                  }
                 }
+                                
               }
             }
-            break;
-          }
-          case SideFx_Bars_Neg:
-          {
-            for (int particle=0;particle<NUM_PARTICLES;particle++)
-            {
-              fxc.strip[strip]->particles[particle].pos -= fxc.strip[strip]->particles[particle].vel;
-              if (fxc.strip[strip]->particles[particle].pos >= fxc.strip[strip]->numleds)
-                fxc.strip[strip]->particles[particle].pos = 0;
-                
-              if (fxc.strip[strip]->particles[particle].pos < 0)
-                fxc.strip[strip]->particles[particle].pos =  fxc.strip[strip]->numleds - 1;
-
-              int pos = fxc.strip[strip]->particles[particle].pos;
-              int BAR_LENGTH = 0.5+(int)abs(fxc.strip[strip]->particles[particle].vel);
-              for (int i=0;i<BAR_LENGTH;i++)
-              {
-                if (pos + i < fxc.strip[strip]->numleds)
-                {
-                  uint32_t rgb = fxc.strip[strip]->palette[pos+i];
-                  int r = (rgb >> 16) & 0xFF;
-                  int g = (rgb >> 8) & 0xFF;
-                  int b = (rgb >> 0) & 0xFF;
-                  r+=128;
-                  g+=128;
-                  b+=128;
-                  if (r > 255) r = 255;
-                  if (g > 255) g = 255;
-                  if (b > 255) b = 255;
-                  fxc.strip[strip]->palette[ pos+i ] = LEDRGB(r,g,b);//v;
-                }
-              }
-            }
-            break;
-          }
-          default:
-            break;
-        }
-      }
-    }          
+    
   }
   
 }

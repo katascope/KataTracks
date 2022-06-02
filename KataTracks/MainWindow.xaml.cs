@@ -197,6 +197,26 @@ namespace KataTracks
                     Log8.Text = title + "\n" + message;
                     Log8.ScrollToEnd();
                     break;
+                case 8:
+                    Log9.Foreground = brush;
+                    Log9.Text = title + "\n" + message;
+                    Log9.ScrollToEnd();
+                    break;
+                case 9:
+                    Log10.Foreground = brush;
+                    Log10.Text = title + "\n" + message;
+                    Log10.ScrollToEnd();
+                    break;
+                case 10:
+                    Log11.Foreground = brush;
+                    Log11.Text = title + "\n" + message;
+                    Log11.ScrollToEnd();
+                    break;
+                case 11:
+                    Log12.Foreground = brush;
+                    Log12.Text = title + "\n" + message;
+                    Log12.ScrollToEnd();
+                    break;
             }
         }
 
@@ -389,6 +409,8 @@ namespace KataTracks
 
         void StopAndSendToBoth(string value)
         {
+            if (value == "gt") value = ">";
+            else if (value == "lt") value = "<";
             DeviceManagerBLE.SendMessage(value);
         }
         private void SendBoth(object sender, RoutedEventArgs e)

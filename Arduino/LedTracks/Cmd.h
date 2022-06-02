@@ -74,6 +74,9 @@ enum UserCommand
   Cmd_SpeedInc,
   Cmd_SpeedRst,
 
+  Cmd_Particles_On,
+  Cmd_Particles_Off,
+
   Cmd_StripAll,
   Cmd_StripNone,
   Cmd_StripOdds,
@@ -87,13 +90,7 @@ enum UserCommand
   Cmd_Strip6,
   Cmd_Strip7,
 
-  Cmd_Stars_Pos_On,
-  Cmd_Stars_Pos_Off,
-  Cmd_Stars_Neg_On,
-  Cmd_Stars_Neg_Off,
-
   Cmd_TransitionFast
-
 };
 
 void UserCommandExecute(FxController &fxc, int cmd);

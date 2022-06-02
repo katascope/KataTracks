@@ -75,6 +75,7 @@ void trackStop(FxController &fxc)
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {    
     fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::None; 
+    fxc.strip[strip]->SetParticlesRunning(false);
   }
   fxc.stripMask = 0xFF;
   //Serial.println(F("Stopping Track"));

@@ -4,8 +4,22 @@
 #include "Config.h"
 #include "FxCore.h"
 
-#define NUM_SIDEFX 4
 #define NUM_PARTICLES 4
+
+class FxParticle
+{
+public:  
+  float on = false;
+  float loc = 0;
+  float vel = 0;
+  unsigned int len = 2;
+  uint32_t rgb = 0xFFFFFFFF;
+  FxParticle()
+  {
+      loc = 0;
+      vel = 0.5f + (float)(rand()%40) / 40.0f;
+  }
+};
 
 class FxStripController
 {
@@ -22,7 +36,6 @@ public:
   int paletteDirection = 1;
   int paletteIndex = 0;
 
-  bool sideFx[NUM_SIDEFX];
   FxParticle particles[NUM_PARTICLES];
 public:
   FxStripController(int nl)
@@ -39,19 +52,40 @@ public:
       initialPalette[i] = LEDRGB(0,0,0);
       sequence[i] = i;
     }
-    for (int s=0;s<NUM_SIDEFX;s++)
-      sideFx[s] = false;
-
-    for (int p=0;p<NUM_PARTICLES;p++)
-    {
-      particles[p].pos = rand() & (numleds-1);
-      //particles[p].vel = 0.25f + (float)(rand()%10) / 10.0f;      
-      //if (rand()%2==0)
-        particles[p].vel = 0.5f + (float)(rand()%40) / 40.0f;
-      //else
-        //particles[p].vel = -0.5f - (float)(rand()%40) / 40.0f;      
-    }
   } 
+  bool HasRunning()
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+      if (particles[i].on) 
+        return true;
+    return false;
+  }
+  void SetParticlesRunning(bool state)
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+      particles[i].on = state;
+  }
+  void SetParticlesLength(int len)
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+      particles[i].len = len;
+  }
+  void SetParticlesColor(uint32_t rgb)
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+      particles[i].rgb = rgb;
+  }
+  void SetParticlesDirection(int dir)//-1 or 1
+  {
+    RandomizeParticles();
+    for (int i=0;i<NUM_PARTICLES;i++)
+      particles[i].loc = dir * particles[i].loc;
+  }
+  void RandomizeParticles()
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+      particles[i].loc = rand() % (numleds-1);
+  }
 };
 
 struct FxController
@@ -69,6 +103,9 @@ public:
     for (int i=0;i<NUM_STRIPS;i++)
         if (strip[i]->paletteSpeed > 0)
           return true;
+    if (HasRunning())
+      return true;
+    
     return false;
   }
   FxController()
@@ -89,6 +126,39 @@ public:
       }
     }
   }
+  bool HasRunning()
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        if (strip[s]->HasRunning())
+          return true;
+    return false;
+  }
+  void SetParticlesRunning(bool isRunning)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetParticlesRunning(isRunning);
+  }  
+  void SetParticlesColor(uint32_t rgb)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetParticlesColor(rgb);
+  }  
+  void SetParticlesDirection(int dir)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetParticlesDirection(dir);
+  }  
+  void SetParticlesLength(int len)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetParticlesLength(len);
+  }
+  
 };
 
 void FxProcessSideFX(FxController &fxc);

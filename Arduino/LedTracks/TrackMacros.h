@@ -9,8 +9,9 @@
   I, fx_strip_all, \
   I, fx_transition_timed_fade, \
   I, fx_palette_dark, \
+  I, fx_particles_off, \
   I + 1000, fx_transition_fast,\
-  I + 1000, fx_palette_dark,
+  I + 1000, fx_palette_dark, 
 
 #define _RANDOM_TO(I, FXRGB) \
   I, fx_transition_timed_wipe_random, \
@@ -114,6 +115,8 @@
   I+3600, FXRGB4, \
   I+4200, FXRGB5,
 
+  
+
   //break up into legs in chest in arms in segments
 
 #define _MULTI_COLOR_FROM_FEET(I, FXRGB) \
@@ -142,10 +145,16 @@
   I, fx_transition_timed_wipe_neg, \
   I, FXRGB, \
 
-#define _MULTI_COLOR_FROM_WAIST(I, FXRGB) \
+#define _MULTI_COLOR_FROM_WAIST_TO_FEET(I, FXRGB) \
   I, fx_speed_rst, \
   I, fx_strip + (LEFT_LEG|RIGHT_LEG), \
   I, fx_transition_timed_wipe_neg, \
+  I, FXRGB,
+
+#define _MULTI_BURST_FROM_CENTER(I, FXRGB) \
+  I, fx_speed_rst, \
+  I, fx_strip + (LEFT_CHEST_A|RIGHT_CHEST_A|LEFT_CHEST_B|RIGHT_CHEST_B), \
+  I, fx_transition_timed_wipe_inout, \
   I, FXRGB,
 
 #define _MULTI_COLOR_FROM_WRISTS(I, FXRGB) \
@@ -213,3 +222,8 @@
   I, fx_speed_rst, \
   I, fx_transition_timed_wipe_inout, \
   I, FXRGB, \
+
+#define _TWO_STEP_MULTI_BURST_FULLBODY(I1, I2, FXRGB) \
+  _MULTI_BURST_FROM_CENTER(I1, FXRGB) \
+  _MULTI_COLOR_FROM_WAIST_TO_FEET(I2, FXRGB) \
+  _MULTI_COLOR_FROM_SHOULDERS_TO_WRISTS(I2, FXRGB)

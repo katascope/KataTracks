@@ -40,24 +40,6 @@
 #define CRGB_HALF    LEDRGB(HALF)
 #define CRGB_LOWHALF LEDRGB(LOWHALF)
 
-class FxParticle
-{
-public:  
-  float on = false;
-  float pos = 0;
-  float vel = 0;
-  uint32_t rgb = 0xFFFFFFFF;
-};
-
-enum SideFx
-{
-  SideFx_None      = 0,
-  SideFx_Stars_Pos = 1,
-  SideFx_Stars_Neg = 2,
-  SideFx_Bars_Pos  = 3,
-  SideFx_Bars_Neg  = 4
-};
-
 enum FxPaletteUpdateType
 {
   None,
@@ -264,15 +246,25 @@ enum FxEvent
 
   fx_palette_rbm,
 
-  fx_sidefx_stars_pos_on,
-  fx_sidefx_stars_pos_off,
-  fx_sidefx_stars_neg_on,
-  fx_sidefx_stars_neg_off,
+  fx_particles_off,
+  fx_particles_pos,
+  fx_particles_neg,
+  fx_particles_length_1,
+  fx_particles_length_2,
+  fx_particles_length_3,
+  fx_particles_length_4,
 
-  fx_sidefx_bars_pos_on,
-  fx_sidefx_bars_pos_off,
-  fx_sidefx_bars_neg_on,
-  fx_sidefx_bars_neg_off,
+  fx_particles_color_dark,
+  fx_particles_color_white,
+  fx_particles_color_red,
+  fx_particles_color_yellow,
+  fx_particles_color_green,
+  fx_particles_color_cyan,
+  fx_particles_color_blue,
+  fx_particles_color_magenta,
+  fx_particles_color_orange,
+  fx_particles_color_half,
+  fx_particles_color_lowhalf,    
   
   fx_strip_all,  //Target all strips
   fx_strip_none, //Target no strips, why?

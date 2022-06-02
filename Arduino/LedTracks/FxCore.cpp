@@ -264,11 +264,25 @@ void PrintFxEventName(int event)
     case fx_strip6:     Serial.print(F("strip6"));return;
     case fx_strip7:     Serial.print(F("strip7"));return;
 
-    case fx_sidefx_stars_pos_on: Serial.print(F("stars_pos_on"));return;
-    case fx_sidefx_stars_pos_off: Serial.print(F("stars_pos_off"));return;
-    case fx_sidefx_stars_neg_on: Serial.print(F("stars_neg_on"));return;
-    case fx_sidefx_stars_neg_off: Serial.print(F("stars_neg_off"));return;
-
+    case fx_particles_off: Serial.print(F("particles_off"));return;
+    case fx_particles_pos: Serial.print(F("particles_pos"));return;
+    case fx_particles_neg: Serial.print(F("particles_neg"));return;
+    case fx_particles_length_1: Serial.print(F("particles_len1"));return;
+    case fx_particles_length_2: Serial.print(F("particles_len2"));return;
+    case fx_particles_length_3: Serial.print(F("particles_len3"));return;
+    case fx_particles_length_4: Serial.print(F("particles_len4"));return;
+    case fx_particles_color_dark:   Serial.print(F("particles_color_dark"));return;
+    case fx_particles_color_white:  Serial.print(F("particles_color_white"));return;
+    case fx_particles_color_red:    Serial.print(F("particles_color_wred"));return;
+    case fx_particles_color_yellow: Serial.print(F("particles_color_yellow"));return;
+    case fx_particles_color_green : Serial.print(F("particles_color_green"));return;
+    case fx_particles_color_cyan:   Serial.print(F("particles_color_cyan"));return;
+    case fx_particles_color_blue:   Serial.print(F("particles_color_blue"));return;
+    case fx_particles_color_magenta:Serial.print(F("particles_color_magenta"));return;
+    case fx_particles_color_orange: Serial.print(F("particles_color_orange"));return;
+    case fx_particles_color_half:   Serial.print(F("particles_color_half"));return;
+    case fx_particles_color_lowhalf:Serial.print(F("particles_color_lowhalf"));return;
+      
     case fx_nothing:Serial.print(F("nothing"));return;
   }
 }

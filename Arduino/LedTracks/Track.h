@@ -33,7 +33,7 @@ const unsigned long SongTrackTest[] PROGMEM =
   1000, fx_speed_1,
   1000, fx_speed_pos,
   1000, fx_transition_timed_fade,
-  1000, fx_sidefx_bars_pos_on,
+  1000, fx_particles_pos,
   1000, fx_palette_lava,
   /*5000, fx_palette_yellow,
   10000, fx_palette_green,
@@ -85,7 +85,7 @@ const unsigned long SongTrack[] PROGMEM =
     _MULTI_COLOR_FROM_RIGHT_WRIST(14800, fx_palette_magenta)
     _MULTI_COLOR_FROM_RIGHT_SHOULDER_TO_CENTER(15200, fx_palette_magenta)
     _MULTI_COLOR_FROM_CENTER_TO_LEFT_SHOULDER(15600, fx_palette_magenta)
-    _MULTI_COLOR_FROM_WAIST(16000, fx_palette_magenta)
+    _MULTI_COLOR_FROM_WAIST_TO_FEET(16000, fx_palette_magenta)
     _MULTI_COLOR_TO_LEFT_WRIST(16400, fx_palette_magenta)
 #elif FOLLOW
     _MULTI_COLOR_FROM_RIGHT_WRIST(14800, fx_palette_magenta)
@@ -119,12 +119,14 @@ const unsigned long SongTrack[] PROGMEM =
     //Reachout?
     _MULTI_COLOR_FROM_WRISTS(26900, fx_palette_magenta)
     _MULTI_COLOR_FROM_SHOULDERS_TO_CENTER(27400, fx_palette_magenta)
-    _MULTI_COLOR_FROM_WAIST(27900, fx_palette_magenta)
+    _MULTI_COLOR_FROM_WAIST_TO_FEET(27900, fx_palette_magenta)
 
+    //Take them to crazytown.
     _MULTI_FINISH(29000)
-    _BURST_OUT_TO(29000, fx_palette_half)
-    //Take them to crazytown.. we came together, so purple again?
-    29000, fx_sidefx_bars_pos_on,
+    _BURST_OUT_TO(29000, fx_palette_half)    
+    29000, fx_particles_neg,
+    //we came together, so purple again?
+    29000, fx_particles_color_magenta,
     29000, fx_transition_timed_wipe_inout,
     29000, fx_palette_blue,
     29400, fx_palette_red,
@@ -138,9 +140,10 @@ const unsigned long SongTrack[] PROGMEM =
     32520, fx_palette_blue,
     32910, fx_palette_rm,
     33300, fx_palette_rb,
-    33690, fx_sidefx_bars_pos_off,
+    33690, fx_particles_off,
     33690, fx_palette_red,
-    //33690,fx_transition_fast,
+    
+    34080, fx_particles_off,
     34080, fx_speed_2,
     34080, fx_speed_neg,
     _MULTI_COLOR_FROM_FEET(34080, COLOR_BETA)
@@ -189,16 +192,19 @@ const unsigned long SongTrack[] PROGMEM =
     47100, fx_strip_all,
     47100, fx_speed_2,
     47100, fx_speed_neg,
-    _FADE_TO(47100, fx_palette_pulse2_blue)
-    _FADE_TO(48100, fx_palette_pulse2_blue)
+    
+    47100, fx_particles_pos,
+    47100, fx_particles_color_red,
+    
+    _FADE_TO(47100, fx_palette_pulse2_red)
+    _FADE_TO(48100, fx_palette_pulse2_red)
     //primetime
+    50400, fx_particles_off,
     _FLASH_WHITE(50400)
-    50400, fx_sidefx_bars_pos_on,
 
     //blue fire
     _FIRE_EFFECT(50600, fx_palette_pulse2_blue, fx_palette_pulse2_cyan, fx_palette_pulse2_white, fx_palette_blue, fx_palette_cyan)
     _FIRE_EFFECT(55000, fx_palette_pulse2_blue, fx_palette_pulse2_magenta, fx_palette_db, fx_palette_dm, fx_palette_dbm)
-    57200, fx_sidefx_bars_pos_off,
 
     //creates the 'eva effect'
     //57200, fx_speed_rst,
@@ -256,7 +262,7 @@ const unsigned long SongTrack[] PROGMEM =
     //pickup from spinning
     _MULTI_COLOR_FROM_WRISTS(101000, fx_palette_magenta)
     _MULTI_COLOR_FROM_NECK(102000, fx_palette_magenta)
-    _MULTI_COLOR_FROM_WAIST(103000, fx_palette_magenta)
+    _MULTI_COLOR_FROM_WAIST_TO_FEET(103000, fx_palette_magenta)
 #elif FOLLOW
     _FADE_TO(103000, fx_palette_magenta)//redundant
 #endif
@@ -314,6 +320,8 @@ const unsigned long SongTrack[] PROGMEM =
     123200, fx_palette_pulse2_blue,
     123300, fx_palette_pulse2_magenta,
     123400, fx_palette_pulse2_white,
+    123500, fx_particles_pos,
+    123500, fx_particles_color_white,
     123500, fx_speed_16,
     123500, fx_transition_fast,
     123500, fx_palette_pulse3_red,
@@ -330,9 +338,10 @@ const unsigned long SongTrack[] PROGMEM =
     124600, fx_palette_pulse4_blue,
     124700, fx_palette_pulse4_magenta,
     124800, fx_palette_pulse4_white,
+    124800, fx_particles_off,
 
     _FADE_TO(125000, fx_palette_magenta)
-    _FADE_TO(126000, fx_palette_dark)
+    _FADE_TO(126500, fx_palette_dark)
 
     //the end
     _TRACK_END(127000)
