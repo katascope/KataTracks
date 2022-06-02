@@ -264,6 +264,10 @@ void PrintFxEventName(int event)
     case fx_strip6:     Serial.print(F("strip6"));return;
     case fx_strip7:     Serial.print(F("strip7"));return;
 
+    case fx_sidefx_stars_pos_on: Serial.print(F("stars_pos_on"));return;
+    case fx_sidefx_stars_pos_off: Serial.print(F("stars_pos_off"));return;
+    case fx_sidefx_stars_neg_on: Serial.print(F("stars_neg_on"));return;
+    case fx_sidefx_stars_neg_off: Serial.print(F("stars_neg_off"));return;
 
     case fx_nothing:Serial.print(F("nothing"));return;
   }

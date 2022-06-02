@@ -87,6 +87,11 @@ enum UserCommand
   Cmd_Strip6,
   Cmd_Strip7,
 
+  Cmd_Stars_Pos_On,
+  Cmd_Stars_Pos_Off,
+  Cmd_Stars_Neg_On,
+  Cmd_Stars_Neg_Off,
+
   Cmd_TransitionFast
 
 };

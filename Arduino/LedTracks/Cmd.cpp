@@ -52,6 +52,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("@code : Time code"));
       Serial.println(F("[ b | n | v] : Brightness Full | Normal | Half"));
       Serial.println(F("z:default mode x:test"));
+      Serial.println(F("a s d f : stars"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("q:strip0 w:strip1 e:strip2 r:strip3 t:strip4 y:strip5 u:strip6 i:strip7 p:All"));
       Serial.println(F("Q:lava W:cloud E:cm R:rb T:rainbow Y:rainbowstripe U:party I:heat"));        
@@ -147,7 +148,14 @@ void UserCommandExecute(FxController &fxc, int cmd)
         neopixelSetBrightness(strip,BRIGHTNESS/2);
       break;
     }
+    
+    case Cmd_Stars_Pos_On:  InstantEvent(fxc, fx_sidefx_stars_pos_on,  FxPaletteUpdateType::Once); break;
+    case Cmd_Stars_Pos_Off: InstantEvent(fxc, fx_sidefx_stars_pos_off, FxPaletteUpdateType::Once); break;
+    case Cmd_Stars_Neg_On:  InstantEvent(fxc, fx_sidefx_stars_neg_on,  FxPaletteUpdateType::Once); break;
+    case Cmd_Stars_Neg_Off: InstantEvent(fxc, fx_sidefx_stars_neg_off, FxPaletteUpdateType::Once); break;
+    
 #endif  
+
     default: break;
   }
 }
@@ -287,6 +295,11 @@ void UserCommandInput(FxController &fxc, int data)
     case '-': UserCommandExecute(fxc, Cmd_SpeedDec);break;
     case '=': UserCommandExecute(fxc, Cmd_SpeedInc);break;
     case '~': UserCommandExecute(fxc, Cmd_SpeedRst);break;
+
+    case ',': UserCommandExecute(fxc, Cmd_Stars_Pos_On);break;
+    case '<': UserCommandExecute(fxc, Cmd_Stars_Pos_Off);break;
+    case '.': UserCommandExecute(fxc, Cmd_Stars_Neg_On);break;
+    case '>': UserCommandExecute(fxc, Cmd_Stars_Neg_Off);break;
 
     case 10:
     case 13:

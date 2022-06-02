@@ -40,6 +40,24 @@
 #define CRGB_HALF    LEDRGB(HALF)
 #define CRGB_LOWHALF LEDRGB(LOWHALF)
 
+class FxParticle
+{
+public:  
+  float on = false;
+  float pos = 0;
+  float vel = 0;
+  uint32_t rgb = 0xFFFFFFFF;
+};
+
+enum SideFx
+{
+  SideFx_None      = 0,
+  SideFx_Stars_Pos = 1,
+  SideFx_Stars_Neg = 2,
+  SideFx_Bars_Pos  = 3,
+  SideFx_Bars_Neg  = 4
+};
+
 enum FxPaletteUpdateType
 {
   None,
@@ -246,6 +264,16 @@ enum FxEvent
 
   fx_palette_rbm,
 
+  fx_sidefx_stars_pos_on,
+  fx_sidefx_stars_pos_off,
+  fx_sidefx_stars_neg_on,
+  fx_sidefx_stars_neg_off,
+
+  fx_sidefx_bars_pos_on,
+  fx_sidefx_bars_pos_off,
+  fx_sidefx_bars_neg_on,
+  fx_sidefx_bars_neg_off,
+  
   fx_strip_all,  //Target all strips
   fx_strip_none, //Target no strips, why?
   fx_strip_evens, //Target even strips
@@ -292,7 +320,7 @@ enum FxEvent
   fx_strip4 = fx_stripmask_16,    
   fx_strip5 = fx_stripmask_32,    
   fx_strip6 = fx_stripmask_64,    
-  fx_strip7 = fx_stripmask_128,    
+  fx_strip7 = fx_stripmask_128,   
   
   fx_nothing = 0xFFFF
 };

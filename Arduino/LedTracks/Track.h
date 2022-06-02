@@ -1,3 +1,4 @@
+
 #ifndef TRACK_DEF
 #define TRACK_DEF
 #include "Config.h"
@@ -29,14 +30,18 @@
 const unsigned long SongTrackTest[] PROGMEM =
 {
   _FLASH_WHITE(1000)
-  1000, fx_transition_timed_wipe_random,
-  1000, fx_palette_red,
-  5000, fx_palette_yellow,
+  1000, fx_speed_1,
+  1000, fx_speed_pos,
+  1000, fx_transition_timed_fade,
+  1000, fx_sidefx_bars_pos_on,
+  1000, fx_palette_lava,
+  /*5000, fx_palette_yellow,
   10000, fx_palette_green,
   15000, fx_palette_cyan,
   20000, fx_palette_blue,
-  25500, fx_palette_magenta,
+  25500, fx_palette_magenta,*/
 
+  //40000, fx_sidefx_stars_neg_on,
   _FADE_TO(40000, fx_palette_dark)
   _TRACK_END(45000)
 };
@@ -119,6 +124,7 @@ const unsigned long SongTrack[] PROGMEM =
     _MULTI_FINISH(29000)
     _BURST_OUT_TO(29000, fx_palette_half)
     //Take them to crazytown.. we came together, so purple again?
+    29000, fx_sidefx_bars_pos_on,
     29000, fx_transition_timed_wipe_inout,
     29000, fx_palette_blue,
     29400, fx_palette_red,
@@ -132,6 +138,7 @@ const unsigned long SongTrack[] PROGMEM =
     32520, fx_palette_blue,
     32910, fx_palette_rm,
     33300, fx_palette_rb,
+    33690, fx_sidefx_bars_pos_off,
     33690, fx_palette_red,
     //33690,fx_transition_fast,
     34080, fx_speed_2,
@@ -186,10 +193,12 @@ const unsigned long SongTrack[] PROGMEM =
     _FADE_TO(48100, fx_palette_pulse2_blue)
     //primetime
     _FLASH_WHITE(50400)
+    50400, fx_sidefx_bars_pos_on,
 
     //blue fire
     _FIRE_EFFECT(50600, fx_palette_pulse2_blue, fx_palette_pulse2_cyan, fx_palette_pulse2_white, fx_palette_blue, fx_palette_cyan)
     _FIRE_EFFECT(55000, fx_palette_pulse2_blue, fx_palette_pulse2_magenta, fx_palette_db, fx_palette_dm, fx_palette_dbm)
+    57200, fx_sidefx_bars_pos_off,
 
     //creates the 'eva effect'
     //57200, fx_speed_rst,

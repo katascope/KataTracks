@@ -122,7 +122,7 @@ namespace KataTracks
                     device.serviceCache[service.uuid] = service;//.Add(service);
                 }
                 //device.log = bd.Name + " BLE thread(" + device.monitorThread.ManagedThreadId.ToString() + ")\n";
-                device.log = bd.Name + "(t" + device.monitorThread.ManagedThreadId.ToString() + "), gatt=" + gattServices.Count + "\n " + device.id + " ONLINE";
+                device.log = bd.Name + "(t" + device.monitorThread.ManagedThreadId.ToString() + "), g=" + gattServices.Count + " " + device.id + " OK";
                 device.bluetoothDevice = bd;
                 //bleDevices[device.id] = device;
                 device.queryingGatt = false;
@@ -169,7 +169,7 @@ namespace KataTracks
                     else
                     {
                         BleDevice device = bleDevices[id];
-                        device.log = device.name + "(t" + device.monitorThread.ManagedThreadId.ToString() + "), gatt=" + bleDevices[id].serviceCache.Count + "\n " + device.id + " ONLINE";
+                        device.log = device.name + "(t" + device.monitorThread.ManagedThreadId.ToString() + "), g=" + bleDevices[id].serviceCache.Count + " " + device.id + " OK";
                     }
 
 

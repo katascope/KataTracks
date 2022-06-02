@@ -146,8 +146,33 @@ void FxDisplayStatus(FxController &fxc)
 #else
       Serial.print(F(",BLE off"));
 #endif
-  //Strip debugging
 
+//SideFX
+      Serial.print(F(", sfx{"));
+      for (int strip=0;strip<NUM_STRIPS;strip++)
+      {
+        bool found = true;
+        for (int sfx=0;sfx<NUM_SIDEFX;sfx++)      
+          if (fxc.strip[strip]->sideFx[sfx])
+            found = true;
+        if (found)
+        {
+          Serial.print(strip);
+          Serial.print(F("="));
+          for (int sfx=0;sfx<NUM_SIDEFX;sfx++)      
+          {
+            if (fxc.strip[strip]->sideFx[sfx])
+            {
+              Serial.print(sfx);
+              Serial.print(F(" "));
+            }
+          }
+          Serial.print(F(" "));
+        }
+      }
+      Serial.print(F("} "));
+
+      //Strip debugging
 #if ENABLE_NEOPIXEL  
       for (int strip=0;strip<NUM_STRIPS;strip++)
       {
@@ -277,6 +302,19 @@ void SetPaletteDirection(FxController &fxc, int c)
         fxc.strip[strip]->paletteSpeed = 0;
     }
   }
+}
+
+void SideFxSetRunning(FxController &fxc, SideFx sfx, bool isRunning)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip))   
+    {
+      fxc.strip[strip]->sideFx[sfx] = isRunning;      
+    }
+    else
+    Serial.println(F("Not change sidefx running"));
+  }  
 }
 
 void FxEventProcess(FxController &fxc,int event)
@@ -536,5 +574,132 @@ void FxEventProcess(FxController &fxc,int event)
       0xFF9900, 0xFFCC00, 0xFFFF00, 0xFFFF33, 
       0xFFFF66, 0xFFFF99, 0xFFFFCC, 0xFFFFFF);break;
 
+    case fx_sidefx_stars_pos_on:  SideFxSetRunning(fxc, SideFx_Stars_Pos, true); break;
+    case fx_sidefx_stars_pos_off: SideFxSetRunning(fxc, SideFx_Stars_Pos, false); break;
+    case fx_sidefx_stars_neg_on:  SideFxSetRunning(fxc, SideFx_Stars_Neg, true); break;
+    case fx_sidefx_stars_neg_off: SideFxSetRunning(fxc, SideFx_Stars_Neg, false); break;
+    case fx_sidefx_bars_pos_on:   SideFxSetRunning(fxc, SideFx_Bars_Pos, true); break;
+    case fx_sidefx_bars_pos_off:  SideFxSetRunning(fxc, SideFx_Bars_Pos, false); break;
+    case fx_sidefx_bars_neg_on:   SideFxSetRunning(fxc, SideFx_Bars_Neg, true); break;
+    case fx_sidefx_bars_neg_off:  SideFxSetRunning(fxc, SideFx_Bars_Neg, false); break;
+
  }
+}
+
+
+void FxProcessSideFX(FxController &fxc)
+{
+/*      if (fxc.strip[strip]->transitionType == Transition_TimedFadeCos)
+      {
+        float sinMux = cos(fxc.transitionMux * 3.14159f * 2 * 1.5f);
+        for (int i = 0; i < numleds; i++)
+          fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
+*/
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    for (int sfx=0;sfx<NUM_SIDEFX;sfx++)
+    {
+      if (fxc.strip[strip]->sideFx[sfx])
+      {
+        switch (sfx)
+        {
+          case SideFx_Stars_Pos:
+          {
+            for (int particle=0;particle<NUM_PARTICLES;particle++)
+            {
+              fxc.strip[strip]->particles[particle].pos += fxc.strip[strip]->particles[particle].vel;
+              if (fxc.strip[strip]->particles[particle].pos >= fxc.strip[strip]->numleds)
+                fxc.strip[strip]->particles[particle].pos = 0;
+
+              int pos = fxc.strip[strip]->particles[particle].pos;
+              fxc.strip[strip]->palette[ pos ]= LEDRGB(255,255,255);
+            }
+            break;
+          }
+          case SideFx_Stars_Neg:
+          {
+            for (int particle=0;particle<NUM_PARTICLES;particle++)
+            {
+              fxc.strip[strip]->particles[particle].pos -= fxc.strip[strip]->particles[particle].vel;
+              if (fxc.strip[strip]->particles[particle].pos < 0)
+                fxc.strip[strip]->particles[particle].pos =  fxc.strip[strip]->numleds - 1;
+
+              int pos = fxc.strip[strip]->particles[particle].pos;
+              fxc.strip[strip]->palette[ pos ]= LEDRGB(255,255,255);
+            }
+            break;
+          }
+          case SideFx_Bars_Pos:
+          {
+            for (int particle=0;particle<NUM_PARTICLES;particle++)
+            {
+              fxc.strip[strip]->particles[particle].pos += fxc.strip[strip]->particles[particle].vel;
+              if (fxc.strip[strip]->particles[particle].pos >= fxc.strip[strip]->numleds)
+                fxc.strip[strip]->particles[particle].pos = 0;
+                
+              if (fxc.strip[strip]->particles[particle].pos < 0)
+                fxc.strip[strip]->particles[particle].pos =  fxc.strip[strip]->numleds - 1;
+
+              int pos = fxc.strip[strip]->particles[particle].pos;
+              int BAR_LENGTH = 0.5+(int)abs(fxc.strip[strip]->particles[particle].vel);
+              for (int i=0;i<BAR_LENGTH;i++)
+              {
+                if (pos + i < fxc.strip[strip]->numleds)
+                {
+                  uint32_t rgb = fxc.strip[strip]->palette[pos+i];
+                  int r = (rgb >> 16) & 0xFF;
+                  int g = (rgb >> 8) & 0xFF;
+                  int b = (rgb >> 0) & 0xFF;
+                  r+=128;
+                  g+=128;
+                  b+=128;
+                  if (r > 255) r = 255;
+                  if (g > 255) g = 255;
+                  if (b > 255) b = 255;
+                  fxc.strip[strip]->palette[ pos+i ] = LEDRGB(r,g,b);//v;
+                }
+              }
+            }
+            break;
+          }
+          case SideFx_Bars_Neg:
+          {
+            for (int particle=0;particle<NUM_PARTICLES;particle++)
+            {
+              fxc.strip[strip]->particles[particle].pos -= fxc.strip[strip]->particles[particle].vel;
+              if (fxc.strip[strip]->particles[particle].pos >= fxc.strip[strip]->numleds)
+                fxc.strip[strip]->particles[particle].pos = 0;
+                
+              if (fxc.strip[strip]->particles[particle].pos < 0)
+                fxc.strip[strip]->particles[particle].pos =  fxc.strip[strip]->numleds - 1;
+
+              int pos = fxc.strip[strip]->particles[particle].pos;
+              int BAR_LENGTH = 0.5+(int)abs(fxc.strip[strip]->particles[particle].vel);
+              for (int i=0;i<BAR_LENGTH;i++)
+              {
+                if (pos + i < fxc.strip[strip]->numleds)
+                {
+                  uint32_t rgb = fxc.strip[strip]->palette[pos+i];
+                  int r = (rgb >> 16) & 0xFF;
+                  int g = (rgb >> 8) & 0xFF;
+                  int b = (rgb >> 0) & 0xFF;
+                  r+=128;
+                  g+=128;
+                  b+=128;
+                  if (r > 255) r = 255;
+                  if (g > 255) g = 255;
+                  if (b > 255) b = 255;
+                  fxc.strip[strip]->palette[ pos+i ] = LEDRGB(r,g,b);//v;
+                }
+              }
+            }
+            break;
+          }
+          default:
+            break;
+        }
+      }
+    }          
+  }
+  
 }

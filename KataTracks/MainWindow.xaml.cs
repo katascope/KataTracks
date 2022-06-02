@@ -210,7 +210,7 @@ namespace KataTracks
                 int color = 0;
                 if (DeviceManagerBLE.bleDevices[kvp.Key].log.Contains("Waiting"))
                     color = 1;
-                if (DeviceManagerBLE.bleDevices[kvp.Key].log.Contains("ONLINE"))
+                if (DeviceManagerBLE.bleDevices[kvp.Key].log.Contains("OK"))
                     color = 2;
                 if (DeviceManagerBLE.bleDevices[kvp.Key].log.Contains(" DC"))
                     color = 3;

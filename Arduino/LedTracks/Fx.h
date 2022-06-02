@@ -4,6 +4,9 @@
 #include "Config.h"
 #include "FxCore.h"
 
+#define NUM_SIDEFX 4
+#define NUM_PARTICLES 4
+
 class FxStripController
 {
 public:  
@@ -18,6 +21,9 @@ public:
   int paletteSpeed = 0;
   int paletteDirection = 1;
   int paletteIndex = 0;
+
+  bool sideFx[NUM_SIDEFX];
+  FxParticle particles[NUM_PARTICLES];
 public:
   FxStripController(int nl)
   { 
@@ -32,6 +38,18 @@ public:
       nextPalette[i] = LEDRGB(0,0,0);
       initialPalette[i] = LEDRGB(0,0,0);
       sequence[i] = i;
+    }
+    for (int s=0;s<NUM_SIDEFX;s++)
+      sideFx[s] = false;
+
+    for (int p=0;p<NUM_PARTICLES;p++)
+    {
+      particles[p].pos = rand() & (numleds-1);
+      //particles[p].vel = 0.25f + (float)(rand()%10) / 10.0f;      
+      //if (rand()%2==0)
+        particles[p].vel = 0.5f + (float)(rand()%40) / 40.0f;
+      //else
+        //particles[p].vel = -0.5f - (float)(rand()%40) / 40.0f;      
     }
   } 
 };
@@ -73,6 +91,7 @@ public:
   }
 };
 
+void FxProcessSideFX(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
 void FxDisplayStatus(FxController &fxc);
 void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) ;

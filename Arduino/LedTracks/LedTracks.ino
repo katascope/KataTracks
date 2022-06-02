@@ -88,6 +88,8 @@ void setup() {
 
 void UpdatePalette()
 {
+  FxProcessSideFX(fxController);
+  
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
     if ((int)fxController.strip[strip]->fxPaletteUpdateType != 0)
@@ -102,6 +104,7 @@ void UpdatePalette()
     neopixelSetPalette(strip, fxController.strip[strip]->numleds, fxController.strip[strip]->palette, fxController.strip[strip]->paletteIndex);
 #endif    
   }
+
 }
 
 void loop()
@@ -140,6 +143,7 @@ void loop()
     if (t - fxController.lastTimeLedUpdate > UPDATE_DELAY)//delay to let bluetooth get data(fastled issue)
     {
       UpdatePalette();
+      
       fxController.lastTimeLedUpdate = t;
       
       for (int strip=0;strip<NUM_STRIPS;strip++)
