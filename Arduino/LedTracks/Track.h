@@ -91,7 +91,7 @@ const unsigned long SongTrack[] PROGMEM =
     _MULTI_COLOR_FROM_RIGHT_WRIST(14800, fx_palette_magenta)
     _MULTI_COLOR_FROM_RIGHT_SHOULDER_TO_CENTER(15200, fx_palette_magenta)
     _MULTI_COLOR_FROM_CENTER_TO_LEFT_SHOULDER(15600, fx_palette_magenta)
-    _MULTI_COLOR_FROM_WAIST(16000, fx_palette_magenta)
+    _MULTI_COLOR_FROM_WAIST_TO_FEET(16000, fx_palette_magenta)
     _MULTI_COLOR_TO_LEFT_WRIST(16400, fx_palette_magenta)
     /*  _MULTI_COLOR_FROM_LEFT_WRIST(14800, fx_palette_magenta`)
       _MULTI_COLOR_FROM_LEFT_SHOULDER_TO_CENTER(15200, fx_palette_magenta)

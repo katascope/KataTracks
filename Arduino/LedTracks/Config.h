@@ -1,12 +1,12 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEAD      1 //Generally LightSuit*A silver
-#define FOLLOW    0 //Generally LightSuit*B gold
-#define SUIT_JACKET    1
+#define LEAD      0 //Generally LightSuit*A silver
+#define FOLLOW    1 //Generally LightSuit*B gold
+#define SUIT_JACKET    0
 
-#if 1
-static const char *DeviceName = "LightSuitAngelC";
+#if 0
+static const char *DeviceName = "LightSuitAngelA";
 #elif LEAD
 static const char *DeviceName = "LightSuitAngelA";
 #elif FOLLOW
@@ -19,6 +19,28 @@ static const char *DeviceName = "LightSuitAngelB";
 #define BRIGHTNESS          20 //50  //Default brightness
 #define BRIGHTNESS_LIMIT    80 //Maximum allowed brightness, //90 possible but runs too hot
 #define ENABLE_SAFETY       1
+
+#if LEAD
+#define NUM_LEDS_0          41
+#define NUM_LEDS_1          41
+#define NUM_LEDS_2          76 
+#define NUM_LEDS_3          76
+#define NUM_LEDS_4          48 //arms
+#define NUM_LEDS_5          48
+#define NUM_LEDS_6          61 //legs
+#define NUM_LEDS_7          61
+#endif
+
+#if FOLLOW
+#define NUM_LEDS_0          36
+#define NUM_LEDS_1          36
+#define NUM_LEDS_2          66 
+#define NUM_LEDS_3          66
+#define NUM_LEDS_4          40 //arms
+#define NUM_LEDS_5          40
+#define NUM_LEDS_6          53 //legs
+#define NUM_LEDS_7          53
+#endif
 
 #if SUIT_JACKET
 #define NUM_LEDS_0          46

@@ -52,7 +52,7 @@ void State_Poll_TestPattern(FxController &fxc)
     neopixelSetPalette(6, fxc.strip[6]->numleds, fxc.strip[6]->palette, fxc.strip[6]->paletteIndex);
     
     FxEventProcess(fxc, fx_strip + LEDS_7);
-    FxEventProcess(fxc, fx_palette_magenta);
+    FxEventProcess(fxc, fx_palette_orange);
     neopixelSetPalette(7, fxc.strip[7]->numleds, fxc.strip[7]->palette, fxc.strip[7]->paletteIndex);
 #endif    
     FxEventProcess(fxc, fx_strip_all);

@@ -85,7 +85,10 @@ namespace KataTracks
         {
             BluetoothDevice bd = null;
             while (bd == null)
-                bd = Task.Run(() => BluetoothDevice.FromIdAsync(bdid)).Result;
+            {
+                var result = Task.Run(() => BluetoothDevice.FromIdAsync(bdid));
+                bd = result.Result;
+            }
 
 
             BleDevice device = bleDevices[bd.Id];
