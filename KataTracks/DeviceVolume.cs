@@ -7,6 +7,9 @@ namespace KataTracks
 {
     class DeviceVolume
     {
+        private static string _name = "";
+        public static string GetName() { return _name; }
+
         private static bool _isActive = false;
         public static bool IsActive() { return _isActive;  }
 
@@ -58,8 +61,11 @@ namespace KataTracks
             int deviceNumber = 0;
             foreach (var rd in captureDevices)
             {
-                if (String.Compare(rd.DeviceFriendlyName.ToUpper(), deviceName.ToUpper()) == 0)
+                if (rd.FriendlyName.ToUpper().Contains(deviceName.ToUpper()))
+                {
+                    _name = rd.FriendlyName;
                     return deviceNumber;
+                }
                 deviceNumber++;
             }
             return 0;
@@ -69,10 +75,9 @@ namespace KataTracks
         {
             try
             {
-                string deviceSearchName = "Yeti Stereo Microphone";
-                int deviceNumber = GetInputDeviceNumber(deviceSearchName);
+                int deviceNumber = GetInputDeviceNumber(deviceName);
 
-                Console.WriteLine("Device number for " + deviceSearchName + " is " + deviceNumber);
+                Console.WriteLine("Device number for " + deviceName + " is " + deviceNumber);
                 var newWaveIn = new WaveInEvent() { DeviceNumber = deviceNumber };
 
                 newWaveIn.WaveFormat = new WaveFormat(11050, 2);

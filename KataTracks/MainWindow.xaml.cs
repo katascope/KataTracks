@@ -60,7 +60,7 @@ namespace KataTracks
 
             //CombinedBluetoothController.Initialize();
 
-            DeviceVolume.Use("Yeti Stereo Microphone");
+            DeviceVolume.Use("Line");
             DeviceWatcher.StartMonitoring();
 
             MainLog.Text += "Ready to Connect\n";
@@ -264,6 +264,8 @@ namespace KataTracks
             MainLog.Text += " Seek " + (timePick*100.0f)+ " ms\n";
 
             MainLog.Text += "SoundTrigger " + (useSoundTrigger ? "ON" : "off") + "\n";
+
+            MainLog.Text += "SoundInput " + DeviceVolume.GetName() + "\n";
 
             if (DeviceVolume.IsActive())
                 MainLog.Text += "Input (" + (int)(DeviceVolume.GetBias()*100.0f) + "%) "+ (int)inputVolume + " of " + (int)VolumeThreshold + "\n";
