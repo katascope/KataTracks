@@ -1,11 +1,11 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEAD      1 //Generally LightSuit*A silver
-#define FOLLOW    0 //Generally LightSuit*B gold
+#define LEAD      0 //Generally LightSuit*A silver
+#define FOLLOW    1 //Generally LightSuit*B gold
 #define SUIT_JACKET    0
 
-#if 1
+#if 0
 static const char *DeviceName = "LightSuitAngelQ";
 #elif LEAD
 static const char *DeviceName = "LightSuitAngelA";
@@ -13,7 +13,7 @@ static const char *DeviceName = "LightSuitAngelA";
 static const char *DeviceName = "LightSuitAngelB";
 #endif
 
-#define STARTUP_STATE       FxState_TestPattern    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
+#define STARTUP_STATE       FxState_Default    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
 #define UPDATE_DELAY        30 //100 //Milliseconds to delay between palette updates, set to 100 for iot, 30 for ble
 #define NUM_STRIPS          8
 #define BRIGHTNESS          20 //50  //Default brightness
@@ -34,8 +34,8 @@ static const char *DeviceName = "LightSuitAngelB";
 #if FOLLOW
 #define NUM_LEDS_0          36
 #define NUM_LEDS_1          36
-#define NUM_LEDS_2          66 
-#define NUM_LEDS_3          66
+#define NUM_LEDS_2          71 
+#define NUM_LEDS_3          71
 #define NUM_LEDS_4          40 //arms
 #define NUM_LEDS_5          40
 #define NUM_LEDS_6          53 //legs
