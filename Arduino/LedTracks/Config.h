@@ -1,8 +1,8 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEAD      0 //Generally LightSuit*A silver
-#define FOLLOW    1 //Generally LightSuit*B gold
+#define LEAD      1 //Generally LightSuit*A silver
+#define FOLLOW    0 //Generally LightSuit*B gold
 #define SUIT_JACKET    0
 
 #if 0
@@ -21,8 +21,8 @@ static const char *DeviceName = "LightSuitAngelB";
 #define ENABLE_SAFETY       1
 
 #if LEAD
-#define NUM_LEDS_0          41
-#define NUM_LEDS_1          41
+#define NUM_LEDS_0          53
+#define NUM_LEDS_1          53
 #define NUM_LEDS_2          76 
 #define NUM_LEDS_3          76
 #define NUM_LEDS_4          48 //arms
@@ -32,8 +32,8 @@ static const char *DeviceName = "LightSuitAngelB";
 #endif
 
 #if FOLLOW
-#define NUM_LEDS_0          36
-#define NUM_LEDS_1          36
+#define NUM_LEDS_0          49
+#define NUM_LEDS_1          49
 #define NUM_LEDS_2          71 
 #define NUM_LEDS_3          71
 #define NUM_LEDS_4          40 //arms
