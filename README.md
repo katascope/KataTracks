@@ -16,7 +16,10 @@ Each LightSuit is a series of individually controlled addressable LED strips and
 ## LightSuitAngel
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid2.png)
+
+The LightSuitAngel devices provides 8-channels of control of LightSuit control. A 3d-printed case covers an Arduino Nano BLE device, using NeoPixel to run micro-second timed preprogrammed tracks.
+
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightDeviceMarkTwo-1.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightDevices2.png)
 
-The LightSuitAngel devices provides 8-channels of control of LightSuit control. A 3d-printed case covers an Arduino Nano BLE device, using NeoPixel to run micro-second timed preprogrammed tracks.
+Other simpler 1-channel devices can also be used with BTF splitters.
