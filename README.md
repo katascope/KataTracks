@@ -14,6 +14,7 @@ The KataTracks Application provides remote Bluetooth Low Energy (BLE) control ov
 Each LightSuit is a series of individually controlled addressable LED strips and LightSuitAngel. Velcro strips are attached to clothing, then to led strips. The velcro holds the strips together and connect at ends through 3-wire BTF connectors into the LightSuitAngel.
 
 ## LightSuitAngel
+![Image](https://github.com/katascope/KataTracks/blob/main/Images/ExplodedLightAngel.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid2.png)
 
