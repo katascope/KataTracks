@@ -3,10 +3,10 @@
 
 #define LEAD      1 //Generally LightSuit*A silver
 #define FOLLOW    0 //Generally LightSuit*B gold
-#define SUIT_JACKET    0
+#define SUIT_JACKET    1
 
 #if 0
-static const char *DeviceName = "LightSuitAngelQ";
+static const char *DeviceName = "LightSuitAngelJ";
 #elif LEAD
 static const char *DeviceName = "LightSuitAngelA";
 #elif FOLLOW
@@ -23,7 +23,7 @@ static const char *DeviceName = "LightSuitAngelB";
 #if LEAD
 #define NUM_LEDS_0          53
 #define NUM_LEDS_1          53
-#define NUM_LEDS_2          76 
+#define NUM_LEDS_2          76
 #define NUM_LEDS_3          76
 #define NUM_LEDS_4          48 //arms
 #define NUM_LEDS_5          48
@@ -34,7 +34,7 @@ static const char *DeviceName = "LightSuitAngelB";
 #if FOLLOW
 #define NUM_LEDS_0          49
 #define NUM_LEDS_1          49
-#define NUM_LEDS_2          71 
+#define NUM_LEDS_2          71
 #define NUM_LEDS_3          71
 #define NUM_LEDS_4          40 //arms
 #define NUM_LEDS_5          40
@@ -45,7 +45,7 @@ static const char *DeviceName = "LightSuitAngelB";
 #if SUIT_JACKET
 #define NUM_LEDS_0          46
 #define NUM_LEDS_1          46
-#define NUM_LEDS_2          36 
+#define NUM_LEDS_2          36
 #define NUM_LEDS_3          36
 #define NUM_LEDS_4          38 //arms
 #define NUM_LEDS_5          38
