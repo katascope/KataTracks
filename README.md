@@ -33,4 +33,12 @@ In combination, the KataTracks system allows for multiple time-synchronized led 
 
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/TronPasoDoble.png)
 
+Abandoned ideas:
+* Using EL wire, too monochrome of effects.
+* Using IMU for colors, too unpredictable during dance.
+* Using regular Arduino Nano, Bluetooth modules cumbersome to attach.
+* Using Arduino Nano IOT, timing was flaky.
+* Playing music to theater, theater will have to provide sound.
+* JST 3-wires, connectors have no tension or bend protection.
+
 KataTracks is under the [MIT License](https://opensource.org/licenses/MIT)
