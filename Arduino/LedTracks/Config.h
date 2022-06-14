@@ -1,11 +1,12 @@
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEAD      1 //Generally LightSuit*A silver
-#define FOLLOW    0 //Generally LightSuit*B gold
-#define SUIT_JACKET    1
+#define LEAD      0 //Generally LightSuit*A silver
+#define FOLLOW    1 //Generally LightSuit*B gold
+#define SUIT_JACKET    0
+#define LAMP           0
 
-#if 0
+#if SUIT_JACKET
 static const char *DeviceName = "LightSuitAngelJ";
 #elif LEAD
 static const char *DeviceName = "LightSuitAngelA";
@@ -16,8 +17,8 @@ static const char *DeviceName = "LightSuitAngelB";
 #define STARTUP_STATE       FxState_Default    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
 #define UPDATE_DELAY        30 //100 //Milliseconds to delay between palette updates, set to 100 for iot, 30 for ble
 #define NUM_STRIPS          8
-#define BRIGHTNESS          20 //50  //Default brightness
-#define BRIGHTNESS_LIMIT    80 //Maximum allowed brightness, //90 possible but runs too hot
+#define BRIGHTNESS          50  //Default brightness
+#define BRIGHTNESS_LIMIT    100 //Maximum allowed brightness, //90 possible but runs too hot
 #define ENABLE_SAFETY       1
 
 #if LEAD
@@ -60,15 +61,17 @@ static const char *DeviceName = "LightSuitAngelB";
 #define DEBUG_BLE           1
 #define SERIAL_BAUD_RATE    9600
 
-#if defined(ARDUINO_AVR_NANO)
+#if LAMP
 #undef STARTUP_STATE
 #define STARTUP_STATE       FxState_TestPattern
-#undef NUM_LEDS
-#define NUM_LEDS            10
+#undef NUM_LEDS0
+#define NUM_LEDS_0          300
 #undef ENABLE_BLE
-#define ENABLE_BLE          0
+#define ENABLE_BLE          1
 #undef NUM_STRIPS
-#define NUM_STRIPS          4
+#define NUM_STRIPS          1
+#undef ENABLE_MULTISTRIP
+#define ENABLE_MULTISTRIP   0
 
 #endif
 

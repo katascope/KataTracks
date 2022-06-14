@@ -50,6 +50,12 @@ namespace KataTracks
         static BluetoothUuid mainStatusUuid = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
 
         static List<string> connectionList = new List<string>() {
+                "91CDE3A4B695", //LightSuitAngelA
+                "B872B08E0D8E", //LightSuitAngelB
+    //            "F6426025BEE",  //LightSuitAngelJ
+/*
+                "77C648CCE101", //LightSuitAngel?
+
                 "CA8E42F29042", //LightSuitA
                 "FA642247BCCD", //LightSuitB
 
@@ -59,13 +65,9 @@ namespace KataTracks
                 "FDB857FE7C3D", //HighPower                
                 "4CEBD64CA98E", //LightSuitI - IOT
                 "9C9C1FDFDFAA", //LightSuitSquid
-
-                "B872B08E0D8E", //LightSuitAngelA?
-                "77C648CCE101", //LightSuitAngelB?
-                "F6426025BEE",  //LightSuitAngelC
-
-                "91CDE3A4B695", //LightSuitAngelABad
-            };
+*/
+  
+                };
     public static void StartMonitoring(List<string> bleDeviceConnectionList)
         {
             //connectionList = bleDeviceConnectionList;
