@@ -18,15 +18,15 @@ Each LightSuit is a series of individually controlled addressable LED strips and
 ## LightSuitAngel
 The LightSuitAngel devices provides 8-channels of control of LightSuit control. A 3d-printed case covers an Arduino Nano BLE device, using NeoPixel to run micro-second timed preprogrammed tracks.
 
-![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightSuitAngel1.png)
+![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightAngel1.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/ExplodedLightAngel.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid2.png)
 
 Other simpler 1-channel devices can also be used with BTF splitters.
 
-![Image](https://github.com/katascope/KataTracks/blob/main/Images/ExplodedDevice.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightDeviceMarkTwo-1.png)
+![Image](https://github.com/katascope/KataTracks/blob/main/Images/ExplodedDevice.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightDevices2.png)
 
 In combination, the KataTracks system allows for multiple time-synchronized led light-suits to be used for performance dance.
