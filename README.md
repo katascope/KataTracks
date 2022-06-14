@@ -1,5 +1,4 @@
 # KataTracks
-![Image](https://github.com/katascope/KataTracks/blob/main/Images/TronPasoDoble.png)
 The KataTracks system is three parts: The KataTracks software, the LightSuit, and the LightSuitAngel device.
 
 ## KataTracks
@@ -31,3 +30,5 @@ Other simpler 1-channel devices can also be used with BTF splitters.
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightDevices2.png)
 
 In combination, the KataTracks system allows for multiple time-synchronized led light-suits to be used for performance dance.
+
+![Image](https://github.com/katascope/KataTracks/blob/main/Images/TronPasoDoble.png)
