@@ -251,7 +251,7 @@ const unsigned long SongTrack[] PROGMEM =
     //end of bwaah
 
     _FADE_TO(88000, fx_palette_rb)
-    _FLASH_TO(94000, fx_palette_magenta)
+    _FLASH_TO(94000, fx_palette_pulse2_magenta)
 
 #if LEAD
     97000, fx_speed_2,
