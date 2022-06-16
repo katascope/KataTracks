@@ -254,22 +254,24 @@ const unsigned long SongTrack[] PROGMEM =
     //end of bwaah
 
     _FADE_TO(88000, fx_palette_rb)
+    _FLASH_TO(94000, fx_palette_blue)
+    _FLASH_TO(95000, fx_palette_red)
 
 #if LEAD
-    _FLASH_TO(94000, fx_palette_pulse2_magenta)
-    94000, fx_speed_2,
-    94000, fx_speed_neg,
-    94000, fx_transition_timed_wipe_random,
-    94000, fx_palette_dark,
+    _FLASH_TO(96000, fx_palette_pulse2_magenta)
+    96000, fx_speed_2,
+    96000, fx_speed_neg,
+    96000, fx_transition_timed_wipe_random,
+    96000, fx_palette_dark,
     100000, fx_palette_dark,
     //pickup from spinning
     _MULTI_COLOR_FROM_WRISTS(101000, fx_palette_magenta)
     _MULTI_COLOR_FROM_NECK(102000, fx_palette_magenta)
     _MULTI_COLOR_FROM_WAIST_TO_FEET(103000, fx_palette_magenta)
 #elif FOLLOW
-    _FLASH_TO(94000, fx_palette_pulse2_magenta)
-    94000, fx_speed_2,
-    94000, fx_speed_neg,
+    _FLASH_TO(96000, fx_palette_pulse2_magenta)
+    96000, fx_speed_2,
+    96000, fx_speed_neg,
     _FADE_TO(97000, fx_palette_magenta)
     101000, fx_palette_magenta,
 #endif
@@ -280,9 +282,9 @@ const unsigned long SongTrack[] PROGMEM =
 
     //CHAPTER 3
     //big march around
-    _FADE_TO(108000, COLOR_ALPHA)
-    _BURST_OUT_TO(109000, fx_palette_half)
-    _BURST_OUT_TO(109500, COLOR_BETA)
+    _FLASH_TO(108000, COLOR_ALPHA)
+    //_BURST_OUT_TO(109000, fx_palette_half)
+    //_BURST_OUT_TO(109500, COLOR_BETA)
     _BURST_OUT_TO(110000, fx_palette_half)
     _BURST_OUT_TO(110500, COLOR_ALPHA)
     _BURST_OUT_TO(111000, fx_palette_half)
