@@ -11,7 +11,14 @@ The KataTracks Application provides remote Bluetooth Low Energy (BLE) control ov
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeBelt3.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightVests1.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightSuitInternal.png)
-![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeCableHole2.png)
+![Image](https://github.com/katascope/KataTracks/blob/main/Images/LightsuitCableHole2.png)
+
+Parts:
+* BTF-LIGHTING WS2812B RGB 5050SMD Individual Addressable LED
+* BTF-LIGHTING 3 Pin Electrical Connector 22AWG IP65 Male Female Connector
+* Two-sided Velcro strip attached to suits
+* Adhesive Velctro strip attached to LED strips
+* Rubberized suit hole
 
 Each LightSuit is a series of individually controlled addressable LED strips and LightSuitAngel. Velcro strips are attached to clothing, then to led strips. The velcro holds the strips together and connect at ends through 3-wire BTF connectors into the LightSuitAngel.
 
@@ -22,6 +29,16 @@ The LightSuitAngel devices provides 8-channels of control of LightSuit control. 
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/ExplodedLightAngel.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid.png)
 ![Image](https://github.com/katascope/KataTracks/blob/main/Images/PrototypeSquid2.png)
+
+Parts
+* Arduino Nano BLE
+* BTF-LIGHTING WS2812B RGB 5050SMD Individual Addressable LED
+* BTF-LIGHTING 3 Pin Electrical Connector 22AWG IP65 Male Female Connector
+* LM2596S LM2596 Buck Converter 3A DC-DC 3-40V to 1.5-35v DC Voltage Regulator 
+* 1000uF 50V Capacitor
+* XT60 connector
+* 25pcs DIP IC Chip Socket Adaptor
+* M3 screws
 
 Other simpler 1-channel devices can also be used with BTF splitters.
 
