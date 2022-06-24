@@ -543,8 +543,10 @@ void FxEventProcess(FxController &fxc,int event)
       0xFFFF66, 0xFFFF99, 0xFFFFCC, 0xFFFFFF);break;
 
     case fx_particles_off: fxc.SetParticlesRunning(false); break;
-    case fx_particles_pos: fxc.SetParticlesRunning(true); fxc.SetParticlesDirection(1); break;
-    case fx_particles_neg: fxc.SetParticlesRunning(true); fxc.SetParticlesDirection(-1); break;
+    case fx_particles_pos: fxc.SetParticlesRunning(true); fxc.SetParticleMode(FX_PARTICLEMODE_STAR); fxc.SetParticlesDirection(1); break;
+    case fx_particles_neg: fxc.SetParticlesRunning(true); fxc.SetParticleMode(FX_PARTICLEMODE_STAR); fxc.SetParticlesDirection(-1); break;
+    case fx_particles_rnd: fxc.SetParticlesRunning(true); fxc.SetParticleMode(FX_PARTICLEMODE_RND); fxc.SetParticlesLength(1);break;//
+    
     case fx_particles_length_1: fxc.SetParticlesLength(1); break;
     case fx_particles_length_2: fxc.SetParticlesLength(2); break;
     case fx_particles_length_3: fxc.SetParticlesLength(3); break;
@@ -583,28 +585,95 @@ void FxProcessSideFX(FxController &fxc)
 
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-
     
             for (int particle=0;particle<NUM_PARTICLES;particle++)
             {
               if (fxc.strip[strip]->particles[particle].on)
               {
-                fxc.strip[strip]->particles[particle].loc += fxc.strip[strip]->particles[particle].vel;
-                if (fxc.strip[strip]->particles[particle].loc >= fxc.strip[strip]->numleds)
-                  fxc.strip[strip]->particles[particle].loc = 0;
-                  
-                if (fxc.strip[strip]->particles[particle].loc < 0)
-                  fxc.strip[strip]->particles[particle].loc =  fxc.strip[strip]->numleds - 1;
-  
-                int loc = fxc.strip[strip]->particles[particle].loc;
-                //int BAR_LENGTH = 0.5+(int)abs(fxc.strip[strip]->particles[particle].vel);
-                for (int i=0;i<fxc.strip[strip]->particles[particle].len;i++)
-                {
-                  if (loc + i < fxc.strip[strip]->numleds)
+
+               /* if (fxc.strip[strip]->particles[particle].mode == FX_PARTICLEMODE_STAR)
+                {                
+                  fxc.strip[strip]->particles[particle].loc += fxc.strip[strip]->particles[particle].vel;
+                  if (fxc.strip[strip]->particles[particle].loc >= fxc.strip[strip]->numleds)
+                    fxc.strip[strip]->particles[particle].loc = 0;
+                    
+                  if (fxc.strip[strip]->particles[particle].loc < 0)
+                    fxc.strip[strip]->particles[particle].loc =  fxc.strip[strip]->numleds - 1;
+    
+                  int loc = fxc.strip[strip]->particles[particle].loc;
+                  for (int i=0;i<fxc.strip[strip]->particles[particle].len;i++)
                   {
-                    fxc.strip[strip]->palette[ loc + i ] = fxc.strip[strip]->particles[particle].rgb;
+                    if (loc + i < fxc.strip[strip]->numleds)
+                    {
+                      fxc.strip[strip]->palette[ loc + i ] = fxc.strip[strip]->particles[particle].rgb;
+                    }
                   }
                 }
+*/
+
+                if (fxc.strip[strip]->particles[particle].mode == FX_PARTICLEMODE_RND)
+                {                
+                  fxc.strip[strip]->particles[particle].len += 2;                  
+                  int len = fxc.strip[strip]->particles[particle].len;
+                  
+                  //for (int i=0;i<fxc.strip[strip]->particles[particle].len;i++)
+                  //{
+                    int loc = fxc.strip[strip]->particles[particle].loc;
+                    //fxc.strip[strip]->particles[particle].rgb;
+                    unsigned int r = (fxc.strip[strip]->palette[ loc ]>> 16) & 0xFF;
+                    unsigned int g = (fxc.strip[strip]->palette[ loc ] >> 8) & 0xFF;
+                    unsigned int b = (fxc.strip[strip]->palette[ loc ] >> 0) & 0xFF;
+                    if (len < 2){ r *= 1; g *= 1; b *= 1; }
+                    if (len < 4){ r *= 2; g *= 2; b *= 2; }
+                    if (len < 6){ r *= 3; g *= 3; b *= 3; }
+                    if (len < 8){ r *= 4; g *= 4; b *= 4; }
+                    if (len < 10){ r *= 6; g *= 6; b *= 6; }
+                    if (r > 255) r = 255;
+                    if (g > 255) g = 255;
+                    if (b > 255) b = 255;
+                   
+                    fxc.strip[strip]->palette[ loc ] = LEDRGB(r,g,b);
+                    //if (loc + len < fxc.strip[strip]->numleds) fxc.strip[strip]->palette[ loc + len ] = LEDRGB(r,g,b);
+                    //if (loc - len > 0) fxc.strip[strip]->palette[ loc - len ] = LEDRGB(r,g,b);
+                  
+                  if ((loc + len) >= fxc.strip[strip]->numleds || (loc - len) < 0)
+                  {
+                    fxc.strip[strip]->particles[particle].loc = rand() % (fxc.strip[strip]->numleds-1);
+                    fxc.strip[strip]->particles[particle].len = 1;
+                  }                   
+                }
+/*                
+                 if (fxc.strip[strip]->particles[particle].mode == FX_PARTICLEMODE_RND)
+                {                
+                  fxc.strip[strip]->particles[particle].len += 1;                  
+                  
+                  for (int i=0;i<fxc.strip[strip]->particles[particle].len;i++)
+                  {
+                    int loc = fxc.strip[strip]->particles[particle].loc;
+                    //fxc.strip[strip]->particles[particle].rgb;
+                    unsigned int r = (fxc.strip[strip]->palette[ loc ]>> 16) & 0xFF;
+                    unsigned int g = (fxc.strip[strip]->palette[ loc ] >> 8) & 0xFF;
+                    unsigned int b = (fxc.strip[strip]->palette[ loc ] >> 0) & 0xFF;
+                    r *= 6;
+                    g *= 6;
+                    b *= 6;
+                    if (r > 255) r = 255;
+                    if (g > 255) g = 255;
+                    if (b > 255) b = 255;
+                   
+                    fxc.strip[strip]->palette[ loc ] = LEDRGB(r,g,b);
+                    if (loc + i < fxc.strip[strip]->numleds)
+                      fxc.strip[strip]->palette[ loc + i ] = LEDRGB(r,g,b);
+                    if (loc - i > 0)
+                      fxc.strip[strip]->palette[ loc - i ] = LEDRGB(r,g,b);
+                  }
+                  if (fxc.strip[strip]->particles[particle].len > 2)
+                  {
+                    fxc.strip[strip]->particles[particle].loc = rand() % (fxc.strip[strip]->numleds-1);
+                    fxc.strip[strip]->particles[particle].len = 1;
+                  }                   
+                }
+*/
                                 
               }
             }

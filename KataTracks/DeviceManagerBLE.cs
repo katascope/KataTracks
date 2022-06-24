@@ -56,7 +56,9 @@ namespace KataTracks
         static List<string> connectionList = new List<string>() {
                 "91CDE3A4B695", //LightSuitAngelA
                 "B872B08E0D8E", //LightSuitAngelB
-    //            "F6426025BEE",  //LightSuitAngelJ
+                //"F6426025BEE",  //LightSuitAngelJ
+                //"2198D30EA040", //LightSuitAngelD
+
 /*
                 "77C648CCE101", //LightSuitAngel?
 

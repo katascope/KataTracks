@@ -253,6 +253,7 @@ enum FxEvent
   fx_particles_off,
   fx_particles_pos,
   fx_particles_neg,
+  fx_particles_rnd,
   fx_particles_length_1,
   fx_particles_length_2,
   fx_particles_length_3,

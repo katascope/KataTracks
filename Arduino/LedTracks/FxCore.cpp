@@ -271,6 +271,7 @@ void PrintFxEventName(int event)
     case fx_particles_off: Serial.print(F("particles_off"));return;
     case fx_particles_pos: Serial.print(F("particles_pos"));return;
     case fx_particles_neg: Serial.print(F("particles_neg"));return;
+    case fx_particles_rnd: Serial.print(F("particles_rnd"));return;
     case fx_particles_length_1: Serial.print(F("particles_len1"));return;
     case fx_particles_length_2: Serial.print(F("particles_len2"));return;
     case fx_particles_length_3: Serial.print(F("particles_len3"));return;

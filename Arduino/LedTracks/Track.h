@@ -32,12 +32,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 //Multistrip
 const unsigned long SongTrackTest[] PROGMEM =
 {
-  _FLASH_WHITE(1000)
-  1000, fx_speed_1,
+  _FLASH_TO(1000, fx_palette_dark)
+  1000, fx_speed_2,
   1000, fx_speed_pos,
   1000, fx_transition_timed_fade,
-  1000, fx_particles_pos,
-  1000, fx_palette_lava,
+  1000, fx_particles_rnd,
+  1000, fx_palette_cm,
   /*5000, fx_palette_yellow,
   10000, fx_palette_green,
   15000, fx_palette_cyan,
@@ -282,6 +282,8 @@ const unsigned long SongTrack[] PROGMEM =
 
     //CHAPTER 3
     //big march around
+    108000, fx_speed_0,
+    108000, fx_particles_rnd,
     _FLASH_TO(108000, COLOR_ALPHA)
     //_BURST_OUT_TO(109000, fx_palette_half)
     //_BURST_OUT_TO(109500, COLOR_BETA)

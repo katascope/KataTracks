@@ -10,10 +10,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #define NUM_PARTICLES 4
 
+enum FxParticleMode
+{
+  FX_PARTICLEMODE_STAR,
+  FX_PARTICLEMODE_RND,
+};
+
 class FxParticle
 {
 public:  
   float on = false;
+  FxParticleMode mode = FX_PARTICLEMODE_STAR;
   float loc = 0;
   float vel = 0;
   unsigned int len = 2;
@@ -85,10 +92,22 @@ public:
     for (int i=0;i<NUM_PARTICLES;i++)
       particles[i].loc = dir * particles[i].loc;
   }
+  void SetParticleMode(FxParticleMode mode)
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+    {
+      particles[i].mode = mode;
+    }
+    RandomizeParticles();
+  }
   void RandomizeParticles()
   {
     for (int i=0;i<NUM_PARTICLES;i++)
+    {
       particles[i].loc = rand() % (numleds-1);
+      if (particles[i].mode == FX_PARTICLEMODE_RND)
+         particles[i].loc = rand() % 10;
+    }
   }
 };
 
@@ -161,6 +180,12 @@ public:
     for (int s=0;s<NUM_STRIPS;s++)
       if (stripMask & (1<<s))   
         strip[s]->SetParticlesLength(len);
+  }
+  void SetParticleMode(FxParticleMode mode)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetParticleMode(mode);
   }
   
 };
