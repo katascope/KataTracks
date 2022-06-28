@@ -139,6 +139,7 @@ const unsigned long SongTrack[] PROGMEM =
     30960, fx_palette_bm,
     31350, fx_palette_rb,
     31740, fx_palette_red,
+    
     32130, fx_palette_magenta,
     32520, fx_palette_blue,
     32910, fx_palette_rm,
@@ -146,7 +147,6 @@ const unsigned long SongTrack[] PROGMEM =
     33690, fx_particles_off,
     33690, fx_palette_red,
     
-    34080, fx_particles_off,
     34080, fx_speed_2,
     34080, fx_speed_neg,
     _MULTI_COLOR_FROM_FEET(34080, COLOR_BETA)
@@ -161,6 +161,7 @@ const unsigned long SongTrack[] PROGMEM =
     36420, COLOR_ALPHA,
     36810, COLOR_BETA,
     37200, fx_palette_rb,
+    37200, fx_particles_off,
     //_MULTI_COLOR_FROM_FEET(36420, COLOR_ALPHA)
     //_MULTI_COLOR_FROM_BELLY(36810, COLOR_BETA)
     //_MULTI_COLOR_FROM_SHOULDERS_TO_WRISTS(37200, fx_palette_rb)
@@ -176,6 +177,7 @@ const unsigned long SongTrack[] PROGMEM =
     //_WIPE_UP(43300, fx_palette_blue)
     43300, fx_speed_rst,
     43300, fx_transition_timed_wipe_inout,
+#if LEAD
     43300, fx_strip + (LEDS_2),
     43300, fx_palette_red,
     43775, fx_strip + (LEDS_1),
@@ -192,7 +194,26 @@ const unsigned long SongTrack[] PROGMEM =
     46150, fx_palette_red,
     46625, fx_strip + (LEDS_7),
     46625, fx_palette_red,
+#elif FOLLOW
+    43300, fx_strip + (LEDS_7),
+    43300, fx_palette_red,
+    43775, fx_strip + (LEDS_5),
+    43775, fx_palette_red,
+    44250, fx_strip + (LEDS_6),
+    44250, fx_palette_red,
+    44725, fx_strip + (LEDS_4),
+    44725, fx_palette_red,
+    45200, fx_strip + (LEDS_3),
+    45200, fx_palette_red,
+    45675, fx_strip + (LEDS_0),
+    45675, fx_palette_red,
+    46150, fx_strip + (LEDS_1),
+    46150, fx_palette_red,
+    46625, fx_strip + (LEDS_2),
+    46625, fx_palette_red,
+#endif    
     47100, fx_strip_all,
+    47100, fx_particles_off,
     47100, fx_speed_2,
     47100, fx_speed_neg,
     
@@ -245,6 +266,7 @@ const unsigned long SongTrack[] PROGMEM =
     _SIDE_KICK_ODDS(80500, COLOR_DELTA)
 
     81000, fx_strip_all,
+    81000, fx_particles_off,
 
     ///bwaaah, into the sss...qqs's
     81500, fx_speed_2,
